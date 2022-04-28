@@ -22,3 +22,23 @@ meta.dir <- function() {
 
           return(dir.info)
 }
+
+process0r <- function() {
+
+              #Select (optional)
+              #for voltage profiles: which cycles shall be extracted?
+              cycles <- c(0,1,2,4,9,14,19,24,49,74,99) #c(0, seq(1,100,5))
+              #cycles <- c(0,1,2,4,9,12,17,20,25,27) # Rate Capability Test
+              #cycles <- c(0:27)
+
+              #locate experimental data
+              dir.info <- meta.dir()
+              dir <- dir.info$dir
+              meta <- dir.info$meta
+
+              #start analysis
+              eval.raw <- analysis(dir, cycles, meta)
+
+              return(eval.raw)
+}
+
