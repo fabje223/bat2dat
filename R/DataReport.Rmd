@@ -1,0 +1,124 @@
+---
+title: "DataReport"
+author: "Fabian"
+date: Sys.Date()
+output: html_document
+runtime: shiny
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#Load scripts
+source("Biologic_Analysis2.R")
+source("Biologic_Analysis2_capacity.R")
+source("Biologic_Analysis2_potprofiles.R")
+source("SaveDat.R")
+source("Biologic_Plot_capacity.R")
+
+#load library
+library(dplyr)
+library(zoo)
+#library(xlsx)
+
+#PlotSettings
+library(ggplot2)
+
+col <- c('red', 'blue', 'darkgreen', 'black')
+lbl <- c('cell 1', 'cell 2', 'cell 3', 'cell 4')
+
+#Plot layout
+  my.panel <- theme(
+    panel.grid.major = element_line(colour="black", size=0.4),
+    panel.grid.minor = element_line(colour="black", linetype="dashed", size=0.2),
+    panel.background = element_blank(),
+    panel.border = element_rect(colour="black", fill=NA, size=2))
+  my.axis <- theme(
+    axis.text.x = element_text(colour="black", size=20, face="bold"),
+    axis.title.x = element_text(colour="black", size=20, face="bold"),
+    axis.text.y = element_text(colour="black", size=20, face="bold"),
+    axis.title.y = element_text(colour="black", size=20, angle=90, face="bold"),
+    plot.title = element_text(colour="black", size=22, face="bold"),
+    strip.text = element_text(colour='black', size=18, face="bold")) 
+  my.legend <- theme(
+    legend.background = element_rect(fill="grey90", colour="black", size=0.5),
+    legend.title = element_text(colour="black", face="bold", size=18),
+    legend.text = element_text(colour="black", face="bold", size=16),
+    legend.key = element_rect(colour="black", size=0.25),
+    legend.position= c(0.2,0.05), #'top'
+    legend.direction="vertical",
+    legend.justification= c(1,0))
+```
+
+## Data Selection
+```{r, DatImport, echo=FALSE}
+fileInput("file1", "Choose .txt file",
+          multiple = FALSE,
+          accept = c("text/csv",
+                     "text/comma-separated-values,text/plain",
+                   ".csv"))
+
+rmarkdown::render_delayed({
+    renderTable({
+      cap <- read.table(input$file1$datapath, header=T, dec = ",", sep = "\t", fill=TRUE)
+  
+      head(cap, 10)
+  })
+})
+```
+
+## Cell Metadata
+
+```{r results='asis'}
+#set working directory for Rfiles:
+dir = 'C:/Users/fabia/Documents/kadi4mat/test_dat' 
+setwd(dir)
+meta <- read.table(paste0(dir, "/", 'meta.txt'), header=TRUE, sep=',')
+knitr::kable(meta, caption="Metadata")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r capacity, echo=FALSE}
+dir = 'C:/Users/fabia/Documents/kadi4mat/test_dat/out' 
+setwd(dir)
+cap <- read.table(paste0(dir, "/", 'Stats.txt'), header=TRUE, sep='\t')
+#knitr::kable(head(cap, 10), caption="Metadata")
+
+#Plot capacity
+  p.cap <- ggplot(cap) +
+        geom_point(aes(x=CycNr, y=Qdc.mAh, color=factor(ident)), size=4) +
+        labs(x = bquote('cycle number'), 
+             y = bquote('capacity / mAh/g'),
+             title = "a) Galvanostatic Cycling") +
+        scale_x_continuous(limits=c(0,max(cap$CycNr)),
+                          breaks = seq(0,200, 10)) +
+        scale_y_continuous(limits=c(0,(max(cap$Qdc.mAh)+1)),
+                          breaks = seq(-3.5, 5, 0.5)) 
+                          #breaks = seq(0,4000, 0.2)) +
+        #scale_color_manual(name = 'cells',
+         #                  values = col,
+          #                label = lbl) +
+        #my.axis +
+        #my.panel + 
+        #my.legend #theme(legend.position = 'none')
+  p.cap
+```
+
+```{r, shinyPlot}
+
+rmarkdown::render_delayed({
+renderPlot({
+  
+  x <- input$cap[,1]
+  y <- input$cap[,5]
+  plot(x,y,
+       xlim = c(0,100),
+       ylim = c(0,10))
+})
+})
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
