@@ -8,4 +8,8 @@
 #'   \item{score}{The participant's score in hypothetical task.}
 #' }
 #' @source <https://www.github.com/mvuorre/exampleRPackage>
-"exampleData-blub"
+#' hello("james bond")
+hello <- function(name = "your name") {
+  name <- stringr::str_to_title(name)
+  print(paste("Hello,", name))
+}

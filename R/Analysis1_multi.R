@@ -27,13 +27,13 @@
 #setwd(Rdir)
 
 #load packages, plot settings & Rscripts
-source("Library.R")
-source("Analysis2.R")
-source("Biologic_Analysis.R")
-source("Arbin_Analysis.R")
-source("SaveDat.R")
-source("RMD_plot.R")
-source("generateReport.R")
+#source("Library.R")
+#source("Analysis2.R")
+#source("Biologic_Analysis.R")
+#source("Arbin_Analysis.R")
+#source("SaveDat.R")
+#source("RMD_plot.R")
+#source("generateReport.R")
 
 # Choose directory of meta data and import
 # dir --> location of meta data file and raw data
