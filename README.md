@@ -6,7 +6,13 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of bat2dat is to …
+Different Potentiostats produce different experimental output files.
+Some of them are easy readable, as they are saves as .txt or .xlsx
+files, while others need to be exported into a readable format prior to
+further processing. This tools aims to convert various potentiostat
+outputs into a uniform structure while extracting key parameters and
+datasets for further graphical processing (e.g. in Origin). For this
+tool to work metadata has to be provided.
 
 ## Installation
 
