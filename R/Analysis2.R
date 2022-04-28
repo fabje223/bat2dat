@@ -4,7 +4,7 @@ analysis <- function(dir, cycles, meta) {
 
   #loop through selected data
   output <- lapply(1:nrow(meta), function(i) {
-i <-6
+
     filename <- as.character(meta[i,2])
     AM.mass <- as.numeric(meta[i,5])/1000
     cycler <- as.character(meta[i,3])

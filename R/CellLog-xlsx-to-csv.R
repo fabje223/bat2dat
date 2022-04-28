@@ -1,3 +1,5 @@
+convertLabNotes <- function() {
+
 library(readxl)
 library(dplyr)
 
@@ -6,7 +8,7 @@ file.dir <- file.choose()
 dir.name <- dirname(file.dir)
 
 #read CellLog
-cell.log <- read_excel(file.dir, 
+cell.log <- read_excel(file.dir,
                       sheet = 1, range="A16:Z56")
 
 #size depends on number of samples
@@ -27,3 +29,4 @@ meta.t[,5] <- as.numeric(meta.t[,5])
 #write .csv file
 setwd(dir.name)
 write.table(meta.t, file="meta.csv", dec=",", sep="\t", row.names=FALSE)
+}

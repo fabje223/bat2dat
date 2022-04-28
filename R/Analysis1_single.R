@@ -1,4 +1,4 @@
-#Single File Import for EC-Lab files (.txt)
+blub <- function() {#Single File Import for EC-Lab files (.txt)
 library(dplyr)
 library(gridExtra)
 library(ggplot2)
@@ -35,7 +35,7 @@ meta <- data.frame('filename' = filename,
 tmp <- read.table(paste0(dir.name, "/", filename), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
 
 #rearrange data.frame
-raw <- tmp %>%       
+raw <- tmp %>%
   select('cycle.number', 'time.s', 'Ns', 'Ewe.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
   mutate(time.s = time.s - min(time.s))
 colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
@@ -49,7 +49,7 @@ VPprofiles <- Biologic.VP(raw, AM.mass, cycles, type)
 
 #all data is collected in a list
 cyc.dat <- list('cell.data' = meta,
-                'capacity' = capacity, 
+                'capacity' = capacity,
                 'VoltageProfiles' = VPprofiles,
                 'raw' = raw)
 #for a single file this step would actually not be necessary
@@ -66,3 +66,4 @@ report(meta, dat, cycles, Rdir, outdir)
 #save data for further processing
 SaveToOrigin.Stats(outdir, dat, meta)
 SaveToOrigin.VP(outdir, dat, meta, cycles)
+}
