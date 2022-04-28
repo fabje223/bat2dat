@@ -8,4 +8,4 @@
 #'   \item{score}{The participant's score in hypothetical task.}
 #' }
 #' @source <https://www.github.com/mvuorre/exampleRPackage>
-"exampleData"
+"exampleData-blub"

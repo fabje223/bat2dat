@@ -5,12 +5,12 @@ Version: 0.1.0
 Maintainer: Fabian Jeschull <fabian.jeschull@kit.edu>
 Description: More about what it does (maybe more than one line) Use four
     Battery Cycling Data
-Different Potentiostats produce different experimental output files.
-Some of them are easy readable, as they are saves as .txt or .xlsx files, 
-while others need to be exported into a readable format prior to further processing.
-This tools aims to convert various potentiostat outputs into a uniform structure
-while extracting key parameters and datasets for further graphical processing (e.g. in Origin).
-For this tool to work metadata has to be provided.
+  Different Potentiostats produce different experimental output files.
+  Some of them are easy readable, as they are saves as .txt or .xlsx files, 
+  while others need to be exported into a readable format prior to further processing.
+  This tools aims to convert various potentiostat outputs into a uniform structure
+  while extracting key parameters and datasets for further graphical processing (e.g. in Origin).
+  For this tool to work metadata has to be provided.
 License: What license is it under?
 Imports: 
     dplyr,
