@@ -9,18 +9,32 @@ meta.dir <- function() {
           dir <- dirname(file.dir)
 
           #read-in meta data file
-          meta <- read.csv(paste0(dir, "/", 'meta.csv'), header=TRUE, sep='\t', quote="\"", dec=".", fill=TRUE)
+          meta <- read.csv(file.dir,
+                           header=TRUE,
+                           sep='\t', quote="\"", dec=".",
+                           stringsAsFactors = F,
+                           fill=TRUE)
+
+          #sort out any sample that is not included in the data-raw folder
+          l.raw <- list.files(dir)
+          boo <- c()
+          for(x in 1:nrow(meta)){
+
+                  a <- any(startsWith(l.raw, c(meta$sample.name[x])) == TRUE)
+                  boo <- c(boo, a)
+          }
+          meta <- meta[boo,]
 
           #output folder
           outdir = paste0(dir, "/Rprocessed")
 
-          dir.info <- list(
+          sample.info <- list(
                             "dir" = dir,
                             "meta" = meta,
                             "outdir" = outdir
                             )
 
-          return(dir.info)
+          return(sample.info)
 }
 
 process0r <- function() {
@@ -32,51 +46,50 @@ process0r <- function() {
               #cycles <- c(0:27)
 
               #locate experimental data
-              dir.info <- meta.dir()
-              dir <- dir.info$dir
-              meta <- dir.info$meta
+              sample.origin <- meta.dir()
+              dir <- sample.origin$dir
+              meta <- sample.origin$meta
 
-              filename <- as.character(meta[i,2])
-              AM.mass <- as.numeric(meta[i,5])/1000
-              cycler <- as.character(meta[i,3])
-              type <- meta[i,4]
+              #convert AM.mass [mg] into g
+              meta$AM.loading <- meta$AM.loading/1000
 
-              #read-in raw data from folder
-              if(meta$cycler == "Biologic BCS"){
+              sampleSUMMARY <- lapply(1:nrow(meta), function(i) {
 
-                print("Reading BCS raw data")
-                raw <- BCSraw(dir, meta$filename)
+                          #read-in raw data from folder
+                          if(meta$instrument[i] == "Biologic BCS"){
 
-              }else if(meta$cycler == "Biologic VMP"){
+                            print("Reading BCS raw data file")
+                            raw <- BCSraw(dir, meta$sample.name[i])
 
-                print("Reading VMP raw data")
-                raw <- VMPraw(dir, meta$filename)
+                          }else if(meta$instrument[i] == "Biologic VMP"){
 
-              }else if(meta$cycler == "Arbin") {
+                            print("Reading VMP raw data file")
+                            raw <- VMPraw(dir, meta$sample.name[i])
 
-                print("Reading Arbin raw data")
+                          }else if(meta$instrument[i] == "Arbin") {
 
-                #check if .res files are in directory; if so, rename them to .accdb
-                files = list.files(pattern = ".*.res")
-                if(length(files) != 0 && cycler == 'Arbin'){
+                            print("Reading Arbin raw data file")
 
-                      res <- paste0(filename, ".res")
-                      newfiles <- gsub(".res$", ".accdb", res)
-                      file.rename(res, newfiles)
-                }
+                            #check if file has .res ending; if so, rename them to .accdb
+                            if(file.exists(paste0(dir, "/", meta$sample.name[i], ".res"))){
 
-                raw <- ARBINraw(dir, meta)
+                                  res <- paste0(meta$sample.name[i], ".res")
+                                  newfile <- gsub(".res$", ".accdb", res)
+                                  file.rename(res, newfile)
+                            }
 
-              }else{
+                            raw <- ARBINraw(dir, meta$sample.name)
 
-                print("cycler not found - check directory")
+                          }else{
 
-                cyc.dat <- list('cell.data' = NULL,
-                                'capacity' = NULL,
-                                'VoltageProfiles' = NULL,
-                                'CCCV' = NULL,
-                                'raw' = NULL)
-              }
+                            print("cycler not found - check directory")
+
+                            raw <- NULL
+                          }
+
+                l.sample <- list("metadata" = meta[i,], "rawdata" = raw)
+                return(l.sample)
+              })
 
 
               #start analysis

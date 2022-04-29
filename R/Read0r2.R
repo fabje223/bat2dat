@@ -24,9 +24,7 @@ VMPraw <- function(dir, filename){
 
 ARBINraw <- function(dir, filename){
 
-  file <- list.files(pattern = filename)
-
-  if(endsWith(file, ".xlsx")){
+  if(endsWith(filename, ".xlsx")){
 
     if (!requireNamespace("readxl", quietly = TRUE)) {
       stop(
@@ -35,11 +33,11 @@ ARBINraw <- function(dir, filename){
       )
     }
 
-    fname <- paste0(dir, "/", file)
+    f.dir <- paste0(dir, "/", filename)
 
     # @param filename must end in .xls or xlsx
-    l <- lapply(grep("Channel*", excel_sheets(fname), value=TRUE),
-                read_excel, path = fname)
+    l <- lapply(grep("Channel*", excel_sheets(f.dir), value=TRUE),
+                read_excel, path = f.dir)
     l <- do.call(rbind,l)
 
     raw <- l %>%
@@ -47,7 +45,7 @@ ARBINraw <- function(dir, filename){
     #mutate(Test_Time(s) = Test_Time(s) - min(Test_Time(s)))
     colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qdc.Ah', 'Qch.Ah')
 
-  }else if(endsWith(file, ".accdb")){
+  }else if(endsWith(filename, ".accdb")){
 
     if (!requireNamespace("RODBC", quietly = TRUE)) {
       stop(
@@ -56,9 +54,9 @@ ARBINraw <- function(dir, filename){
       )
     }
 
-    fname <- paste0(dir, "/", file)
+    f.dir <- paste0(dir, "/", filename)
 
-    con <- odbcConnectAccess2007(fname)
+    con <- odbcConnectAccess2007(f.dir)
     #sqlTables(con, tableType="TABLE")$TABLE_NAME
     raw <- sqlFetch(con, "Channel_Normal_Table")
     odbcCloseAll()
