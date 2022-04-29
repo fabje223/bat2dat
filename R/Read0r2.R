@@ -1,4 +1,4 @@
-BCSraw <- function(dir, meta){
+BCSraw <- function(dir, filename){
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
   raw <- tmp %>%
@@ -10,7 +10,7 @@ BCSraw <- function(dir, meta){
 
 }
 
-VMPraw <- function(dir, meta){
+VMPraw <- function(dir, filename){
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
   raw <- tmp %>%
@@ -22,7 +22,7 @@ VMPraw <- function(dir, meta){
 
   }
 
-ARBINraw <- function(dir, meta){
+ARBINraw <- function(dir, filename){
 
   file <- list.files(pattern = filename)
 

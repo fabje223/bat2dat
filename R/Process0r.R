@@ -9,7 +9,7 @@ meta.dir <- function() {
           dir <- dirname(file.dir)
 
           #read-in meta data file
-          meta <- read.csv(paste0(dir, "/", 'meta.csv'), header=TRUE, sep=',', quote="\"", dec=".", fill=TRUE)
+          meta <- read.csv(paste0(dir, "/", 'meta.csv'), header=TRUE, sep='\t', quote="\"", dec=".", fill=TRUE)
 
           #output folder
           outdir = paste0(dir, "/Rprocessed")
@@ -36,21 +36,21 @@ process0r <- function() {
               dir <- dir.info$dir
               meta <- dir.info$meta
 
-              #filename <- as.character(meta[i,2])
-              #AM.mass <- as.numeric(meta[i,5])/1000
-              #cycler <- as.character(meta[i,3])
-              #type <- meta[i,4]
+              filename <- as.character(meta[i,2])
+              AM.mass <- as.numeric(meta[i,5])/1000
+              cycler <- as.character(meta[i,3])
+              type <- meta[i,4]
 
               #read-in raw data from folder
               if(meta$cycler == "Biologic BCS"){
 
                 print("Reading BCS raw data")
-                raw <- BCSraw(dir, meta)
+                raw <- BCSraw(dir, meta$filename)
 
               }else if(meta$cycler == "Biologic VMP"){
 
                 print("Reading VMP raw data")
-                raw <- VMPraw(dir, meta)
+                raw <- VMPraw(dir, meta$filename)
 
               }else if(meta$cycler == "Arbin") {
 
