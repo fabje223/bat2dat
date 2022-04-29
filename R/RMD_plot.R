@@ -14,9 +14,9 @@ plotCapReport <- function(capacity){
         scale_y_continuous(limits=c(0,max(capacity$Qdc.mAh.g)),
                           breaks = seq(0, 5000, 50)) +
         #     breaks = seq(0,4000, 0.2)) +
-        my.axis +
-        my.panel +
-        my.legend #theme(legend.position = 'none')
+        #my.axis +
+        customTheme()
+        #my.legend #theme(legend.position = 'none')
 
       #Plot Coulombic Efficiency
       p.CE <- ggplot(capacity) +
@@ -29,8 +29,10 @@ plotCapReport <- function(capacity){
         scale_y_continuous(limits=c(40,103),
                           breaks = seq(0, 200, 5)) +
         #     breaks = seq(0,4000, 0.2)) +
-        my.axis +
-        my.panel +
+
+
+        #my.axis +
+        customTheme() +
         theme(legend.position = 'none')
 
     #merge into one plot
@@ -59,9 +61,9 @@ plotIRdrop <- function(capacity){
                     scale_y_continuous(limits=c(min.y.ch*1000, max.y.ch*1000),
                                        breaks = seq(min.y.ch*900, max.y.ch*1100, length.out=5)) +
                     #     breaks = seq(0,4000, 0.2)) +
-                    my.axis +
-                    my.panel +
-                    my.legend + theme(legend.position = 'right')
+                    #my.axis +
+                    customTheme() +
+                    theme(legend.position = 'right')
 
   max.y.dc <- max(capacity$Edrop.dc)
   min.y.dc <- min(capacity$Edrop.dc)
@@ -76,9 +78,9 @@ plotIRdrop <- function(capacity){
                   scale_y_continuous(limits=c(min.y.dc*900, max.y.dc*1000),
                                      breaks = seq(min.y.dc*900, max.y.dc*1100, length.out=5)) +
                   #     breaks = seq(0,4000, 0.2)) +
-                  my.axis +
-                  my.panel +
-                  my.legend + theme(legend.position = 'right')
+                  #my.axis +
+                  customTheme() +
+                  theme(legend.position = 'right')
 
   #merge into one plot
   grid.arrange(p.IRdrop.ch,
@@ -104,9 +106,9 @@ plotVPloop <- function(vp.dat){
                       breaks = seq(-1, 5, 0.5)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
-    my.axis +
-    my.panel +
-    my.legend + theme(legend.position = "right")
+    #my.axis +
+    customTheme() +
+    theme(legend.position = "right")
 
   return(p.vp)
 
@@ -134,9 +136,9 @@ plotVPlin <- function(vp.dat){
                       breaks = seq(-5, 5, 0.25)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
-    my.axis +
-    my.panel +
-    my.legend + theme(legend.position = "right")
+    #my.axis +
+    customTheme() +
+    theme(legend.position = "right")
 
   return(p.vp)
 
@@ -155,7 +157,7 @@ plotVPsplit <- function(vp.dat, cell){
     min.ch.y <- round(min(ch$Ewe.V),1)-0.1
     max.ch.y <- round(max(ch$Ewe.V),1)+0.1
     #print('plotting cathode/full cell data')
-  }else {
+  }else if (cell %in% c('halfcell-anode', 'LiS')){
     ch <- vp.dat %>%
       filter(type == 'ch')
     dc <- vp.dat %>%
@@ -166,6 +168,9 @@ plotVPsplit <- function(vp.dat, cell){
     max.ch.y <- round(max(dc$Ewe.V),1)+0.1
     max.dc.y <- max.ch.y
     #print('plotting anode data')
+  }else {
+    print('unknown celltype')
+    stop()
   }
 
   #Plot capacity
@@ -180,9 +185,9 @@ plotVPsplit <- function(vp.dat, cell){
                       breaks = seq(-5, 5, 0.25)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
-    my.axis +
-    my.panel +
-    my.legend + theme(legend.position = "none")
+    #my.axis +
+    customTheme() +
+    theme(legend.position = "none")
     #my.legend + theme(legend.position = c(0,1),
     #                  legend.justification = c("left", "top"))
 
@@ -199,9 +204,9 @@ plotVPsplit <- function(vp.dat, cell){
                       breaks = seq(-5, 5, 0.25)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
-    my.axis +
-    my.panel +
-    my.legend + theme(legend.position = "none")
+    #my.axis +
+    customTheme() +
+    theme(legend.position = "none")
 
   #merge into one plot
   grid.arrange(p.vp1,

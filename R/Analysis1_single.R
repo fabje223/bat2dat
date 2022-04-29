@@ -58,10 +58,10 @@ dat <- list(cyc.dat)
 
 #generate a data report
 #set working directory for Rfiles (RMarkdown needs to know where R scripts are located)
-Rdir = c('Q:/DataEvaluation/2_R-CyclingData/Rproject/example')
+Rdir = c('C:/Users/gm5225/Documents/Rprojects/bat2dat/R')
 setwd(Rdir)
 
-report(meta, dat, cycles, Rdir, outdir)
+report(cyc.dat, Rdir, outdir)
 
 #save data for further processing
 SaveToOrigin.Stats(outdir, dat, meta)
