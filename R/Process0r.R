@@ -36,8 +36,68 @@ process0r <- function() {
               dir <- dir.info$dir
               meta <- dir.info$meta
 
+              #filename <- as.character(meta[i,2])
+              #AM.mass <- as.numeric(meta[i,5])/1000
+              #cycler <- as.character(meta[i,3])
+              #type <- meta[i,4]
+
+              #read-in raw data from folder
+              if(meta$cycler == "Biologic BCS"){
+
+                print("Reading BCS raw data")
+                raw <- BCSraw(dir, meta)
+
+              }else if(meta$cycler == "Biologic VMP"){
+
+                print("Reading VMP raw data")
+                raw <- VMPraw(dir, meta)
+
+              }else if(meta$cycler == "Arbin") {
+
+                print("Reading Arbin raw data")
+
+                #check if .res files are in directory; if so, rename them to .accdb
+                files = list.files(pattern = ".*.res")
+                if(length(files) != 0 && cycler == 'Arbin'){
+
+                      res <- paste0(filename, ".res")
+                      newfiles <- gsub(".res$", ".accdb", res)
+                      file.rename(res, newfiles)
+                }
+
+                raw <- ARBINraw(dir, meta)
+
+              }else{
+
+                print("cycler not found - check directory")
+
+                cyc.dat <- list('cell.data' = NULL,
+                                'capacity' = NULL,
+                                'VoltageProfiles' = NULL,
+                                'CCCV' = NULL,
+                                'raw' = NULL)
+              }
+
+
               #start analysis
               eval.raw <- analysis(dir, cycles, meta)
+
+              #++++ under construction ++++
+              #calculate capacities for each cycle
+              capacity <- Biologic.CAP(raw, AM.mass, type)
+              #extract voltage profiles for selected cycles
+              VPprofiles <- Biologic.VP(raw, AM.mass, cycles, type)
+              #detailed analysis of CC-CV steps
+              CCCV <- Biologic.CCCV(raw, AM.mass, type)
+
+              cyc.dat <- list('cell.data' = meta[i,],
+                              'capacity' = capacity,
+                              'VoltageProfiles' = VPprofiles,
+                              'CCCV' = CCCV,
+                              'raw' = raw)
+
+
+
 
               return(eval.raw)
 }
