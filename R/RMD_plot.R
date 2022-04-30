@@ -1,6 +1,15 @@
-#Plotting Script for RMarkdown Report
-#library('viridis')
 
+#' Plotting Script for RMarkdown Report
+#'
+#' @param capacity
+#'
+#' @return
+#' @export
+#'
+#' @include customTheme.R
+#' @import viridis ggplot2 gridExtra
+#'
+#' @examples
 plotCapReport <- function(capacity){
 
       #Plot capacity
@@ -45,6 +54,7 @@ plotCapReport <- function(capacity){
       #return(p.cap, p.CE)
 }
 
+#' @rdnames plotCapReport
 plotIRdrop <- function(capacity){
 
   #Plot capacity
@@ -92,6 +102,7 @@ plotIRdrop <- function(capacity){
 
 }
 
+#' @rdnames plotCapReport
 plotVPloop <- function(vp.dat){
 
   #Plot capacity
@@ -114,6 +125,7 @@ plotVPloop <- function(vp.dat){
 
 }
 
+#' @rdnames plotCapReport
 plotVPlin <- function(vp.dat){
 
     ch <- vp.dat %>%
@@ -144,6 +156,7 @@ plotVPlin <- function(vp.dat){
 
 }
 
+#' @rdnames plotCapReport
 plotVPsplit <- function(vp.dat, cell){
 
   if(cell %in% c('halfcell-cathode', 'fullcell')){

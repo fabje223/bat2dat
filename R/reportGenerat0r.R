@@ -1,3 +1,14 @@
+#' reportGenerat0r
+#'
+#' Interface to plot data and pass it to report.Rdm to
+#' generate data report
+#'
+#' @param exp sample info
+#'
+#' @return
+#' @export
+#'
+#' @examples
 reportGenerat0r <- function(exp){
 
   meta <- exp$metadata
