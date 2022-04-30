@@ -64,12 +64,12 @@ report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
                     #Generate html report using RMarkdown
                     if(htmlReport == TRUE){
-                        report(exp, Rdir, outdir)
+                        report(exp)
                     }
 
                     #Export data as .txt (Origin compatible)
                     if(exportCap == TRUE){
-                        SaveToOrigin.Stats(outdir, exp)
+                        SaveToOrigin.Stats(exp)
                     }
                       #SaveToOrigin.CCCV(outdir, exp)
                       #SaveToOrigin.VP(outdir, exp, cycles)

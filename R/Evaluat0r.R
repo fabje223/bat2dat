@@ -1,4 +1,4 @@
-BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv){
+BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               cycDat <- list('capacity' = NULL,
                              'VoltageProfiles' = NULL,
@@ -14,7 +14,7 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv){
 
               #CC-CV step analysis is included if TRUE
               if(cccv == TRUE){
-                cycDat$CCCV <- Biologic.CCCV(raw, AMmass, cellType)
+                cycDat$CCCV <- Biologic.CCCV(raw, AMmass, cellType, warningsLOG)
               }
 
               return(cycDat)

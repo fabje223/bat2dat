@@ -1,6 +1,6 @@
 #Load meta data and raw data files
 
-meta.dir <- function() {
+metaDir <- function() {
 
           #pop-up window
           file.dir <- file.choose()
@@ -32,17 +32,13 @@ meta.dir <- function() {
                   }
           }
           meta <- meta[boo,]
+          meta$dir <- dir
+          meta$outdir <- outdir
 
-          sample.info <- list(
-                            "dir" = dir,
-                            "outdir" = outdir,
-                            "meta" = meta
-                            )
-
-          return(sample.info)
+          return(meta)
 }
 
-process0r <- function(cycles = c(seq(0, 100, 10)), cccv = TRUE) {
+process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -51,12 +47,17 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = TRUE) {
               #cycles <- c(0:27)
 
               #locate experimental data
-              sample.origin <- meta.dir()
-              dir <- sample.origin$dir
-              meta <- sample.origin$meta
+              meta <- metaDir()
 
               #convert AM.mass [mg] into g
               meta$AM.loading <- meta$AM.loading/1000
+
+              #creates log for warning messages
+              warningsLOG <- data.frame(
+                              "script" = character(),
+                              "section" = character(),
+                              "message" = character()
+              )
 
               #read-in raw data from folder
               sampleSUMMARY <- lapply(1:nrow(meta), function(i) {
@@ -64,23 +65,24 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = TRUE) {
                           if(meta$instrument[i] == "Biologic BCS"){
 
                             print("Reading BCS raw data file")
-                            raw <- BCSraw(dir, meta$sample.name[i])
+                            raw <- BCSraw(meta$dir[i], meta$sample.name[i])
 
-                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading, meta$cell.config, cycles, cccv)
+                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
+                                                         cycles, cccv, warningsLOG)
 
                           }else if(meta$instrument[i] == "Biologic VMP"){
 
                             print("Reading VMP raw data file")
-                            raw <- VMPraw(dir, meta$sample.name[i])
+                            raw <- VMPraw(meta$dir[i], meta$sample.name[i])
 
-                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading, meta$cell.config, cycles, cccv)
+                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles, cccv)
 
                           }else if(meta$instrument[i] == "Arbin") {
 
                             print("Reading Arbin raw data file")
 
                             #check if file has .res ending; if so, rename them to .accdb
-                            if(file.exists(paste0(dir, "/", meta$sample.name[i], ".res"))){
+                            if(file.exists(paste0(meta$dir[i], "/", meta$sample.name[i], ".res"))){
 
                                   res <- paste0(meta$sample.name[i], ".res")
                                   newfile <- gsub(".res$", ".accdb", res)
@@ -89,7 +91,7 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = TRUE) {
 
                             raw <- ARBINraw(dir, meta$sample.name)
 
-                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading, meta$cell.config, cycles)
+                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
 
                           }else{
 
@@ -103,6 +105,8 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = TRUE) {
                                  "capacity" = rawEval$capacity,
                                  "VoltageProfiles" = rawEval$VoltageProfiles,
                                  "CCCV" = rawEval$CCCV)
+
+                print(paste0('Data analysis of file ', meta$sample.name[i], " finished"))
 
                 return(l.sample)
               })
