@@ -16,13 +16,15 @@ License: What license is it under?
 Depends: 
     R (>= 2.10)
 Imports: 
-    RODBC,
-    devtools,
+    dplyr,
+    ggplot2,
     gridExtra,
     kableExtra,
+    knitr,
     readxl,
-    shiny,
-    tidyverse,
+    rmarkdown,
+    RODBC,
+    tidyr,
     viridis
 Suggests:
     withr
