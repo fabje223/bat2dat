@@ -33,7 +33,7 @@ reportGenerat0r <- function(exp){
     }
 
   #locate report.rmd file
-  #file <- system.file("rmd", "report.Rmd", package = "bat2dat")
+  file <- system.file("rmd", "report.Rmd", package = "bat2dat")
 
   #background details
   reportName <- c(paste0("DataReport_", meta$sample.name, ".html"))
