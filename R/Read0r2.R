@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param dir
+#' @param filename
+#'
+#' @return
+#' @export
+#'
+#' @examples
 BCSraw <- function(dir, filename){
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
@@ -10,6 +19,15 @@ BCSraw <- function(dir, filename){
 
 }
 
+#' Title
+#'
+#' @param dir
+#' @param filename
+#'
+#' @return
+#' @export
+#'
+#' @examples
 VMPraw <- function(dir, filename){
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
@@ -22,6 +40,15 @@ VMPraw <- function(dir, filename){
 
   }
 
+#' Title
+#'
+#' @param dir
+#' @param filename
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ARBINraw <- function(dir, filename){
 
   if(endsWith(filename, ".xlsx")){

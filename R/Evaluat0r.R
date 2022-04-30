@@ -1,3 +1,16 @@
+#' Title
+#'
+#' @param raw
+#' @param AMmass
+#' @param cellType
+#' @param cycles
+#' @param cccv
+#' @param warningsLOG
+#'
+#' @return
+#' @export
+#'
+#' @examples
 BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               cycDat <- list('capacity' = NULL,
@@ -21,6 +34,17 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               }
 
+#' Title
+#'
+#' @param raw
+#' @param AMmass
+#' @param cellType
+#' @param cycles
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
 
               cycDat <- list('capacity' = NULL,

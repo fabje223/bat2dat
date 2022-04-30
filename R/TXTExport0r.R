@@ -1,12 +1,13 @@
-######################################################################################################################
-# Saving results
-######################################################################################################################
-#save indiviual files:
-#change saving directory if desired
-#directory must exist
-#setwd(outdir)
 
 #save capacity vs. cycle data
+#' Title
+#'
+#' @param exp
+#'
+#' @return
+#' @export
+#'
+#' @examples
 SaveToOrigin.Stats <- function(exp){
 
           capacity <- exp$capacity

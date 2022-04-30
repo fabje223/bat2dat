@@ -1,5 +1,10 @@
-#Load meta data and raw data files
 
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
 metaDir <- function() {
 
           #pop-up window
@@ -38,6 +43,15 @@ metaDir <- function() {
           return(meta)
 }
 
+#' Title
+#'
+#' @param cycles
+#' @param cccv
+#'
+#' @return
+#' @export
+#'
+#' @examples
 process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
               #Select (optional)

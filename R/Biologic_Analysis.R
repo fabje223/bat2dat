@@ -1,4 +1,14 @@
 #picks capacity data and end point potentials on charge and discharge sequence for each cycle
+#' Title
+#'
+#' @param raw
+#' @param AM.mass
+#' @param type
+#'
+#' @return
+#' @export
+#'
+#' @examples
 Biologic.CAP <- function(raw, AM.mass, type){
 
         #extract columns needed from result file of instrument, using piping operators
