@@ -1,4 +1,6 @@
-#' Title
+#' Starts evaluation of expeirmental data
+#'
+#' Depending on instrument different analysis scripts are needed
 #'
 #' @param raw
 #' @param AMmass
@@ -9,6 +11,11 @@
 #'
 #' @return
 #' @export
+#'
+#' @include Read0r.R Process0r.R Report0r.R
+#'
+#' @import dplyr
+#' @importFrom magrittr %>%
 #'
 #' @examples
 BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){

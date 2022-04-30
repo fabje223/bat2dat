@@ -2,16 +2,23 @@
 % Please edit documentation in R/Biologic_Analysis.R
 \name{Biologic.CAP}
 \alias{Biologic.CAP}
-\title{Title}
+\title{Analysis of Biologic potentiostat data}
 \usage{
 Biologic.CAP(raw, AM.mass, type)
 }
 \arguments{
-\item{type}{}
+\item{raw}{- object of Biologic.CAP}
+
+\item{AM.mass}{- object of Biologic.CAP}
+
+\item{type}{- object of Biologic.CAP}
 }
 \value{
-
+capacity table
 }
 \description{
-Title
+Analysis of Biologic potentiostat data
+}
+\examples{
+
 }

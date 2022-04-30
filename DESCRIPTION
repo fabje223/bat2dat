@@ -2,6 +2,7 @@ Type: Package
 Package: bat2dat
 Title: Analysis of Potentiostat Output for Battery Research
 Version: 0.1.0
+Author: fabje223
 Maintainer: Fabian Jeschull <fabian.jeschull@kit.edu>
 Description: More about what it does (maybe more than one line) Use four
     Battery Cycling Data Different Potentiostats produce different
@@ -16,6 +17,7 @@ License: What license is it under?
 Depends: 
     R (>= 2.10)
 Imports: 
+    devtools,
     dplyr,
     ggplot2,
     gridExtra,
@@ -25,6 +27,9 @@ Imports:
     rmarkdown,
     RODBC,
     tidyr,
+    tidyverse,
+    utils,
+    magrittr,
     viridis
 Suggests:
     withr
@@ -33,3 +38,18 @@ Author@R: person("Fabian", "Jeschull", email = "fabian.jeschull@kit.edu",
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
+Collate: 
+    'Arbin_Analysis.R'
+    'Report0r.R'
+    'Process0r.R'
+    'Read0r.R'
+    'Evaluat0r.R'
+    'Biologic_Analysis.R'
+    'CellLog-xlsx-to-csv.R'
+    'RMD_plot.R'
+    'Read0r2.R'
+    'TXTExport0r.R'
+    'customThemes.R'
+    'generateReport.R'
+    'packageBuild0r.R'
+    'reportGenerat0r.R'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Evaluat0r.R
 \name{BiologicEvaluat0r}
 \alias{BiologicEvaluat0r}
-\title{Title}
+\title{Starts evaluation of expeirmental data}
 \usage{
 BiologicEvaluat0r(raw, AMmass, cellType, cycles, cccv, warningsLOG)
 }
@@ -13,5 +13,5 @@ BiologicEvaluat0r(raw, AMmass, cellType, cycles, cccv, warningsLOG)
 
 }
 \description{
-Title
+Depending on instrument different analysis scripts are needed
 }

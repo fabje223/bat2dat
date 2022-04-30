@@ -1,14 +1,20 @@
 #picks capacity data and end point potentials on charge and discharge sequence for each cycle
-#' Title
+#' Analysis of Biologic potentiostat data
 #'
-#' @param raw
-#' @param AM.mass
-#' @param type
+#' @param raw - object of Biologic.CAP
+#' @param AM.mass - object of Biologic.CAP
+#' @param type - object of Biologic.CAP
 #'
-#' @return
+#' @return capacity table
 #' @export
 #'
+#' @include Read0r.R Evaluat0r.R Process0r.R Report0r.R
+#'
+#' @import dplyr
+#' @importFrom magrittr %>%
+#'
 #' @examples
+#'
 Biologic.CAP <- function(raw, AM.mass, type){
 
         #extract columns needed from result file of instrument, using piping operators

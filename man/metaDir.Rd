@@ -2,13 +2,18 @@
 % Please edit documentation in R/Process0r.R
 \name{metaDir}
 \alias{metaDir}
-\title{Title}
+\title{Process dataset}
 \usage{
 metaDir()
+}
+\arguments{
+\item{cycles}{cycles to be extracted for voltage profiles}
+
+\item{cccv}{was cccv cycling conducted? TRUE/FALSE}
 }
 \value{
 
 }
 \description{
-Title
+Initiates import and analysis of a curated dataset
 }

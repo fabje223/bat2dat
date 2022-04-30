@@ -100,10 +100,10 @@ analysis <- function(dir, cycles, meta) {
 
           fname <- paste0(dir, "/", file)
 
-          con <- odbcConnectAccess2007(fname)
+          con <- RODBC::odbcConnectAccess2007(fname)
           #sqlTables(con, tableType="TABLE")$TABLE_NAME
-          raw <- sqlFetch(con, "Channel_Normal_Table")
-          odbcCloseAll()
+          raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
+          RODBC::odbcCloseAll()
 
           raw <- raw %>%
                   select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')

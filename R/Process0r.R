@@ -1,8 +1,17 @@
 
-#' Title
+#' Process dataset
+#'
+#' Initiates import and analysis of a curated dataset
+#'
+#' @param cycles cycles to be extracted for voltage profiles
+#' @param cccv was cccv cycling conducted? TRUE/FALSE
 #'
 #' @return
 #' @export
+#'
+#' @include Report0r.R
+#' @importFrom utils read.csv
+#'
 #'
 #' @examples
 metaDir <- function() {
@@ -43,15 +52,7 @@ metaDir <- function() {
           return(meta)
 }
 
-#' Title
-#'
-#' @param cycles
-#' @param cccv
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#' @rdnames metaDir
 process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
               #Select (optional)

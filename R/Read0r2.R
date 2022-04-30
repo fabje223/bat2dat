@@ -1,10 +1,17 @@
-#' Title
+#' Read experimental data
+#'
+#' Imports experimental data from data folders, depending on data format/instrument.
+#' Experimental data is converted into a uniform format for further processing
 #'
 #' @param dir
 #' @param filename
 #'
 #' @return
 #' @export
+#'
+#' @include Process0r.R Report0r.R
+#' @importFrom utils read.table
+#' @import dplyr
 #'
 #' @examples
 BCSraw <- function(dir, filename){
@@ -19,15 +26,7 @@ BCSraw <- function(dir, filename){
 
 }
 
-#' Title
-#'
-#' @param dir
-#' @param filename
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#' @rdname add
 VMPraw <- function(dir, filename){
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
@@ -40,15 +39,7 @@ VMPraw <- function(dir, filename){
 
   }
 
-#' Title
-#'
-#' @param dir
-#' @param filename
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#' @rdname add
 ARBINraw <- function(dir, filename){
 
   if(endsWith(filename, ".xlsx")){

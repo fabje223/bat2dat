@@ -2,7 +2,7 @@
 % Please edit documentation in R/Read0r2.R
 \name{BCSraw}
 \alias{BCSraw}
-\title{Title}
+\title{Read experimental data}
 \usage{
 BCSraw(dir, filename)
 }
@@ -13,5 +13,6 @@ BCSraw(dir, filename)
 
 }
 \description{
-Title
+Imports experimental data from data folders, depending on data format/instrument.
+Experimental data is converted into a uniform format for further processing
 }
