@@ -3,7 +3,7 @@
 
 report <- function(exp){
 
-          meta <- exp$cell.data
+          meta <- exp$metadata
           capacity <- exp$capacity
           VPprofiles <- exp$VoltageProfiles
 

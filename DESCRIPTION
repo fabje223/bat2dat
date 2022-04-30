@@ -16,14 +16,14 @@ License: What license is it under?
 Depends: 
     R (>= 2.10)
 Imports: 
-    tidyverse
+    RODBC,
+    devtools,
     gridExtra,
     kableExtra,
     readxl,
-    RODBC,
     shiny,
+    tidyverse,
     viridis
-    devtools
 Suggests:
     withr
 Author@R: person("Fabian", "Jeschull", email = "fabian.jeschull@kit.edu",
