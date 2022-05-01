@@ -11,6 +11,7 @@
 #'
 #' @include Process0r.R Report0r.R
 #' @importFrom utils read.table magrittr %>%
+#' @name %>%
 #' @import dplyr readxl
 #'
 #' @examples

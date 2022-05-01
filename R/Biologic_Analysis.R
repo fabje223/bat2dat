@@ -1,4 +1,3 @@
-#picks capacity data and end point potentials on charge and discharge sequence for each cycle
 #' Analysis of Biologic potentiostat data
 #'
 #' @param raw - object of Biologic.CAP
@@ -12,6 +11,7 @@
 #'
 #' @import dplyr
 #' @importFrom magrittr %>%
+#' @name %>%
 #'
 #' @examples
 #'
@@ -170,9 +170,9 @@ Biologic.CAP <- function(raw, AM.mass, type){
 
                         }
                 return(cap)
-        }
+}
 
-#splits constant current (CC) and constant voltage (CV) parts of the CC-CV technique apart
+#' @describeIn Biologic.CAP Evaluates CCCV-steps in galvanostatic cycling data
 Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
 
         #CV step
@@ -368,8 +368,7 @@ Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
         return(CCCV)
 }
 
-#extract voltage profiles (time/capacity vs. potential) for selected cycles
-#and differential capacity
+#' @describeIn Biologic.CAP Evaluates CCCV-steps in galvanostatic cycling data
 Biologic.VP <- function(raw, AM.mass, cycles, type){
 
         #extract columns needed from result file of instrument, using piping operators

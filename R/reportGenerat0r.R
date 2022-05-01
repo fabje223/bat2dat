@@ -9,8 +9,6 @@
 #' @export
 #'
 #' @include Report0r.R customThemes.R plot0r.R Direct0r.R
-#' @includeRmd report.Rdm
-#' @import
 #'
 #' @examples
 reportGenerat0r <- function(exp){

@@ -11,7 +11,6 @@
 #'
 #' @include Report0r.R Direct0r.R Read0r2.R
 #'
-#'
 #' @examples
 
 process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {

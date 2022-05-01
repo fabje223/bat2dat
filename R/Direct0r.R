@@ -12,7 +12,6 @@
 #' @include Report0r.R Process0r.R
 #' @importFrom utils read.csv
 #'
-#'
 #' @examples
 #'
 metaDir <- function() {

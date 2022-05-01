@@ -16,6 +16,7 @@
 #'
 #' @import dplyr
 #' @importFrom magrittr %>%
+#' @name %>%
 #'
 #' @examples
 BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
