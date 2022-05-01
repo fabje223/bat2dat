@@ -2,31 +2,49 @@ Type: Package
 Package: bat2dat
 Title: Analysis of Potentiostat Output for Battery Research
 Version: 0.1.0
+Author: fabje223
 Maintainer: Fabian Jeschull <fabian.jeschull@kit.edu>
 Description: More about what it does (maybe more than one line) Use four
-    Battery Cycling Data
-  Different Potentiostats produce different experimental output files.
-  Some of them are easy readable, as they are saves as .txt or .xlsx files, 
-  while others need to be exported into a readable format prior to further processing.
-  This tools aims to convert various potentiostat outputs into a uniform structure
-  while extracting key parameters and datasets for further graphical processing (e.g. in Origin).
-  For this tool to work metadata has to be provided.
-License: What license is it under?
+    Battery Cycling Data Different Potentiostats produce different
+    experimental output files.  Some of them are easy readable, as they
+    are saves as .txt or .xlsx files, while others need to be exported
+    into a readable format prior to further processing.  This tools aims
+    to convert various potentiostat outputs into a uniform structure while
+    extracting key parameters and datasets for further graphical
+    processing (e.g. in Origin).  For this tool to work metadata has to be
+    provided.
+License: CC0
+Depends: 
+    R (>= 2.10),
+    ggplot2
 Imports: 
     dplyr,
-    ggplot2,
     gridExtra,
-    knitr,
     readxl,
     rmarkdown,
     RODBC,
+    magrittr,
+    utils,
     viridis
 Suggests:
-    testthat
+    withr,
+    kableExtra,
+    knitr,
+    devtools
 Author@R: person("Fabian", "Jeschull", email = "fabian.jeschull@kit.edu",
     role = c("aut", "cre"))
 Encoding: UTF-8
 LazyData: true
-Depends: 
-    R (>= 2.10)
 RoxygenNote: 7.1.2
+Collate: 
+    'Read0r2.R'
+    'Direct0r.R'
+    'Process0r.R'
+    'customThemes.R'
+    'plot0r.R'
+    'reportGenerat0r.R'
+    'Report0r.R'
+    'Evaluat0r.R'
+    'Arbin_Analysis.R'
+    'Biologic_Analysis.R'
+    'TXTExport0r.R'

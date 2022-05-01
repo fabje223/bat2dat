@@ -1,42 +1,20 @@
-#! /usr/bin/Rscript --vanilla
-#args <- commandArgs(trailingOnly = TRUE)
-
-######################################################################################################################
-# Single File import:
-# 1.1) Analysis1_single.R
-#
-# Multiple File import:
-# 1.2) Analysis1_multi.R (this script)
-#
-# Script to extract data from EC-Lab files (.txt format) and Arbin files (both .res and .xlsx)
-# 2) Analysis2.R
-# 3) Biologic_Analysis.R
-# 4) Arbin_Analysis.R
-#
-# additionally for plotting:
-# in Origin:  SaveDat.R
-# as html Report:   - generateReport.R
-#                   - RMD_plot.R
-#                   - report.Rmd
-#####################################################################################################################
-# execute by marking lines 13-43 and press STRG+ENTER
-#####################################################################################################################
-
-#set working directory for Rfiles:
-#Rdir = 'C:/Users/gm5225/Documents/kadi4mat'
-#setwd(Rdir)
-
-#load packages, plot settings & Rscripts
-#source("Library.R")
-#source("Analysis2.R")
-#source("Biologic_Analysis.R")
-#source("Arbin_Analysis.R")
-#source("SaveDat.R")
-#source("RMD_plot.R")
-#source("generateReport.R")
-
-# initiate data processing with
-# analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#' @title Report0r
+#'
+#' @description initiate data processing with:
+#' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#'
+#' @param htmlReport create a html report? TRUE/FALSE
+#' @param exportCap export data.frames to .txt for further processing? TRUE/FALSE
+#'
+#' @return no return; saves a html report, .txt files of analysed data or both
+#' @export
+#'
+#' @include reportGenerat0r.R Process0r.R
+#'
+#' @examples
+#' \dontrun{
+#'  analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#'  }
 
 report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
@@ -64,12 +42,12 @@ report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
                     #Generate html report using RMarkdown
                     if(htmlReport == TRUE){
-                        report(exp, Rdir, outdir)
+                        reportGenerat0r(exp)
                     }
 
                     #Export data as .txt (Origin compatible)
                     if(exportCap == TRUE){
-                        SaveToOrigin.Stats(outdir, exp)
+                        SaveStatsToOrigin(exp)
                     }
                       #SaveToOrigin.CCCV(outdir, exp)
                       #SaveToOrigin.VP(outdir, exp, cycles)

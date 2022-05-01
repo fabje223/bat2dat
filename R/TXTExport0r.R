@@ -1,56 +1,62 @@
-######################################################################################################################
-# Saving results
-######################################################################################################################
-#save indiviual files:
-#change saving directory if desired
-#directory must exist
-#setwd(outdir)
+#' @title TXTExport0r
+#'
+#' @description exports analysed data from list 'processedData', i.e. exp = processedData[[sampleID]]
+#'
+#' @param exp list containing all sample information
+#'
+#' @return no return; writes a .txt file with respective data into outdir folder
+#' @export
+#'
+#' @importFrom utils write.table
+#'
+#' @examples
+SaveStatsToOrigin <- function(exp){
 
-#save capacity vs. cycle data
-SaveToOrigin.Stats <- function(outdir, exp){
-          
           capacity <- exp$capacity
-          meta <- exp$cell.data
-          filename <- meta$filename
+          meta <- exp$metadata
+          filename <- meta$sample.name
+          outdir <- meta$outdir
 
           write.table(capacity, paste0(outdir, "//Stat_", filename, ".txt"), sep="\t", row.names=FALSE)
-                
+
           print(paste0('Cycling data of cell ', filename, ' exported to ', outdir))
 }
 
-#save CCCV table
-SaveToOrigin.CCCV <- function(outdir, exp){
-          
+#' @describeIn SaveStatsToOrigin save results from CCCV step analysis
+SaveToOrigin.CCCV <- function(exp){
+
           CCCV <- exp$CCCV
-          meta <- exp$cell.data
+          meta <- exp$metadata
           filename <- meta$sample.name
+          outdir <- meta$outdir
 
           write.table(CCCV, paste0(outdir, "//CCCV_", filename, ".txt"), sep="\t", row.names=FALSE)
-          
+
           print(paste0('Cycling data of cell ', filename, ' exported to ', outdir))
 }
 
-#save capacity vs. cycle data
-SaveToOrigin.VP <- function(outdir, exp, cycles){
-    
+#' @describeIn SaveStatsToOrigin save results from extracted voltage profiles
+SaveVPToOrigin <- function(exp){
+
     VPprofiles <- exp$VoltageProfiles
-    meta <- exp$cell.data
+    meta <- exp$metadata
     filename <- meta$sample.name
-    
+    outdir <- meta$outdir
+
     for(i in 1:length(VPprofiles)){
-      
+
       VP <- VPprofiles[[i]]
 
-          write.table(VP, paste0(outdir, "//VP_", filename, "cycle#", cycles[i], ".txt"), sep="\t", row.names=FALSE)
+          write.table(VP, paste0(outdir, "//VP_", filename, "cycle#", i, ".txt"), sep="\t", row.names=FALSE)
     }
-    
+
     print(paste0('Voltage profiles of cell ', filename, ' exported to ', outdir))
 
 }
 
-SaveToXlxs <- function(outdir, meta, capacity, VPprofiles){
-  
-  setwd(outdir)
-  write.xlsx(capacity, file = paste0(meta[1,2], ".xlsx"), sheetName = "Stats", append = FALSE)
-  
-}
+#' @describeIn SaveStatsToOrigin produces .xlsx file from generated data
+#SaveToXlxs <- function(outdir, meta, capacity, VPprofiles){
+
+ # write.xlsx(capacity, file = paste0(meta[1,2], ".xlsx"), sheetName = "Stats", append = FALSE)
+
+#}
