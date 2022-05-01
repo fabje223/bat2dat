@@ -1,15 +1,16 @@
-# initiate data processing with
-# analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
-
-#' Title
+#' Report0r
 #'
-#' @param htmlReport
-#' @param exportCap
+#' initiate data processing with:
+#' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#'
+#' @param htmlReport create a html report? TRUE/FALSE
+#' @param exportCap export data.frames to .txt for further processing? TRUE/FALSE
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)'
 
 report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 

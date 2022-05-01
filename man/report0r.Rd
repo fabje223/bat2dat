@@ -2,16 +2,19 @@
 % Please edit documentation in R/Report0r.R
 \name{report0r}
 \alias{report0r}
-\title{Title}
+\title{Report0r}
 \usage{
 report0r(htmlReport = FALSE, exportCap = TRUE)
 }
 \arguments{
-\item{exportCap}{}
+\item{htmlReport}{create a html report? TRUE/FALSE}
+
+\item{exportCap}{export data.frames to .txt for further processing? TRUE/FALSE}
 }
 \value{
 
 }
 \description{
-Title
+initiate data processing with:
+analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
 }

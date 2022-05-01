@@ -1,7 +1,6 @@
-
-#' Process dataset
+#' Direct0r
 #'
-#' Initiates import and analysis of a curated dataset
+#' Locate folder with meta data and raw data
 #'
 #' @param cycles cycles to be extracted for voltage profiles
 #' @param cccv was cccv cycling conducted? TRUE/FALSE

@@ -1,4 +1,4 @@
-#' Read experimental data
+#' Read0r2.R
 #'
 #' Imports experimental data from data folders, depending on data format/instrument.
 #' Experimental data is converted into a uniform format for further processing

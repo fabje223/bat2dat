@@ -6,7 +6,7 @@
 \alias{plotVPloop}
 \alias{plotVPlin}
 \alias{plotVPsplit}
-\title{Plotting Script for RMarkdown Report}
+\title{plot0r}
 \usage{
 plotCapReport(capacity)
 
@@ -19,7 +19,7 @@ plotVPlin(vp.dat)
 plotVPsplit(vp.dat, cell)
 }
 \arguments{
-\item{capacity}{}
+\item{capacity}{data.frame with galvanostatic cycling information}
 }
 \value{
 

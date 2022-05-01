@@ -1,5 +1,4 @@
-
-#' Process dataset
+#' Process0r
 #'
 #' Initiates import and analysis of a curated dataset
 #'

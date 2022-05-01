@@ -1,11 +1,10 @@
-
 #' Arbin.analysis
 #'
 #' Analysis Arbin data to produce data.frames for voltage profiles of selected cycles
 #' and capacity (vs. cycle number) data
 #'
-#' @param raw
-#' @param cycles
+#' @param raw raw data file
+#' @param cycles selected cycles to extract for voltage profiles
 #'
 #' @return returns data.frames (for Arbin.VP as list)
 #' @export

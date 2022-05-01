@@ -1,5 +1,6 @@
-#' Starts evaluation of expeirmental data
+#' Evaluat0r
 #'
+#' Starts evaluation of experimental data.
 #' Depending on instrument different analysis scripts are needed
 #'
 #' @param raw raw data

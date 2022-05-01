@@ -2,7 +2,7 @@
 % Please edit documentation in R/Process0r.R
 \name{process0r}
 \alias{process0r}
-\title{Process dataset}
+\title{Process0r}
 \usage{
 process0r(cycles = c(seq(0, 100, 10)), cccv = FALSE)
 }

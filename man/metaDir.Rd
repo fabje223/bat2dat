@@ -2,7 +2,7 @@
 % Please edit documentation in R/Direct0r.R
 \name{metaDir}
 \alias{metaDir}
-\title{Process dataset}
+\title{Direct0r}
 \usage{
 metaDir()
 }
@@ -15,7 +15,7 @@ metaDir()
 returns a data.frame with metadata on samples and an input & output directory
 }
 \description{
-Initiates import and analysis of a curated dataset
+Locate folder with meta data and raw data
 }
 \examples{
 

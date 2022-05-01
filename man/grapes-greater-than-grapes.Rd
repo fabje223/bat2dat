@@ -7,7 +7,7 @@
 \alias{BiologicEvaluat0r}
 \alias{Arbin.VP}
 \alias{Biologic.CAP}
-\title{Read experimental data}
+\title{Read0r2.R}
 \usage{
 BCSraw(dir, filename)
 
@@ -28,7 +28,7 @@ Biologic.CAP(raw, AM.mass, type)
 
 \item{cellType}{cell configuration (halfcell, fullcell, etc.)}
 
-\item{cycles}{}
+\item{cycles}{selected cycles to extract for voltage profiles}
 
 \item{cccv}{perform CCCV step analysis? TRUE/FALSE}
 
@@ -51,10 +51,13 @@ capacity table
 Imports experimental data from data folders, depending on data format/instrument.
 Experimental data is converted into a uniform format for further processing
 
+Starts evaluation of experimental data.
 Depending on instrument different analysis scripts are needed
 
 Analysis Arbin data to produce data.frames for voltage profiles of selected cycles
 and capacity (vs. cycle number) data
+
+Analysis of Biologic potentiostat data
 }
 \examples{
 

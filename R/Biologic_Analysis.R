@@ -1,3 +1,5 @@
+#' Biologic_Analysis
+#'
 #' Analysis of Biologic potentiostat data
 #'
 #' @param raw - object of Biologic.CAP

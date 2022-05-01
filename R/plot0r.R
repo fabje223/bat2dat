@@ -1,7 +1,8 @@
-
+#' plot0r
+#'
 #' Plotting Script for RMarkdown Report
 #'
-#' @param capacity
+#' @param capacity data.frame with galvanostatic cycling information
 #'
 #' @return
 #' @export
