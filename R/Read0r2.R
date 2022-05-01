@@ -3,8 +3,8 @@
 #' Imports experimental data from data folders, depending on data format/instrument.
 #' Experimental data is converted into a uniform format for further processing
 #'
-#' @param dir
-#' @param filename
+#' @param dir directory to raw data folder
+#' @param filename sample name
 #'
 #' @return
 #' @export
