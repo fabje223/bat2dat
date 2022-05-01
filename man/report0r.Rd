@@ -18,3 +18,8 @@ report0r(htmlReport = FALSE, exportCap = TRUE)
 initiate data processing with:
 analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
 }
+\examples{
+\dontrun{
+ analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+ }
+}

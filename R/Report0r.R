@@ -1,6 +1,6 @@
-#' Report0r
+#' @title Report0r
 #'
-#' initiate data processing with:
+#' @description initiate data processing with:
 #' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
 #'
 #' @param htmlReport create a html report? TRUE/FALSE
@@ -9,8 +9,12 @@
 #' @return
 #' @export
 #'
+#' @include reportGenerat0r.R Process0r.R
+#'
 #' @examples
-#' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)'
+#' \dontrun{
+#'  analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#'  }
 
 report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
@@ -43,7 +47,7 @@ report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
                     #Export data as .txt (Origin compatible)
                     if(exportCap == TRUE){
-                        SaveToOrigin.Stats(exp)
+                        SaveStatsToOrigin(exp)
                     }
                       #SaveToOrigin.CCCV(outdir, exp)
                       #SaveToOrigin.VP(outdir, exp, cycles)

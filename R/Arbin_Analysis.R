@@ -1,6 +1,6 @@
-#' Arbin.analysis
+#' @title Arbin.analysis
 #'
-#' Analysis Arbin data to produce data.frames for voltage profiles of selected cycles
+#' @description Analysis Arbin data to produce data.frames for voltage profiles of selected cycles
 #' and capacity (vs. cycle number) data
 #'
 #' @param raw raw data file
@@ -10,6 +10,8 @@
 #' @export
 #'
 #' @include Evaluat0r.R Process0r.R Read0r2.R Report0r.R
+#' @importFrom utils head
+#' @importFrom utils tail
 #' @importFrom magrittr %>%
 #' @name %>%
 #' @import dplyr

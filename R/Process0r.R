@@ -1,6 +1,6 @@
-#' Process0r
+#' @title Process0r
 #'
-#' Initiates import and analysis of a curated dataset
+#' @description Initiates import and analysis of a curated dataset
 #'
 #' @param cycles cycles to be extracted for voltage profiles
 #' @param cccv was cccv cycling conducted? TRUE/FALSE
@@ -65,7 +65,7 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
                             raw <- ARBINraw(dir, meta$sample.name)
 
-                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
+                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], cycles)
 
                           }else{
 

@@ -1,6 +1,6 @@
-#' Evaluat0r
+#' @title Evaluat0r
 #'
-#' Starts evaluation of experimental data.
+#' @description Starts evaluation of experimental data.
 #' Depending on instrument different analysis scripts are needed
 #'
 #' @param raw raw data
@@ -44,17 +44,17 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
               }
 
 #' @describeIn BiologicEvaluat0r Evaluat0r for Arbin Instruments
-ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
+ArbinEvaluat0r <- function(raw, AMmass, cycles){
 
               cycDat <- list('capacity' = NULL,
                              'VoltageProfiles' = NULL,
                              'CCCV' = NULL)
 
               #calculate capacities for each cycle
-              cycDat$capacity <- Arbin.CAP(raw, AMmass, cellType)
+              cycDat$capacity <- Arbin.CAP(raw, AMmass)
 
               #extract voltage profiles for selected cycles
-              cycDat$VPprofiles <- Arbin.VP(raw, AMmass, cycles, cellType)
+              cycDat$VPprofiles <- Arbin.VP(raw, AMmass, cycles)
 
               return(cycDat)
 

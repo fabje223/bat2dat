@@ -1,6 +1,6 @@
-#' Biologic_Analysis
+#' @title Biologic_Analysis
 #'
-#' Analysis of Biologic potentiostat data
+#' @description Analysis of Biologic potentiostat data
 #'
 #' @param raw - object of Biologic.CAP
 #' @param AM.mass - object of Biologic.CAP
@@ -11,12 +11,13 @@
 #'
 #' @include Read0r2.R Evaluat0r.R Process0r.R Report0r.R
 #'
-#' @import dplyr
 #' @importFrom magrittr %>%
+#' @importFrom utils head
+#' @importFrom utils tail
 #' @name %>%
+#' @import dplyr
 #'
 #' @examples
-#'
 Biologic.CAP <- function(raw, AM.mass, type){
 
         #extract columns needed from result file of instrument, using piping operators

@@ -1,5 +1,16 @@
-#Custom Plot layout
-
+#' @title customTheme
+#'
+#' @description creates a custom theme for plotting data, used in report.Rmd
+#'
+#' @return customTheme for ggplot2
+#' @export
+#'
+#' @examples
+#' p <- ggplot(mtcars) +
+#'      geom_point(aes(x=mpg, y=cyl), color='red', size=4) +
+#'      customTheme()
+#'
+#' p <- p + customTheme()
     customTheme <- function() {
 
                     theme_bw() %+replace%

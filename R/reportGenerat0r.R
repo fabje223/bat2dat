@@ -1,6 +1,6 @@
-#' reportGenerat0r
+#' @title reportGenerat0r
 #'
-#' Interface to plot data and pass it to report.Rdm to
+#' @description Interface to plot data and pass it to report.Rdm to
 #' generate data report
 #'
 #' @param exp sample info
@@ -8,7 +8,7 @@
 #' @return
 #' @export
 #'
-#' @include Report0r.R customThemes.R plot0r.R Direct0r.R
+#' @include Report0r.R customThemes.R plot0r.R
 #'
 #' @examples
 reportGenerat0r <- function(exp){

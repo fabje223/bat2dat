@@ -1,9 +1,6 @@
-#' Direct0r
+#' @title Direct0r
 #'
-#' Locate folder with meta data and raw data
-#'
-#' @param cycles cycles to be extracted for voltage profiles
-#' @param cccv was cccv cycling conducted? TRUE/FALSE
+#' @description Locate folder with meta data and raw data
 #'
 #' @return returns a data.frame with metadata on samples and an input & output directory
 #' @export

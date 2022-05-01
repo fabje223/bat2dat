@@ -1,6 +1,6 @@
-#' Read0r2.R
+#' @title Read0r2.R
 #'
-#' Imports experimental data from data folders, depending on data format/instrument.
+#' @description Imports experimental data from data folders, depending on data format/instrument.
 #' Experimental data is converted into a uniform format for further processing
 #'
 #' @param dir directory to raw data folder
@@ -10,7 +10,8 @@
 #' @export
 #'
 #' @include Process0r.R Report0r.R
-#' @importFrom utils read.table magrittr %>%
+#' @importFrom utils read.table
+#' @importFrom magrittr %>%
 #' @name %>%
 #' @import dplyr readxl
 #'

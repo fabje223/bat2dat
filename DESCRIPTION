@@ -15,40 +15,39 @@ Description: More about what it does (maybe more than one line) Use four
     provided.
 License: What license is it under?
 Depends: 
-    R (>= 2.10)
+    R (>= 2.10),
+    ggplot2
 Imports: 
-    devtools,
     dplyr,
-    ggplot2,
+    scales,
     gridExtra,
     kableExtra,
     knitr,
     readxl,
     rmarkdown,
     RODBC,
-    tidyr,
-    tidyverse,
-    utils,
     magrittr,
+    utils,
     viridis
 Suggests:
-    withr
+    withr,
+    devtools
 Author@R: person("Fabian", "Jeschull", email = "fabian.jeschull@kit.edu",
     role = c("aut", "cre"))
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
 Collate: 
-    'Report0r.R'
+    'Read0r2.R'
     'Direct0r.R'
     'Process0r.R'
-    'Read0r2.R'
+    'customThemes.R'
+    'plot0r.R'
+    'reportGenerat0r.R'
+    'Report0r.R'
     'Evaluat0r.R'
     'Arbin_Analysis.R'
     'Biologic_Analysis.R'
     'CellLog-xlsx-to-csv.R'
     'TXTExport0r.R'
-    'customThemes.R'
     'packageBuild0r.R'
-    'reportGenerat0r.R'
-    'plot0r.R'
