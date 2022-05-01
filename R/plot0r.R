@@ -6,7 +6,7 @@
 #' @return
 #' @export
 #'
-#' @include customThemes.R
+#' @include customThemes.R reportGenerat0r.R
 #' @import viridis ggplot2 gridExtra
 #'
 #' @examples
@@ -54,7 +54,7 @@ plotCapReport <- function(capacity){
       #return(p.cap, p.CE)
 }
 
-#' @rdnames plotCapReport
+#' @describeIn plotCapReport plots IR drop versus cycle number
 plotIRdrop <- function(capacity){
 
   #Plot capacity
@@ -102,7 +102,7 @@ plotIRdrop <- function(capacity){
 
 }
 
-#' @rdnames plotCapReport
+#' @describeIn plotCapReport plots voltage profile vs Qloop
 plotVPloop <- function(vp.dat){
 
   #Plot capacity
@@ -125,7 +125,7 @@ plotVPloop <- function(vp.dat){
 
 }
 
-#' @rdnames plotCapReport
+#' @describeIn plotCapReport plots voltage profile vs Q
 plotVPlin <- function(vp.dat){
 
     ch <- vp.dat %>%
@@ -156,7 +156,7 @@ plotVPlin <- function(vp.dat){
 
 }
 
-#' @rdnames plotCapReport
+#' @describeIn plotCapReport plots voltage profile vs Q
 plotVPsplit <- function(vp.dat, cell){
 
   if(cell %in% c('halfcell-cathode', 'fullcell')){

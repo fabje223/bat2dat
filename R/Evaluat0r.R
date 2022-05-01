@@ -12,7 +12,7 @@
 #' @return returns a list cycDat with analysed data
 #' @export
 #'
-#' @include Read0r.R Process0r.R Report0r.R
+#' @include Read0r2.R Process0r.R Report0r.R
 #'
 #' @import dplyr
 #' @importFrom magrittr %>%

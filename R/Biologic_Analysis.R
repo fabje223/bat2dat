@@ -8,7 +8,7 @@
 #' @return capacity table
 #' @export
 #'
-#' @include Read0r.R Evaluat0r.R Process0r.R Report0r.R
+#' @include Read0r2.R Evaluat0r.R Process0r.R Report0r.R
 #'
 #' @import dplyr
 #' @importFrom magrittr %>%
