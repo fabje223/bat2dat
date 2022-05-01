@@ -20,12 +20,6 @@
 #' @examples
 Biologic.CAP <- function(raw, AM.mass, type){
 
-        #extract columns needed from result file of instrument, using piping operators
-        #df.cycles <- tmp %>%
-         #             select('cycle.number', 'time.s', 'Ns', 'Ewe.V', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
-          #            mutate(time.s = time.s - min(time.s))
-        #colnames(df.cycles) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'Qdc.mAh', 'Qch.mAh')
-
         #create empty result data.frame
         cap <- data.frame("CycNr" = numeric(), "time.s.ch" = numeric(), "time.s.dc" = numeric(), "Qch.mAh" = numeric(),
                           "Qdc.mAh" = numeric(), "CE" = numeric(), "Ewe.endCH" = numeric(), "Ewe.endDC" = numeric())
@@ -35,6 +29,9 @@ Biologic.CAP <- function(raw, AM.mass, type){
         # split files into charge and discharge sequences
         # ! EC lab files for anode half cells start in the second half of the sequence with a negative current (--> Ns parameter)
         # ! Sorting needs to be corrected for Ns in this case (Ns should be the same for one cycle, but is shifted by half a cycle)
+
+        #binding variables to function Biologic.CAP
+        cyc.nr <- Ns <- I.mA <- time.s <- Qch.mAh <- Qdc.mAh <- Qch.mAh.g <- Qdc.mAh.g <- CE <- Ewe.endCH <- Ewe.V <- NULL
 
                 seq1.df <- data.frame()
                 seq2.df <- data.frame()
@@ -177,6 +174,9 @@ Biologic.CAP <- function(raw, AM.mass, type){
 
 #' @describeIn Biologic.CAP Evaluates CCCV-steps in galvanostatic cycling data
 Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
+
+        #binding variables to function Biologic.CAP
+        cyc.nr <- Ns <- I.mA <- Ewe.V <- dE <-NULL
 
         #CV step
         tmp3 <- raw %>%
@@ -379,6 +379,9 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
         #         select('cycle.number', 'time.s', 'Ns', 'Ewe.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
         #        mutate(time.s = time.s - min(time.s))
         #colnames(df.VP) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
+
+        #binding variables to function Biologic.CAP
+        cyc.nr <- Ns <- I.mA <- Qch.mAh <- Qdc.mAh <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- NULL
 
         #create empty result data.frame and empty VP.list (temporary storage)
         VPprofiles <- data.frame("CycNr" = numeric(), "time.s" = numeric(), "Qch.mAh" = numeric(), "Qdc.mAh" = numeric(), "Qloop" = numeric(),

@@ -42,7 +42,7 @@ report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
                     #Generate html report using RMarkdown
                     if(htmlReport == TRUE){
-                        report(exp)
+                        reportGenerat0r(exp)
                     }
 
                     #Export data as .txt (Origin compatible)

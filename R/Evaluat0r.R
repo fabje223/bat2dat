@@ -54,7 +54,7 @@ ArbinEvaluat0r <- function(raw, AMmass, cycles){
               cycDat$capacity <- Arbin.CAP(raw, AMmass)
 
               #extract voltage profiles for selected cycles
-              cycDat$VPprofiles <- Arbin.VP(raw, AMmass, cycles)
+              cycDat$VPprofiles <- Arbin.VP(raw, cycles)
 
               return(cycDat)
 

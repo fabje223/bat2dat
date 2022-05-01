@@ -6,11 +6,6 @@
 \usage{
 metaDir()
 }
-\arguments{
-\item{cycles}{cycles to be extracted for voltage profiles}
-
-\item{cccv}{was cccv cycling conducted? TRUE/FALSE}
-}
 \value{
 returns a data.frame with metadata on samples and an input & output directory
 }

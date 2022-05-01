@@ -13,7 +13,7 @@ Description: More about what it does (maybe more than one line) Use four
     extracting key parameters and datasets for further graphical
     processing (e.g. in Origin).  For this tool to work metadata has to be
     provided.
-License: What license is it under?
+License: CC0
 Depends: 
     R (>= 2.10),
     ggplot2
@@ -48,6 +48,4 @@ Collate:
     'Evaluat0r.R'
     'Arbin_Analysis.R'
     'Biologic_Analysis.R'
-    'CellLog-xlsx-to-csv.R'
     'TXTExport0r.R'
-    'packageBuild0r.R'

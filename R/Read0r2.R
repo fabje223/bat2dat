@@ -18,6 +18,9 @@
 #' @examples
 BCSraw <- function(dir, filename){
 
+  #binding variables locally to function BCSraw()
+  time.s <- NULL
+
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ecell.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
@@ -30,6 +33,9 @@ BCSraw <- function(dir, filename){
 
 #' @describeIn BCSraw read .txt files from raw data directory
 VMPraw <- function(dir, filename){
+
+  #binding variables locally to function VMPraw()
+  time.s <- NULL
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
   raw <- tmp %>%

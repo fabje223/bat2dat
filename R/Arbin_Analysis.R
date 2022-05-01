@@ -19,6 +19,9 @@
 #' @examples
 Arbin.VP <- function(raw, cycles){
 
+  #binding variables locally to function Arbin.VP
+  cyc.nr <- time.s <- Qch.Ah <- Qdc.Ah <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- NULL
+
   VP.list <- list()
   k = 1
 
@@ -58,7 +61,11 @@ Arbin.VP <- function(raw, cycles){
 
 #' @describeIn Arbin.VP data from galvanostatic cycling experiments
 Arbin.CAP <- function(raw, AM.mass){
-   #raw <- ldat[[1]]$raw
+
+  #binding variables locally to function Arbin.CAP
+  cyc.nr <- I.A <- NULL
+
+  #raw <- ldat[[1]]$raw
    mass <- AM.mass/1000 #in g
 
    #determine cell type: anode-half cell/ cathode-half cell or full cell

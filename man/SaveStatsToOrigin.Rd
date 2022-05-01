@@ -8,7 +8,7 @@
 \usage{
 SaveStatsToOrigin(exp)
 
-SaveToOrigin.CCCV(outdir, exp)
+SaveToOrigin.CCCV(exp)
 
 SaveVPToOrigin(exp)
 }

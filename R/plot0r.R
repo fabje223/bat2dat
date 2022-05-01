@@ -1,8 +1,10 @@
-#' @description plot0r
+#' @title plot0r
 #'
 #' @description Plotting Script for RMarkdown Report
 #'
 #' @param capacity data.frame with galvanostatic cycling information
+#' @param vp.dat data.frame with voltage profile information on selected cycles
+#' @param cell cell configuration of experiment (halfcell-anode, halfcell-cathode, fullcell, LiS)
 #'
 #' @return
 #' @export
@@ -12,6 +14,10 @@
 #'
 #' @examples
 plotCapReport <- function(capacity){
+
+      #binding variables locally to function plotCapReport
+      p.cap <- p.CE <- NULL
+      CycNr <- Qdc.mAh.g <- CE <- NULL
 
       #Plot capacity
       p.cap <- ggplot(capacity) +
@@ -57,6 +63,11 @@ plotCapReport <- function(capacity){
 
 #' @describeIn plotCapReport plots IR drop versus cycle number
 plotIRdrop <- function(capacity){
+
+  p.IR.drop.ch <- p.IR.drop.dc <- NULL
+
+  #binding variables locally to function plotCapReport
+  CycNr <- Edrop.ch <- Edrop.dc <- NULL
 
   #Plot capacity
   max.y.ch <- max(capacity$Edrop.ch)
@@ -106,6 +117,11 @@ plotIRdrop <- function(capacity){
 #' @describeIn plotCapReport plots voltage profile vs Qloop
 plotVPloop <- function(vp.dat){
 
+  p.vp <- NULL
+
+  #binding variables locally to function plotVPloop
+  CycNr <- Ewe.V <- Ewe.V.rnd <- Qloop.mAh.g <- NULL
+
   #Plot capacity
   p.vp <- ggplot(vp.dat) +
     geom_path(aes(x=Qloop.mAh.g, y=Ewe.V.rnd, color=factor(CycNr)), size=1.5) +
@@ -128,6 +144,11 @@ plotVPloop <- function(vp.dat){
 
 #' @describeIn plotCapReport plots voltage profile vs Q
 plotVPlin <- function(vp.dat){
+
+    p.vp <- NULL
+
+    #binding variables locally to function plotVPloop
+    CycNr <- Ewe.V.ch <- Ewe.V.dc <- Qch.mAh.g <- Qdc.mAh.g <- type <- NULL
 
     ch <- vp.dat %>%
           filter(type == 'ch')
@@ -159,6 +180,11 @@ plotVPlin <- function(vp.dat){
 
 #' @describeIn plotCapReport plots voltage profile vs Q
 plotVPsplit <- function(vp.dat, cell){
+
+  p.vp1 <- p.vp2 <- NULL
+
+  #binding variables locally to function plotVPloop
+  CycNr <- Ewe.V.ch <- Ewe.V.dc <- Qch.mAh.g <- Qdc.mAh.g <- type <- NULL
 
   if(cell %in% c('halfcell-cathode', 'fullcell')){
     ch <- vp.dat %>%

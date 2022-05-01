@@ -36,8 +36,8 @@ reportGenerat0r <- function(exp){
     VP.df <- do.call(rbind, l.VP)
 
     pVPloop <- plotVPloop(VP.df)
-    #pVPlin  <- plotVPlin(VP.df)
-    #pVPsplit  <- plotVPsplit(VP.df, meta$cell.config)
+    pVPlin  <- plotVPlin(VP.df)
+    pVPsplit  <- plotVPsplit(VP.df, meta$cell.config)
 
   }else{
 
