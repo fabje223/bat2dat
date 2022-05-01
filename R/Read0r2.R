@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @include Process0r.R Report0r.R
-#' @importFrom utils read.table
-#' @import dplyr
+#' @importFrom utils read.table magrittr %>%
+#' @import dplyr readxl
 #'
 #' @examples
 BCSraw <- function(dir, filename){
@@ -26,7 +26,7 @@ BCSraw <- function(dir, filename){
 
 }
 
-#' @rdname add
+#' @describeIn BCSraw read .txt files from raw data directory
 VMPraw <- function(dir, filename){
 
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
@@ -39,7 +39,7 @@ VMPraw <- function(dir, filename){
 
   }
 
-#' @rdname add
+#' @describeIn BCSraw read .txt files from raw data directory
 ARBINraw <- function(dir, filename){
 
   if(endsWith(filename, ".xlsx")){
@@ -74,10 +74,10 @@ ARBINraw <- function(dir, filename){
 
     f.dir <- paste0(dir, "/", filename)
 
-    con <- odbcConnectAccess2007(f.dir)
+    con <- RODBC::odbcConnectAccess2007(f.dir)
     #sqlTables(con, tableType="TABLE")$TABLE_NAME
-    raw <- sqlFetch(con, "Channel_Normal_Table")
-    odbcCloseAll()
+    raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
+    RODBC::odbcCloseAll()
 
     raw <- raw %>%
       select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')

@@ -6,7 +6,7 @@
 #' @return
 #' @export
 #'
-#' @include customTheme.R
+#' @include customThemes.R
 #' @import viridis ggplot2 gridExtra
 #'
 #' @examples

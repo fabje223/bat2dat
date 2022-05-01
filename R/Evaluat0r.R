@@ -2,14 +2,14 @@
 #'
 #' Depending on instrument different analysis scripts are needed
 #'
-#' @param raw
-#' @param AMmass
-#' @param cellType
-#' @param cycles
-#' @param cccv
-#' @param warningsLOG
+#' @param raw raw data
+#' @param AMmass active material mass in mg
+#' @param cellType cell configuration (halfcell, fullcell, etc.)
+#' @param cycles cycles to be included in voltage profile analysis
+#' @param cccv perform CCCV step analysis? TRUE/FALSE
+#' @param warningsLOG a log book for warning messages
 #'
-#' @return
+#' @return returns a list cycDat with analysed data
 #' @export
 #'
 #' @include Read0r.R Process0r.R Report0r.R
@@ -41,17 +41,7 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               }
 
-#' Title
-#'
-#' @param raw
-#' @param AMmass
-#' @param cellType
-#' @param cycles
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#' @describeIn BiologicEvaluat0r Evaluat0r for Arbin Instruments
 ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
 
               cycDat <- list('capacity' = NULL,
