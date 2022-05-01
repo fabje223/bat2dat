@@ -14,7 +14,10 @@
 #' @importFrom utils tail
 #' @importFrom magrittr %>%
 #' @name %>%
-#' @import dplyr
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom dplyr arrange
 #'
 #' @examples
 Arbin.VP <- function(raw, cycles){

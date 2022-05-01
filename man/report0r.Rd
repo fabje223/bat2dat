@@ -12,7 +12,7 @@ report0r(htmlReport = FALSE, exportCap = TRUE)
 \item{exportCap}{export data.frames to .txt for further processing? TRUE/FALSE}
 }
 \value{
-
+no return; saves a html report, .txt files of analysed data or both
 }
 \description{
 initiate data processing with:

@@ -15,7 +15,9 @@
 #'
 #' @include Read0r2.R Process0r.R Report0r.R
 #'
-#' @import dplyr
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @name %>%
 #'

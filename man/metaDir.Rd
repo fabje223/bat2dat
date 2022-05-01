@@ -13,5 +13,7 @@ returns a data.frame with metadata on samples and an input & output directory
 Locate folder with meta data and raw data
 }
 \examples{
-
+\dontrun{
+meta <- metaDir()
+}
 }

@@ -39,7 +39,7 @@ Biologic.CAP(raw, AM.mass, type)
 \item{type}{- object of Biologic.CAP}
 }
 \value{
-
+returns data.frame with raw data
 
 returns a list cycDat with analysed data
 

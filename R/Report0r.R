@@ -6,7 +6,7 @@
 #' @param htmlReport create a html report? TRUE/FALSE
 #' @param exportCap export data.frames to .txt for further processing? TRUE/FALSE
 #'
-#' @return
+#' @return no return; saves a html report, .txt files of analysed data or both
 #' @export
 #'
 #' @include reportGenerat0r.R Process0r.R

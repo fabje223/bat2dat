@@ -6,11 +6,12 @@
 #' @param vp.dat data.frame with voltage profile information on selected cycles
 #' @param cell cell configuration of experiment (halfcell-anode, halfcell-cathode, fullcell, LiS)
 #'
-#' @return
+#' @return returns graphs generated from expeirmental data for report.Rmd
 #' @export
 #'
 #' @include customThemes.R reportGenerat0r.R
-#' @import viridis ggplot2 gridExtra
+#' @import ggplot2 viridis
+#' @importFrom gridExtra grid.arrange
 #'
 #' @examples
 plotCapReport <- function(capacity){

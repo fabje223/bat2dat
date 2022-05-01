@@ -26,7 +26,7 @@ plotVPsplit(vp.dat, cell)
 \item{cell}{cell configuration of experiment (halfcell-anode, halfcell-cathode, fullcell, LiS)}
 }
 \value{
-
+returns graphs generated from expeirmental data for report.Rmd
 }
 \description{
 Plotting Script for RMarkdown Report

@@ -5,7 +5,8 @@
 #' @param cycles cycles to be extracted for voltage profiles
 #' @param cccv was cccv cycling conducted? TRUE/FALSE
 #'
-#' @return
+#' @return returns a summary of all sample data, including metadata and raw file.
+#' sampleSUMMARY is a list of one or more samples stated in meta.csv file (=cell log).
 #' @export
 #'
 #' @include Report0r.R Direct0r.R Read0r2.R

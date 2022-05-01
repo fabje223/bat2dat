@@ -9,7 +9,9 @@
 #' @importFrom utils read.csv
 #'
 #' @examples
-#'
+#' \dontrun{
+#' meta <- metaDir()
+#' }
 metaDir <- function() {
 
   #pop-up window

@@ -12,10 +12,12 @@
 #' @include Read0r2.R Evaluat0r.R Process0r.R Report0r.R
 #'
 #' @importFrom magrittr %>%
+#' @name %>%
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
 #' @importFrom utils head
 #' @importFrom utils tail
-#' @name %>%
-#' @import dplyr
 #'
 #' @examples
 Biologic.CAP <- function(raw, AM.mass, type){

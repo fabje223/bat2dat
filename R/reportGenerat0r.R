@@ -5,12 +5,19 @@
 #'
 #' @param exp sample info
 #'
-#' @return
+#' @return initiates data report function report.Rmd and generates plots for report using plot0r.R
 #' @export
 #'
 #' @include Report0r.R customThemes.R plot0r.R
 #'
 #' @examples
+#' \dontrun{
+#' exp <- list("metadata" <- base.info,
+#'             "capacity" <- data.frame,
+#'             "VoltageProfiles" <- list(df1, df2, ...),
+#'             "CCCV" <- data.frame)
+#' report <- reportGenerat0r(exp)
+#' }
 reportGenerat0r <- function(exp){
 
   meta <- exp$metadata

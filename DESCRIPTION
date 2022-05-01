@@ -19,10 +19,7 @@ Depends:
     ggplot2
 Imports: 
     dplyr,
-    scales,
     gridExtra,
-    kableExtra,
-    knitr,
     readxl,
     rmarkdown,
     RODBC,
@@ -31,6 +28,8 @@ Imports:
     viridis
 Suggests:
     withr,
+    kableExtra,
+    knitr,
     devtools
 Author@R: person("Fabian", "Jeschull", email = "fabian.jeschull@kit.edu",
     role = c("aut", "cre"))

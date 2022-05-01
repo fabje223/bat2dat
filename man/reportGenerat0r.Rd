@@ -10,9 +10,18 @@ reportGenerat0r(exp)
 \item{exp}{sample info}
 }
 \value{
-
+initiates data report function report.Rmd and generates plots for report using plot0r.R
 }
 \description{
 Interface to plot data and pass it to report.Rdm to
 generate data report
+}
+\examples{
+\dontrun{
+exp <- list("metadata" <- base.info,
+            "capacity" <- data.frame,
+            "VoltageProfiles" <- list(df1, df2, ...),
+            "CCCV" <- data.frame)
+report <- reportGenerat0r(exp)
+}
 }

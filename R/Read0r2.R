@@ -6,14 +6,18 @@
 #' @param dir directory to raw data folder
 #' @param filename sample name
 #'
-#' @return
+#' @return returns data.frame with raw data
 #' @export
 #'
 #' @include Process0r.R Report0r.R
 #' @importFrom utils read.table
 #' @importFrom magrittr %>%
 #' @name %>%
-#' @import dplyr readxl
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#'
+#' @import readxl
 #'
 #' @examples
 BCSraw <- function(dir, filename){

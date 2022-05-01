@@ -12,7 +12,8 @@ process0r(cycles = c(seq(0, 100, 10)), cccv = FALSE)
 \item{cccv}{was cccv cycling conducted? TRUE/FALSE}
 }
 \value{
-
+returns a summary of all sample data, including metadata and raw file.
+sampleSUMMARY is a list of one or more samples stated in meta.csv file (=cell log).
 }
 \description{
 Initiates import and analysis of a curated dataset
