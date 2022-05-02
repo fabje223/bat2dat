@@ -20,7 +20,7 @@
 #' @importFrom dplyr arrange
 #'
 #' @examples
-Arbin.VP <- function(raw, cycles){
+Arbin.VP <- function(raw, cycles=c(1,5,10)){
 
   #binding variables locally to function Arbin.VP
   cyc.nr <- time.s <- Qch.Ah <- Qdc.Ah <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- NULL

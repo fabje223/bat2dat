@@ -17,7 +17,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #'
-#' @import readxl
+#' @import readxl RODBC
 #'
 #' @examples
 BCSraw <- function(dir, filename){
@@ -52,9 +52,7 @@ VMPraw <- function(dir, filename){
   }
 
 #' @describeIn BCSraw read .txt files from raw data directory
-ARBINraw <- function(dir, filename){
-
-  if(endsWith(filename, ".xlsx")){
+ARBINrawXLSX <- function(dir, filename){
 
     if (!requireNamespace("readxl", quietly = TRUE)) {
       stop(
@@ -63,7 +61,7 @@ ARBINraw <- function(dir, filename){
       )
     }
 
-    f.dir <- paste0(dir, "/", filename)
+    f.dir <- paste0(dir, "/", filename, ".xlsx")
 
     # @param filename must end in .xls or xlsx
     l <- lapply(grep("Channel*", excel_sheets(f.dir), value=TRUE),
@@ -75,7 +73,11 @@ ARBINraw <- function(dir, filename){
     #mutate(Test_Time(s) = Test_Time(s) - min(Test_Time(s)))
     colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qdc.Ah', 'Qch.Ah')
 
-  }else if(endsWith(filename, ".accdb")){
+    return(raw)
+  }
+
+#' @describeIn BCSraw read .txt files from raw data directory
+ARBINrawACCDB <- function(dir, filename){
 
     if (!requireNamespace("RODBC", quietly = TRUE)) {
       stop(
@@ -84,16 +86,28 @@ ARBINraw <- function(dir, filename){
       )
     }
 
-    f.dir <- paste0(dir, "/", filename)
+    errorRODBC <- tryCatch(
+                          expr = {
+                                  con <- RODBC::odbcConnectAccess2007(filename)
+                          },
+                          error = function(e) e
+                  )
 
-    con <- RODBC::odbcConnectAccess2007(f.dir)
-    #sqlTables(con, tableType="TABLE")$TABLE_NAME
-    raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
-    RODBC::odbcCloseAll()
+    if(inherits(errorRODBC, "simpeError")){
 
-    raw <- raw %>%
-      select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
+        print(paste0("Error: could not access odbcConnectAccess2007. Use .xlsx file instead."))
+        raw <- NULL
 
-    colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
-  }
+    }else if(!inherits(errorRODBC, "simpeError")){
+        #sqlTables(con, tableType="TABLE")$TABLE_NAME
+        raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
+        RODBC::odbcCloseAll()
+
+        raw <- raw %>%
+          select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
+
+        colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
+    }
+
+    return(raw)
 }
