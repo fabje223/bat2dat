@@ -97,7 +97,7 @@ battery cyclers into a standardized format for further processing.
 bat2dat requires a curated data folder containing:  
 - experimental data (.txt, .xlsx, … etc.) –\> the format depends on the
 battery cycler used  
-- a metadata file *‘meta.csv’* meta.csv requires the following
+- a metadata file *‘meta.csv’* meta.csv requires the following general
 structure:  
 
 | Identifier | sample.name |  instrument  |  cell.config   | AM.loading |
@@ -142,11 +142,24 @@ needed.
 
 *meta.csv* can be created from digital lab notebooks.  
 A POLiS and Kadi4Mat compatible notebook is provided in the examples
-folder.  
-The meta.csv file can be generated using the *CellLog-xlsx-to-csv.R*
-script.  
-Other notebook imports can be created upon request. **Note: this
-function is currently under construction.**  
+folder (*labnotes_example.xlsx*).  
+The *meta.csv* file can be generated using the
+***CellLog-xlsx-to-csv.R*** script.  
+Other notebook imports can be created upon request.
+
+``` r
+data(exampleMeta)
+knitr::kable(head(exampleMeta, 2), 
+             align = 'c',
+             caption = "Table: Structure of meta.csv file")
+```
+
+| Identifier |       sample name        |  instrument  |  cell config   | AM loading |
+|:----------:|:------------------------:|:------------:|:--------------:|:----------:|
+|  sample1   | SampleExample_Biologic-1 | Biologic BCS | halfcell-anode |   7.7995   |
+|  sample2   | SampleExample_Biologic-2 | Biologic BCS | halfcell-anode |   7.5525   |
+
+Table: Structure of meta.csv file
 
 ## Supported datasets
 
