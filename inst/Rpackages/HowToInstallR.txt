@@ -1,0 +1,8 @@
+1) Install latest R version (here R-4.0.3-win.exe) --> maybe check for updates
+2) Install RStudio
+3) Open "install.packages.R" in RStudio
+4) mark text in script and press ctrl + enter to run the script
+5) the packages should install themselves (you might need to run RStudio as Administrator)
+
+You only need to run "install.packages.R" once. 
+The packages can be loaded as required by calling library(package name).

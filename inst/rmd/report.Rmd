@@ -16,7 +16,12 @@ params:
 
 ```{r setup, include = FALSE}
 #library(knitr)
+<<<<<<< HEAD
 
+=======
+library(kableExtra)
+library(dplyr)
+>>>>>>> f45ddd2e8300fad7e1f60a66364ce1acdedbf8d7
 #knitr::opts_chunk$set(results = FALSE)
 #RMarkdown Cookbook: https://bookdown.org/yihui/rmarkdown-cookbook/kable.html#customize-html-tables
 ```
