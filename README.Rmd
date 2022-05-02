@@ -162,6 +162,7 @@ samples will be a list of all samples contained in the metadata file (*meta.csv*
   > *VoltageProfiles*: section of raw data for selected cycles --> format: list of data.frames\
   > *CCCV*: if galvanostatic cycling was performed in a constant current constant potential technqiue (CC-CV), a CCCV step analysis can be performed, splitting the contributions of the CC and CV step --> format: R data.frame\
 
+Exported data will be saved as a subfolder *Rprocessed* of the raw data folder (*path/to/data/Rprocessed*) on your local hard drive. 
 
 ## Examples
 

@@ -180,6 +180,9 @@ samples will be a list of all samples contained in the metadata file
 > performed, splitting the contributions of the CC and CV step –\>
 > format: R data.frame  
 
+Exported data will be saved as a subfolder *Rprocessed* of the raw data
+folder (*path/to/data/Rprocessed*) on your local hard drive.
+
 ## Examples
 
 This is a basic example which shows you how to solve a common problem:
