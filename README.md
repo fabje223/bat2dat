@@ -155,13 +155,18 @@ function is currently under construction.**
 Biologic instruments save acquired data in a *.mpr* file (*EC-Lab raw
 data binary file*), which is complex to read-in directly. Therefore, the
 workaround herein is to **use export function of EC-Lab** (*Experiment
-\> Export as Text…*).  
+\> Export as Text…*).
+
+<img src="man/figures/README-BiologicTXTExport.png" width="100%" />
+
 The exported data table should look like this (may vary depending on the
 exported variables):
 
 ``` r
 data(exampleData)
-knitr::kable(head(exampleData, 5), align = 'c')
+knitr::kable(head(exampleData, 5), 
+             align = 'c',
+             caption = "Table: Structure of EC-Lab .txt files")
 ```
 
 | cycle.number | Ns  | time.s | X.I..mA | Ecell.V  | Q.discharge.mA.h | Q.charge.mA.h | dq.mA.h | X.Q.Qo..mA.h | Capacity.mA.h | Energy.charge.W.h | Energy.discharge.W.h |  X  |
@@ -171,6 +176,8 @@ knitr::kable(head(exampleData, 5), align = 'c')
 |      0       |  0  |  600   |    0    | 2.158218 |        0         |       0       |    0    |      0       |       0       |         0         |          0           | NA  |
 |      0       |  0  |  900   |    0    | 2.159084 |        0         |       0       |    0    |      0       |       0       |         0         |          0           | NA  |
 |      0       |  0  |  1200  |    0    | 2.160541 |        0         |       0       |    0    |      0       |       0       |         0         |          0           | NA  |
+
+Table: Structure of EC-Lab .txt files
 
 The strange looking column names are a result of the import into R and
 are renamed during the analysis. For the script to work, ***the
@@ -210,8 +217,18 @@ The analysis script is started by executing:
                 exportCap = TRUE)
 
 During execution you will be asked for the directory of your
-experimental data. Select the meta.csv file and execution will
-continue.  
+experimental data. Select the meta.csv file and execution will continue.
+**It is important that meta.csv and raw data files are located in the
+same folder**. Additional files do not interfere.
+
+> the script offers two options:  
+> - generate a html-report? yes(=TRUE)/no(=FALSE)  
+> - export analysed data as .txt file? yes(=TRUE)/no(=FALSE)  
+>
+> the script won’t run the analysis if both values are set to FALSE.  
+> once the script started, you will be asked to specify the location of
+> your data.  
+
 If you’d like to work with your data in R afterwards, call report0r()
 like this:  
 
@@ -265,7 +282,7 @@ example workflow can be found here:
 
 You can also embed plots, for example:
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+<img src="man/figures/README-BiologicTXTExport.png" width="100%" />
 
 In that case, don’t forget to commit and push the resulting figure
 files, so they display on GitHub and CRAN.

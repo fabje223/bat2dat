@@ -136,10 +136,17 @@ bat2dat requires a curated data folder containing: \
 ## Supported datasets
 ### Biologic Data
 Biologic instruments save acquired data in a *.mpr* file (*EC-Lab raw data binary file*), which is complex to read-in directly. Therefore, the workaround herein is to **use export function of EC-Lab** (*Experiment > Export as Text...*).  
+
+```{r, fig.caption=paste("Exporting .mpr files from EC-Lab as .txt files"), echo = FALSE}
+knitr::include_graphics("man/figures/README-BiologicTXTExport.png")
+```
+
 The exported data table should look like this (may vary depending on the exported variables):
 ```{r}
 data(exampleData)
-knitr::kable(head(exampleData, 5), align = 'c')
+knitr::kable(head(exampleData, 5), 
+             align = 'c',
+             caption = "Table: Structure of EC-Lab .txt files")
 ```
 
   The strange looking column names are a result of the import into R and are renamed during the analysis. For the script to work, ***the following parameters need to be exported***:
@@ -150,9 +157,6 @@ knitr::kable(head(exampleData, 5), align = 'c')
 
 ### Arbin Data
 Arbin data comes in 2 formats: it is saved by the instrument as a *.res* file and can be converted via the Excel plug-in to a *.xlsx* result file with several tabs for metadata. raw cycling data, (processed) Stats-Tab for end-of-cycling-sequence information (e.g. cycle number vs. capacity). Both types can be imported into R. Import of *.res* files require the RODBC package (included in the package recommendations above) and changing the file extension from .res to *.accdb* (Access database file).
-
-
-
 
 
 ## How to use
@@ -170,7 +174,15 @@ report0r(   htmlReport = TRUE,
             exportCap = TRUE)
 ```
 
-During execution you will be asked for the directory of your experimental data. Select the meta.csv file and execution will continue.  
+During execution you will be asked for the directory of your experimental data. Select the meta.csv file and execution will continue. **It is important that meta.csv and raw data files are located in the same folder**. Additional files do not interfere.
+
+> the script offers two options:\
+> - generate a html-report? yes(=TRUE)/no(=FALSE)\
+> - export analysed data as .txt file? yes(=TRUE)/no(=FALSE)\
+>
+> the script won't run the analysis if both values are set to FALSE.\
+> once the script started, you will be asked to specify the location of your data.\
+
 If you'd like to work with your data in R afterwards, call report0r() like this:\
 
 ```
@@ -206,7 +218,7 @@ You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-da
 You can also embed plots, for example:
 
 ```{r pressure, echo = FALSE}
-plot(pressure)
+knitr::include_graphics("man/figures/README-BiologicTXTExport.png")
 ```
 
 In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

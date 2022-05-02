@@ -18,7 +18,7 @@
 
 report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
 
-            print('Hello there! Let us analyse some data, shall we?')
+            print('Hello there! Let us analyse some data, shall we? Show the way to your experimental data...')
 
                   if(htmlReport == FALSE && exportCap == FALSE) {
                     stop(
@@ -55,4 +55,6 @@ report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
                       #SaveToOrigin.VP(outdir, exp, cycles)
 
                   }
+
+                  return(processedData)
               }
