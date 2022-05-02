@@ -86,6 +86,7 @@ ARBINrawACCDB <- function(dir, filename){
       )
     }
 
+    #system.file() required???
     errorRODBC <- tryCatch(
                           expr = {
                                   con <- RODBC::odbcConnectAccess2007(filename)
