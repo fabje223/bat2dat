@@ -15,7 +15,7 @@ params:
 ---
 
 ```{r setup, include = FALSE}
-library(knitr)
+#library(knitr)
 library(kableExtra)
 library(dplyr)
 #knitr::opts_chunk$set(results = FALSE)

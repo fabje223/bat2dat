@@ -24,7 +24,7 @@ reportGenerat0r <- function(exp){
 
   #draw capacity vs. cycle number
   capacity <- exp$capacity
-  if(max(capacity$cycNr) >= 1){
+  if(max(capacity$CycNr) >= 1){
 
     pCap <- plotCapReport(capacity)
     pIRdrop <- plotIRdrop(capacity)

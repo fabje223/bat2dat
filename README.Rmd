@@ -16,24 +16,154 @@ knitr::opts_chunk$set(
 # bat2dat
 
 <!-- badges: start -->
-<!-- badges: end -->
+<!-- badges: end --> 
 
 Different Potentiostats produce different experimental output files.
 Some of them are easy readable, as they are saves as .txt or .xlsx files, 
 while others need to be exported into a readable format prior to further processing.
 This tools aims to convert various potentiostat outputs into a uniform structure
 while extracting key parameters and datasets for further graphical processing (e.g. in Origin).
-For this tool to work metadata has to be provided.
+For this tool to work metadata has to be provided. 
 
 ## Installation
 
-You can install the development version of bat2dat like so:
+bat2dat is based on R programming language. To install R and the functions of bat2dat on your computer follow these three steps:\
+  1) Install the **latest R version**. You'll find the latest version on the following website
+
+  > <https://www.r-project.org/> \
+  > <https://ftp.fau.de/cran/>
+
+  2) install required Rpackages used within bat2dat. To do so copy the following lines into your R console. If the code is not run automatically press *Enter*
+  ```r
+#utils: basic functions
+install.packages('utils')   
+
+#magrittr: piping operators
+install.packages('magrittr')
+
+#dplyr: modify data through filter, select and mutate
+install.packages('dplyr')
+
+#tidyr: modify data.frames
+install.packages('tidyverse')
+
+#zoo: for moving average on data
+install.packages('zoo')
+
+#readxl: open excel files
+install.packages('readxl')
+
+#ggplot2: plot data
+install.packages('ggplot2')
+
+#gridExtra: combine plots generated with ggplot2
+install.packages('gridExtra')
+
+#viridis: colour spectrum
+install.packages('viridis')
+
+#rmarkdown: generates html or pdf files / reports
+install.packages('rmarkdown')
+
+#optparse: interface for Linux subsystem
+install.packages("optparse")
+
+#RODBC: open microsoft access files
+install.packages('RODBC')
+
+#knitr: knitr package to generate reports
+install.packages('knitr')
+
+#kableExtra: additional package to knitr & Rmarkdown
+install.packages('kableExtra')
+  ```
+
+  A more user-friedly environment is provided by RStudio, which can be downloaded as free desktop version from here:
+  > <https://www.rstudio.com/products/rstudio/download/#download> \
+  
+  Note: in RStudio R is executed by marking the code snippet you'd like to run and press **ctrl + enter** (*Windows*) or **cmd + enter** (*MacOS*).\
+
+
+3) You can install the development version of bat2dat via GitHub like so:\
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+devtools::github(fabje223/bat2dat)
 ```
 
-## Example
+
+## Requirements
+
+The main idea of bat2dat is to provide an easy way to convert data from battery cyclers into a standardized format for further processing. \
+bat2dat requires a curated data folder containing: \
+  - experimental data (.txt, .xlsx, ... etc.) --> the format depends on the battery cycler used \
+  - a metadata file *'meta.csv'*
+  meta.csv requires the following structure: \
+  
+  | Identifier | sample.name | instrument | cell.config | AM.loading |
+  |:----------:|:-----------:|:----------:|:-----------:|:----------:|
+  | Sample 1 | experiment1 | Biologic BCS | halfcell-anode | 1.00 |
+  
+### **Notes -1-: bat2dat specific *meta.csv* syntax**\
+  - in case meta.csv is created manually:
+  
+  > *Identifier*, *sample.name*, *instrument* and *cell.config* are text or character items and need to be put in quotation marks, e.g. "sample 1"\
+  > items in meta.csv are separated by a tab separator\
+    
+  - *instrument*:
+
+  > *Biologic BCS* refers to BCS instrument by Biologic (.txt format, exported from ECLab) \
+  > *Biologic VMP* refers to VMP/VSP instruments by Biologic (.txt format, exported from ECLab) \
+  > *Arbin* refers to Arbin battery cyclers (.res format or exported via Excel Plug-In as .xlsx) \
+  
+  bat2dat has a modular approach and more cyclers can be added if needed.\
+  
+  - *cell.config* has to be defined for some of the scripts in order to split up charge and discharge sequences correctly:
+  
+  > *halfcell-anode* (cycling starts with a negative current)\
+  > *halfcell-cathode* & *fullcell* (the two are equivalent; cycling starts with a positive current)\
+  > *LiS* is an except, as it is cell-specific: sulfur batteries, though a cathode, are techniqually in a charged state and thus start with a negative current.\
+  
+  - *AM.loading*: the active material mass should be given in units of [mg]
+
+### **Notes -2-: bat2dat specific *meta.csv* syntax**\
+  *meta.csv* can be created from digital lab notebooks.\
+  A POLiS and Kadi4Mat compatible notebook is provided in the examples folder.\
+  The meta.csv file can be generated using the *CellLog-xlsx-to-csv.R* script.\
+  Other notebook imports can be created upon request.
+  **Note: this function is currently under construction.**\
+
+
+## How to use
+
+**Experimental data and the metadata file need to be located in the same folder on the local hard drive.**\
+The analysis script is started by executing:
+
+```
+#if library is not loaded already
+library(bat2dat)
+
+# generates a data report if htmlReport == TRUE
+# exports a .txt file if exportCap == TRUE
+report0r(   htmlReport = TRUE, 
+            exportCap = TRUE)
+```
+
+During execution you will be asked for the directory of your experimental data. Select the meta.csv file and execution will continue.  
+If you'd like to work with your data in R afterwards, call report0r() like this:\
+
+```
+samples <- report0r( htmlReport = TRUE, 
+                     exportCap = TRUE)
+```
+
+samples will be a list of all samples contained in the metadata file (*meta.csv*) and contains up to three different analysed objects:
+
+  > *capacity*: end of cycling squence (e.g. charge & discharge capacity or Coulombic efficiency vs. cycle number) --> format: R data.frame\
+  > *VoltageProfiles*: section of raw data for selected cycles --> format: list of data.frames\
+  > *CCCV*: if galvanostatic cycling was performed in a constant current constant potential technqiue (CC-CV), a CCCV step analysis can be performed, splitting the contributions of the CC and CV step --> format: R data.frame\
+
+
+## Examples
 
 This is a basic example which shows you how to solve a common problem:
 
