@@ -186,6 +186,7 @@ folder (*path/to/data/Rprocessed*) on your local hard drive.
 ## Examples
 
 This is a basic example which shows you how to solve a common problem:
+blub
 
 ``` r
 #library(bat2dat)
