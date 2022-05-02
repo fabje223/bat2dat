@@ -53,4 +53,6 @@ report0r <- function(htmlReport = FALSE, exportCap = TRUE) {
                       #SaveToOrigin.VP(outdir, exp, cycles)
 
                   }
+
+                  return(processedData)
               }
