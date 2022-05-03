@@ -13,7 +13,7 @@
 #'
 #' @examples
 
-process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
+process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -23,9 +23,6 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
               #locate experimental data
               meta <- metaDir()
-
-              #convert AM.mass [mg] into g
-              meta$AM.loading <- meta$AM.loading/1000
 
               #creates log for warning messages
               warningsLOG <- data.frame(
