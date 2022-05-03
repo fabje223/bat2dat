@@ -25,7 +25,18 @@ BCSraw <- function(dir, filename){
   #binding variables locally to function BCSraw()
   time.s <- NULL
 
+  # read .txt file
+  # little workaround required:
+  # some computers export values with "," decimal, others with "." decimal sign
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
+  #save column names for after the operation
+  tmp.colnames <- colnames(tmp)
+  #convert all column classes into class "numeric"
+  tmp.l <- lapply(1:ncol(tmp), function(x) tmp[,x] <- as.numeric(tmp[,x]))
+  #put data.frame back together and reinsert header names
+  tmp <- as.data.frame(do.call(cbind, tmp.l))
+  colnames(tmp) = tmp.colnames
+
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ecell.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
     mutate(time.s = time.s - min(time.s))
@@ -44,7 +55,18 @@ VMPraw <- function(dir, filename){
   #binding variables locally to function VMPraw()
   time.s <- NULL
 
+  # read .txt file
+  # little workaround required:
+  # some computers export values with "," decimal, others with "." decimal sign
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
+  #save column names for after the operation
+  tmp.colnames <- colnames(tmp)
+  #convert all column classes into class "numeric"
+  tmp.l <- lapply(1:ncol(tmp), function(x) tmp[,x] <- as.numeric(tmp[,x]))
+  #put data.frame back together and reinsert header names
+  tmp <- as.data.frame(do.call(cbind, tmp.l))
+  colnames(tmp) = tmp.colnames
+
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ewe.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
     mutate(time.s = time.s - min(time.s))
