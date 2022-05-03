@@ -3,6 +3,8 @@
 #' @description initiate data processing with:
 #' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
 #'
+#' @param cccv perform a CC-CV step analysis? yes(=TRUE)/no(=FALSE)
+#' @param cycles cycle numbers to be extracted to plot voltage profiles
 #' @param htmlReport create a html report? TRUE/FALSE
 #' @param exportCap export data.frames to .txt for further processing? TRUE/FALSE
 #'
@@ -50,11 +52,12 @@ report0r <- function(cccv = FALSE, cycles = c(0,1,4,seq(9,199, 10)), htmlReport 
                     #Export data as .txt (Origin compatible)
                     if(exportCap == TRUE){
                         SaveStatsToOrigin(exp)
+                        SaveVPToOrigin(exp)
                     }
                       #SaveToOrigin.CCCV(outdir, exp)
-                      #SaveToOrigin.VP(outdir, exp, cycles)
+
 
                   }
 
                   return(processedData)
-              }
+        }

@@ -77,7 +77,7 @@ ARBINrawXLSX <- function(dir, filename){
   }
 
 #' @describeIn BCSraw read .txt files from raw data directory
-ARBINrawACCDB <- function(dir, filename){
+ARBINrawACCDB <- function(filename){
 
     if (!requireNamespace("RODBC", quietly = TRUE)) {
       stop(
@@ -86,28 +86,36 @@ ARBINrawACCDB <- function(dir, filename){
       )
     }
 
+    raw <- data.frame()
+
     #system.file() required???
-    errorRODBC <- tryCatch(
+    RODBC <- tryCatch(
                           expr = {
                                   con <- RODBC::odbcConnectAccess2007(filename)
+                                  #sqlTables(con, tableType="TABLE")$TABLE_NAME
+                                  raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
+                                  RODBC::odbcCloseAll()
                           },
-                          error = function(e) e
+                          error = function(e) e,
+                          warning = function(w) w
                   )
 
-    if(inherits(errorRODBC, "simpeError")){
+    if(inherits(RODBC, "simpeError")){
 
         print(paste0("Error: could not access odbcConnectAccess2007. Use .xlsx file instead."))
         raw <- NULL
 
-    }else if(!inherits(errorRODBC, "simpeError")){
-        #sqlTables(con, tableType="TABLE")$TABLE_NAME
-        raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
-        RODBC::odbcCloseAll()
+    }else if(inherits(RODBC, "simpeWarning")){
 
-        raw <- raw %>%
-          select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
+        print(paste0("Error: could not access odbcConnectAccess2007. Use .xlsx file instead."))
+        raw <- NULL
 
-        colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
+    }else{
+
+        raw <- raw# %>%
+          #select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
+
+        #colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
     }
 
     return(raw)

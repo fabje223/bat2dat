@@ -46,8 +46,9 @@ SaveVPToOrigin <- function(exp){
     for(i in 1:length(VPprofiles)){
 
       VP <- VPprofiles[[i]]
+      cycNr <- VP$cyc.nr[1]
 
-          write.table(VP, paste0(outdir, "//VP_", filename, "cycle#", i, ".txt"), sep="\t", row.names=FALSE)
+          write.table(VP, paste0(outdir, "//VP_", filename, "cycle#", cycNr, ".txt"), sep="\t", row.names=FALSE)
     }
 
     print(paste0('Voltage profiles of cell ', filename, ' exported to ', outdir))
