@@ -29,7 +29,10 @@ BCSraw <- function(dir, filename){
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ecell.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
     mutate(time.s = time.s - min(time.s))
+
   colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
+
+  raw <- raw
 
   return(raw)
 
@@ -45,6 +48,7 @@ VMPraw <- function(dir, filename){
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ewe.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
     mutate(time.s = time.s - min(time.s))
+
   colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
 
   return(raw)
