@@ -13,7 +13,7 @@
 #'
 #' @examples
 
-process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
+process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -23,9 +23,6 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
               #locate experimental data
               meta <- metaDir()
-
-              #convert AM.mass [mg] into g
-              meta$AM.loading <- meta$AM.loading/1000
 
               #creates log for warning messages
               warningsLOG <- data.frame(
@@ -56,15 +53,19 @@ process0r <- function(cycles = c(seq(0, 100, 10)), cccv = FALSE) {
 
                             print("Reading Arbin raw data file")
 
+                            #path/to/file/filename.res --> check is .res file in directory
+                            res <- paste0(meta$dir[i], "/", meta$sample.name[i], ".res")
                             #check if file has .res ending; if so, rename them to .accdb
-                            if(file.exists(paste0(meta$dir[i], "/", meta$sample.name[i], ".res"))){
+                            if(file.exists(res)){
 
-                                  res <- paste0(meta$sample.name[i], ".res")
                                   newfile <- gsub(".res$", ".accdb", res)
                                   file.rename(res, newfile)
-                            }
+                                  raw <- ARBINrawACCDB(dir, newfile)
 
-                            raw <- ARBINraw(dir, meta$sample.name)
+                            }else{
+
+                                  raw <- ARBINrawXLSX(dir, meta$sample.name[i])
+                            }
 
                             rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], cycles)
 

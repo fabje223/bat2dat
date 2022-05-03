@@ -31,6 +31,12 @@ metaDir <- function() {
                    stringsAsFactors = F,
                    fill=TRUE)
 
+  #convert AM.loading values (can be class character) into numeric values
+  meta$AM.loading <- as.numeric(gsub(",", ".", gsub("\\.", "", meta$AM.loading)))
+
+  #convert AM.mass [mg] into g
+  meta$AM.loading <- meta$AM.loading/1000
+
   #sort out any sample that is not included in the data-raw folder
   l.raw <- list.files(dir)
   boo <- c()

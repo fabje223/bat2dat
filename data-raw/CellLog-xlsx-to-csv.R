@@ -34,11 +34,14 @@ convertLabNotes <- function(example=FALSE) {
                               filter(metadata %in% col)
 
                     #modify transposed data.frame before convertion into .csv
-                    meta.t <- t(meta)
+                    meta.t <- as.data.frame(t(meta))
                     meta.t <- meta.t[5:nrow(meta.t), 1:ncol(meta.t)]
                     row.names(meta.t) <- 1:nrow(meta.t)
                     colnames(meta.t) <- c(col)
                     meta.t[,5] <- as.numeric(meta.t[,5])
+
+                    #remove NA
+                    meta.t <- meta.t[!is.na(meta.t[,2]),]
 
                     #write .csv file
                     write.table(meta.t, paste0(dirName, '/exampleMeta.csv'), dec=",", sep="\t", row.names=FALSE)
@@ -46,6 +49,6 @@ convertLabNotes <- function(example=FALSE) {
                     if(example == TRUE){
                           #create example metadata file in /data
                           exampleMeta <- meta.t
-                          usethis::use_data(exampleMeta)
+                          usethis::use_data(exampleMeta, overwrite=TRUE)
                     }
 }

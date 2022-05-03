@@ -141,8 +141,8 @@ needed.
 ### **Notes -2-: bat2dat specific *meta.csv* syntax** 
 
 *meta.csv* can be created from digital lab notebooks.  
-A POLiS and Kadi4Mat compatible notebook is provided in the examples
-folder (*labnotes_example.xlsx*).  
+A POLiS and Kadi4Mat compatible notebook is provided in the */data-raw
+folder* (*labnotes_example.xlsx*).  
 The *meta.csv* file can be generated using the
 ***CellLog-xlsx-to-csv.R*** script.  
 Other notebook imports can be created upon request.
@@ -226,7 +226,9 @@ The analysis script is started by executing:
 
     # generates a data report if htmlReport == TRUE
     # exports a .txt file if exportCap == TRUE
-    report0r(   htmlReport = TRUE, 
+    report0r(   cccv = FALSE,                 #optional
+                cycles = c(1,2,5,10,25,50),   #optional
+                htmlReport = TRUE, 
                 exportCap = TRUE)
 
 During execution you will be asked for the directory of your
@@ -234,13 +236,23 @@ experimental data. Select the meta.csv file and execution will continue.
 **It is important that meta.csv and raw data files are located in the
 same folder**. Additional files do not interfere.
 
-> the script offers two options:  
+> the script offers four options:  
+> - perform a CC-CV step analysis to separate constant current and
+> constant potential contributions? yes(=TRUE)/no(=FALSE)  
+> - which cycles would you like to extract to plot voltage profiles?  
+> options: - use default (c(seq(0, 100, 10)), i.e. 0, 10, 20, 30,…, 100)
+> Note that Biologic starts counting from 0.  
+> - make your own selection, type: c(*cycle#x*, *cycle#y*, …,
+> *cycle#xy*)  
 > - generate a html-report? yes(=TRUE)/no(=FALSE)  
 > - export analysed data as .txt file? yes(=TRUE)/no(=FALSE)  
 >
-> the script won’t run the analysis if both values are set to FALSE.  
+> The default settings for the latter two is TRUE. The script won’t run
+> the analysis if both values are set to FALSE (at least one has to be
+> TRUE).  
 > once the script started, you will be asked to specify the location of
 > your data.  
+> see also: Section Examples
 
 If you’d like to work with your data in R afterwards, call report0r()
 like this:  
@@ -263,39 +275,123 @@ samples will be a list of all samples contained in the metadata file
 Exported data will be saved as a subfolder *Rprocessed* of the raw data
 folder (*path/to/data/Rprocessed*) on your local hard drive.
 
-## Examples
+## Functions
 
-This is a basic example which shows you how to solve a common problem:
-blub
+### report0r()
 
-``` r
-#library(bat2dat)
-## basic example code
-```
+> Full analysis with .txt export and html report  
+> All initial parameters of the report0r function have a default value,
+> so that the script can be run with default settings, like so:
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+    #if library is not loaded already
+    library(bat2dat)
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+    # generates a data report if htmlReport == TRUE
+    # exports a .txt file if exportCap == TRUE
+    report0r()
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+If you would like to change the cycles for the voltage profile
+extraction run *report0r()* like this:
 
-You can also embed plots, for example:
+In this first example html report *and* .txt export will both be
+executed):
 
-<img src="man/figures/README-BiologicTXTExport.png" width="100%" />
+    #if library is not loaded already
+    library(bat2dat)
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+    # generates a data report if htmlReport == TRUE
+    # exports a .txt file if exportCap == TRUE
+    report0r(cycles = c(1,2,5,10,25,50))
+
+In the second example only the .txt export is performed (same cycles are
+extracted), i.e. put the function to FALSE you do not want included:
+
+    #if library is not loaded already
+    library(bat2dat)
+
+    # generates a data report if htmlReport == TRUE
+    # exports a .txt file if exportCap == TRUE
+    report0r( cycles = c(1,2,5,10,25,50), 
+              htmlReport = FALSE)
+
+> **HINT** There are different ways to choose your cycles:  
+> - manually: cylces = c(1,6,9,3,12,99) –\> no specific order needed,
+> just type the numbers you’d like to extract  
+> - intervall: cycles = c(seq(0, 99, 10)) –\> the first two numbers
+> define the boundary (from 0 to 99); the third number defines the
+> interval (every 10th cycle)  
+> - mixed: cycles = c(0,1,2,4, seq(9,99,10)) –\> combine the two above.
+
+### process0r()
+
+> perform a data analysis and receive sample information in a R list
+> object for further processing  
+
+If you’d like to skip the export and report function all together call
+process0r() directly (before report0r() did this job for us):  
+
+    #if library is not loaded already
+    library(bat2dat)
+
+    # starts data analysis
+    # default: cccv=FALSE & cycles(seq(0,100,10))
+    process0r()
+
+If you would like to make changes to the analysis, i.e. include a CC-CV
+step analysis (cccv=TRUE) or change the cycle numbers in the voltage
+profile extraction proceed like this:  
+
+    #if library is not loaded already
+    library(bat2dat)
+
+    # starts data analysis
+    # default: cccv=FALSE & cycles(seq(0,100,10))
+    process0r(cccv=TRUE,
+              cycles(1,2,5,10,25))
+
+### metaDir()
+
+> import a meta data file from a folder
+
+To import a meta data table into R simple use:  
+
+    #if library is not loaded already
+    library(bat2dat)
+
+    # starts data analysis
+    meta <- metaDir()
+
+### BCSraw(), VMPraw(), ARBINrawXLSX()
+
+> import raw data files into R
+
+The functions require 2 variables:  
+- *directory* (dir), i.e. where is the file stored - *filename*, name of
+the experimental data file (for BCSraw and VMPraw a .txt file; for
+ARBINrawXLSX a .xlsx file)  
+
+The two variables need to be either be defined prior, or be available in
+a metadata file (–\> metaDir())  
+
+    #if library is not loaded already
+    library(bat2dat)
+
+    # starts data analysis
+    raw <- VMPraw(dir, filename)
+
+If a metadata file imported through metaDir() is available, use:  
+
+    raw <- VMPraw(dir=meta$dir[1], 
+                  filename= meta$sample.name[1])
+
+*Note: the number in brackets \[x\] is the entry in the metadata file
+(by row)*  
+
+You could also type *filename* (without file extension, i.e. .txt, etc)
+and *dir* manually. Or using the following code snippet:  
+
+    #Pop-up window to select file path:
+    fileDir <- file.choose()
+
+    #defines dir
+    dir <- dirname(fileDir)
