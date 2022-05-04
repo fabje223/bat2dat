@@ -49,6 +49,8 @@ reportGenerat0r <- function(exp){
   }else{
 
     pVPloop <- NA
+    pVPlin  <- NA
+    pVPsplit  <- NA
 
     }
 

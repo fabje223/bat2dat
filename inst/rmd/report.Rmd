@@ -16,12 +16,10 @@ params:
 
 ```{r setup, include = FALSE}
 #library(knitr)
-<<<<<<< HEAD
 
-=======
 library(kableExtra)
 library(dplyr)
->>>>>>> f45ddd2e8300fad7e1f60a66364ce1acdedbf8d7
+
 #knitr::opts_chunk$set(results = FALSE)
 #RMarkdown Cookbook: https://bookdown.org/yihui/rmarkdown-cookbook/kable.html#customize-html-tables
 ```
@@ -31,6 +29,7 @@ library(dplyr)
 ```{r metadata, echo = FALSE}
 d1 <- params$metavar
 d2 <- params$cap
+
 
 ret <- d2 %>%
         dplyr::filter(Qdc.mAh > Qdc.mAh[1]*0.8) 
@@ -99,17 +98,17 @@ kableExtra::kable(init.stats,
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
 ```{r fig3, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-params$plotVPloop
+if(!is.na(params$plotVPloop)) plot(params$plotVPloop)
 ```
 
 ### Linear
-```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center"}
-params$plotVPlin
+```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", warning=FALSE}
+if(!is.na(params$plotVPlin)) params$plotVPlin
 ```
 
 ### Split
-```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-plot(params$plotVPsplit)
+```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", warning=FALSE}
+if(!is.na(params$plotVPsplit)) plot(params$plotVPsplit)
 ```
 
 ## {-}

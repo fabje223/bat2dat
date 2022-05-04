@@ -63,7 +63,7 @@ plotCapReport <- function(capacity){
 }
 
 #' @describeIn plotCapReport plots IR drop versus cycle number
-plotIRdrop <- function(capacity){
+plotIRdrop <- function(capacity, cell){
 
   p.IR.drop.ch <- p.IR.drop.dc <- NULL
 
@@ -71,8 +71,29 @@ plotIRdrop <- function(capacity){
   CycNr <- Edrop.ch <- Edrop.dc <- NULL
 
   #Plot capacity
-  max.y.ch <- max(capacity$Edrop.ch)
-  min.y.ch <- min(capacity$Edrop.ch)
+  if(cell %in% c('halfcell-cathode', 'fullcell')){
+
+          min.y.ch <- min(capacity$Edrop.ch)
+          max.y.ch <- max(capacity$Edrop.ch)
+
+          min.y.dc <- min(capacity$Edrop.dc)
+          max.y.dc <- max(capacity$Edrop.dc)
+
+          #print('plotting cathode/full cell data')
+  }else if (cell %in% c('halfcell-anode', 'LiS')){
+
+          max.y.ch <- max(capacity$Edrop.ch)
+          min.y.ch <- min(capacity$Edrop.ch)
+
+          max.y.dc <- max(capacity$Edrop.dc)
+          min.y.dc <- min(capacity$Edrop.dc)
+
+          #print('plotting anode data')
+  }else {
+    print('unknown celltype')
+    stop()
+  }
+
   p.IRdrop.ch <- ggplot(capacity) +
                     geom_point(aes(x=CycNr, y=Edrop.ch*1000), color='red', size=4) +
                     labs(x = bquote('cycle number'),
@@ -88,8 +109,6 @@ plotIRdrop <- function(capacity){
                     customTheme() +
                     theme(legend.position = 'right')
 
-  max.y.dc <- max(capacity$Edrop.dc)
-  min.y.dc <- min(capacity$Edrop.dc)
   p.IRdrop.dc <- ggplot(capacity) +
                   geom_point(aes(x=CycNr, y=Edrop.dc*1000), color='blue', size=4) +
                   labs(x = bquote('cycle number'),
