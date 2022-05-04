@@ -63,13 +63,13 @@ kableExtra::kable(t(keypara), align = "cccc", digits = 2,
 ### Capacity & CE Plots
 ```{r fig1, echo = FALSE, fig.height=6, fig.width=10, fig.align="center"}
 
-if(!is.na(params$plotCap)) plot(params$plotCap)
+if(length(params$plotCap)==2) plot(params$plotCap)
 ```
 
 ### IR drop
 ```{r fig2, echo = FALSE, meessage = FALSE, fig.height=6, fig.width=8, fig.align="center"}
 
-if(!is.na(params$plotIR)) plot(params$plotIR)
+if(length(params$plotIR)==2) plot(params$plotIR)
 ```
 
 ### Data Table
@@ -98,17 +98,17 @@ kableExtra::kable(init.stats,
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
 ```{r fig3, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-if(!is.na(params$plotVPloop)) plot(params$plotVPloop)
+if(length(params$plotVPloop)==2) plot(params$plotVPloop)
 ```
 
 ### Linear
 ```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", warning=FALSE}
-if(!is.na(params$plotVPlin)) params$plotVPlin
+if(length(params$plotVPlin)==2) params$plotVPlin
 ```
 
 ### Split
 ```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", warning=FALSE}
-if(!is.na(params$plotVPsplit)) plot(params$plotVPsplit)
+if(length(params$plotVPsplit)==2) plot(params$plotVPsplit)
 ```
 
 ## {-}
