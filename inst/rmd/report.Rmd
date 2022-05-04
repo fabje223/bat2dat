@@ -63,13 +63,13 @@ kableExtra::kable(t(keypara), align = "cccc", digits = 2,
 ### Capacity & CE Plots
 ```{r fig1, echo = FALSE, fig.height=6, fig.width=10, fig.align="center"}
 
-plot(params$plotCap)
+if(!is.na(params$plotCap)) plot(params$plotCap)
 ```
 
 ### IR drop
 ```{r fig2, echo = FALSE, meessage = FALSE, fig.height=6, fig.width=8, fig.align="center"}
 
-plot(params$plotIR)
+if(!is.na(params$plotIR)) plot(params$plotIR)
 ```
 
 ### Data Table

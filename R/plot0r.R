@@ -70,6 +70,12 @@ plotIRdrop <- function(capacity, cell){
   #binding variables locally to function plotCapReport
   CycNr <- Edrop.ch <- Edrop.dc <- NULL
 
+  #default values
+  min.y.ch <- 0
+  max.y.ch <- 1
+  min.y.dc <- 0
+  max.y.dc <- 1
+
   #Plot capacity
   if(cell %in% c('halfcell-cathode', 'fullcell')){
 
