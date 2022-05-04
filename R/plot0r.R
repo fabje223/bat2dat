@@ -70,29 +70,29 @@ plotIRdrop <- function(capacity, cell){
   #binding variables locally to function plotCapReport
   CycNr <- Edrop.ch <- Edrop.dc <- NULL
 
-  #default values
-  min.y.ch <- 0
-  max.y.ch <- 1
-  min.y.dc <- 0
-  max.y.dc <- 1
-
   #Plot capacity
   if(cell %in% c('halfcell-cathode', 'fullcell')){
 
-          min.y.ch <- min(capacity$Edrop.ch)
-          max.y.ch <- max(capacity$Edrop.ch)
+          minmax <- c("min.y.ch" <- min(capacity$Edrop.ch),
+                      "max.y.ch" <- max(capacity$Edrop.ch),
+                      "min.y.dc" <- min(capacity$Edrop.dc),
+                      "max.y.dc" <- max(capacity$Edrop.dc))
 
-          min.y.dc <- min(capacity$Edrop.dc)
-          max.y.dc <- max(capacity$Edrop.dc)
+          # workaround: no resting step between charge and discharge
+          # prevents error "from must be a finite number" in scale_y_continuous
+          minmax[is.na(minmax)] <- 0
 
           #print('plotting cathode/full cell data')
   }else if (cell %in% c('halfcell-anode', 'LiS')){
 
-          max.y.ch <- max(capacity$Edrop.ch)
-          min.y.ch <- min(capacity$Edrop.ch)
+          minmax <- c("min.y.ch" <- min(capacity$Edrop.ch),
+                      "max.y.ch" <- max(capacity$Edrop.ch),
+                      "min.y.dc" <- min(capacity$Edrop.dc),
+                      "max.y.dc" <- max(capacity$Edrop.dc))
 
-          max.y.dc <- max(capacity$Edrop.dc)
-          min.y.dc <- min(capacity$Edrop.dc)
+          # workaround: no resting step between charge and discharge
+          # prevents error "from must be a finite number" in scale_y_continuous
+          minmax[is.na(minmax)] <- 0
 
           #print('plotting anode data')
   }else {
@@ -108,8 +108,8 @@ plotIRdrop <- function(capacity, cell){
                          color = "Legend") +
                     #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
                     #                  breaks = seq(0,200, 10)) +
-                    scale_y_continuous(limits=c(min.y.ch*1000, max.y.ch*1000),
-                                       breaks = seq(min.y.ch*900, max.y.ch*1100, length.out=5)) +
+                    scale_y_continuous(limits=c(minmax[1]*1100, minmax[2]*900),
+                                       breaks = round(seq(minmax[1]*1200, minmax[2]*800, length.out=10), 0)) +
                     #     breaks = seq(0,4000, 0.2)) +
                     #my.axis +
                     customTheme() +
@@ -123,8 +123,8 @@ plotIRdrop <- function(capacity, cell){
                        color = "Legend") +
                   #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
                   #                  breaks = seq(0,200, 10)) +
-                  scale_y_continuous(limits=c(min.y.dc*900, max.y.dc*1000),
-                                     breaks = seq(min.y.dc*900, max.y.dc*1100, length.out=5)) +
+                  scale_y_continuous(limits=c(minmax[3]*1100, minmax[4]*900),
+                                     breaks = round(seq(minmax[3]*1200, minmax[4]*800, length.out=10), 0)) +
                   #     breaks = seq(0,4000, 0.2)) +
                   #my.axis +
                   customTheme() +
