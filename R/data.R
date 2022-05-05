@@ -25,7 +25,7 @@
 #'
 #' Specifics of meta data file.
 #'
-#' @format A data frame with 53940 rows and 10 variables:
+#' @format A data frame with 4 rows and 5 variables:
 #' \describe{
 #'   \item{Identifier}{identifier of experiment}
 #'   \item{sample name}{name of the file *without* file extension}
@@ -36,5 +36,5 @@
 #'   **Note that spelling need to be exact.**}
 #'   \item{AM loading}{absolut active material content of working electrode}
 #' }
-#' @source galvanostatic cycling experiment of a graphite-potassium half cell measured on a Biologic BCS instrument
+#' @source fabje223
 "exampleMeta"
