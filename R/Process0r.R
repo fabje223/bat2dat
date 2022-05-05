@@ -37,6 +37,7 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
                           if(meta$instrument[i] == "Biologic BCS"){
 
                             print("Reading BCS raw data file")
+
                             raw <- BCSraw(meta$dir[i], meta$sample.name[i])
 
                             rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
@@ -55,12 +56,17 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
 
                             #path/to/file/filename.res --> check is .res file in directory
                             res <- paste0(meta$dir[i], "/", meta$sample.name[i], ".res")
+                            accdb <- paste0(meta$dir[i], "/", meta$sample.name[i], ".accdb")
                             #check if file has .res ending; if so, rename them to .accdb
                             if(file.exists(res)){
 
                                   newfile <- gsub(".res$", ".accdb", res)
                                   file.rename(res, newfile)
-                                  raw <- ARBINrawACCDB(dir, newfile)
+                                  raw <- ARBINrawACCDB(newfile)
+
+                            }else if(file.exists(accdb)){
+
+                                  raw <- ARBINrawACCDB(accdb)
 
                             }else{
 
@@ -73,6 +79,7 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
 
                             print("cycler not found - check directory")
 
+                            raw <- data.frame()
                             raw <- NULL
                           }
 
