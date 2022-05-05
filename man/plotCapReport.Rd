@@ -10,7 +10,7 @@
 \usage{
 plotCapReport(capacity)
 
-plotIRdrop(capacity)
+plotIRdrop(capacity, cell)
 
 plotVPloop(vp.dat)
 
@@ -21,9 +21,9 @@ plotVPsplit(vp.dat, cell)
 \arguments{
 \item{capacity}{data.frame with galvanostatic cycling information}
 
-\item{vp.dat}{data.frame with voltage profile information on selected cycles}
-
 \item{cell}{cell configuration of experiment (halfcell-anode, halfcell-cathode, fullcell, LiS)}
+
+\item{vp.dat}{data.frame with voltage profile information on selected cycles}
 }
 \value{
 returns graphs generated from expeirmental data for report.Rmd

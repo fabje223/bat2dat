@@ -13,7 +13,7 @@ BCSraw(dir, filename)
 
 BiologicEvaluat0r(raw, AMmass, cellType, cycles, cccv, warningsLOG)
 
-Arbin.VP(raw, cycles)
+Arbin.VP(raw, cycles = c(1, 5, 10))
 
 Biologic.CAP(raw, AM.mass, type)
 }

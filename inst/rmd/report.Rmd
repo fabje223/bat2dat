@@ -16,12 +16,10 @@ params:
 
 ```{r setup, include = FALSE}
 #library(knitr)
-<<<<<<< HEAD
 
-=======
 library(kableExtra)
 library(dplyr)
->>>>>>> f45ddd2e8300fad7e1f60a66364ce1acdedbf8d7
+
 #knitr::opts_chunk$set(results = FALSE)
 #RMarkdown Cookbook: https://bookdown.org/yihui/rmarkdown-cookbook/kable.html#customize-html-tables
 ```
@@ -32,8 +30,9 @@ library(dplyr)
 d1 <- params$metavar
 d2 <- params$cap
 
-ret <- d2 %>%
-        dplyr::filter(Qdc.mAh > Qdc.mAh[1]*0.8) 
+# Error message: UseMethod("filter") no applicable method for 'filter'
+# ignore. disappears in actual execution, when cap is defined
+ret <- dplyr::filter(d2, Qdc.mAh > Qdc.mAh[1]*0.8) 
 if(nrow(ret) == 0) ret = head(d2,2)
 
 keypara <- data.frame('max cycle number' = max(d2$CycNr)+1,
@@ -64,13 +63,13 @@ kableExtra::kable(t(keypara), align = "cccc", digits = 2,
 ### Capacity & CE Plots
 ```{r fig1, echo = FALSE, fig.height=6, fig.width=10, fig.align="center"}
 
-plot(params$plotCap)
+if(length(params$plotCap)==2) plot(params$plotCap)
 ```
 
 ### IR drop
 ```{r fig2, echo = FALSE, meessage = FALSE, fig.height=6, fig.width=8, fig.align="center"}
 
-plot(params$plotIR)
+if(length(params$plotIR)==2) plot(params$plotIR)
 ```
 
 ### Data Table
@@ -99,17 +98,17 @@ kableExtra::kable(init.stats,
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
 ```{r fig3, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-params$plotVPloop
+if(length(params$plotVPloop)==9) params$plotVPloop
 ```
 
 ### Linear
-```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center"}
-params$plotVPlin
+```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", warning=FALSE}
+if(length(params$plotVPlin)==9) plot(params$plotVPlin)
 ```
 
 ### Split
-```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-plot(params$plotVPsplit)
+```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", warning=FALSE}
+if(length(params$plotVPsplit)==2) plot(params$plotVPsplit)
 ```
 
 ## {-}

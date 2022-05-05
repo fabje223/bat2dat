@@ -2,13 +2,13 @@
 % Please edit documentation in R/TXTExport0r.R
 \name{SaveStatsToOrigin}
 \alias{SaveStatsToOrigin}
-\alias{SaveToOrigin.CCCV}
+\alias{SaveCCCVToOrigin}
 \alias{SaveVPToOrigin}
 \title{TXTExport0r}
 \usage{
 SaveStatsToOrigin(exp)
 
-SaveToOrigin.CCCV(exp)
+SaveCCCVToOrigin(exp)
 
 SaveVPToOrigin(exp)
 }
@@ -23,7 +23,7 @@ exports analysed data from list 'processedData', i.e. exp = processedData[[sampl
 }
 \section{Functions}{
 \itemize{
-\item \code{SaveToOrigin.CCCV}: save results from CCCV step analysis
+\item \code{SaveCCCVToOrigin}: save results from CCCV step analysis
 
 \item \code{SaveVPToOrigin}: save results from extracted voltage profiles
 }}

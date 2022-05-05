@@ -17,7 +17,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #'
-#' @import readxl
+#' @import readxl RODBC
 #'
 #' @examples
 BCSraw <- function(dir, filename){
@@ -25,11 +25,25 @@ BCSraw <- function(dir, filename){
   #binding variables locally to function BCSraw()
   time.s <- NULL
 
+  # read .txt file
+  # little workaround required:
+  # some computers export values with "," decimal, others with "." decimal sign
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
+  #save column names for after the operation
+  tmp.colnames <- colnames(tmp)
+  #convert all column classes into class "numeric"
+  tmp.l <- lapply(1:ncol(tmp), function(x) tmp[,x] <- as.numeric(tmp[,x]))
+  #put data.frame back together and reinsert header names
+  tmp <- as.data.frame(do.call(cbind, tmp.l))
+  colnames(tmp) = tmp.colnames
+
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ecell.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
     mutate(time.s = time.s - min(time.s))
+
   colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
+
+  raw <- raw
 
   return(raw)
 
@@ -41,10 +55,22 @@ VMPraw <- function(dir, filename){
   #binding variables locally to function VMPraw()
   time.s <- NULL
 
+  # read .txt file
+  # little workaround required:
+  # some computers export values with "," decimal, others with "." decimal sign
   tmp <- read.table(paste0(dir, "/", filename, ".txt"), header=T, dec = ",", sep = "\t", fill=TRUE) #.txt
+  #save column names for after the operation
+  tmp.colnames <- colnames(tmp)
+  #convert all column classes into class "numeric"
+  tmp.l <- lapply(1:ncol(tmp), function(x) tmp[,x] <- as.numeric(tmp[,x]))
+  #put data.frame back together and reinsert header names
+  tmp <- as.data.frame(do.call(cbind, tmp.l))
+  colnames(tmp) = tmp.colnames
+
   raw <- tmp %>%
     select('cycle.number', 'time.s', 'Ns', 'Ewe.V', 'X.I..mA', 'Q.discharge.mA.h', 'Q.charge.mA.h') %>%
     mutate(time.s = time.s - min(time.s))
+
   colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
 
   return(raw)
@@ -52,9 +78,7 @@ VMPraw <- function(dir, filename){
   }
 
 #' @describeIn BCSraw read .txt files from raw data directory
-ARBINraw <- function(dir, filename){
-
-  if(endsWith(filename, ".xlsx")){
+ARBINrawXLSX <- function(dir, filename){
 
     if (!requireNamespace("readxl", quietly = TRUE)) {
       stop(
@@ -63,7 +87,7 @@ ARBINraw <- function(dir, filename){
       )
     }
 
-    f.dir <- paste0(dir, "/", filename)
+    f.dir <- paste0(dir, "/", filename, ".xlsx")
 
     # @param filename must end in .xls or xlsx
     l <- lapply(grep("Channel*", excel_sheets(f.dir), value=TRUE),
@@ -75,7 +99,11 @@ ARBINraw <- function(dir, filename){
     #mutate(Test_Time(s) = Test_Time(s) - min(Test_Time(s)))
     colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qdc.Ah', 'Qch.Ah')
 
-  }else if(endsWith(filename, ".accdb")){
+    return(raw)
+  }
+
+#' @describeIn BCSraw read .txt files from raw data directory
+ARBINrawACCDB <- function(filename){
 
     if (!requireNamespace("RODBC", quietly = TRUE)) {
       stop(
@@ -84,16 +112,37 @@ ARBINraw <- function(dir, filename){
       )
     }
 
-    f.dir <- paste0(dir, "/", filename)
+    raw <- data.frame()
 
-    con <- RODBC::odbcConnectAccess2007(f.dir)
-    #sqlTables(con, tableType="TABLE")$TABLE_NAME
-    raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
-    RODBC::odbcCloseAll()
+    #system.file() required???
+    RODBC <- tryCatch(
+                          expr = {
+                                  con <- RODBC::odbcConnectAccess2007(filename)
+                                  #sqlTables(con, tableType="TABLE")$TABLE_NAME
+                                  raw <- RODBC::sqlFetch(con, "Channel_Normal_Table")
+                                  RODBC::odbcCloseAll()
+                          },
+                          error = function(e) e,
+                          warning = function(w) w
+                  )
 
-    raw <- raw %>%
-      select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
+    if(inherits(RODBC, "simpeError")){
 
-    colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
-  }
+        print(paste0("Error: could not access odbcConnectAccess2007. Use .xlsx file instead."))
+        raw <- NULL
+
+    }else if(inherits(RODBC, "simpeWarning")){
+
+        print(paste0("Error: could not access odbcConnectAccess2007. Use .xlsx file instead."))
+        raw <- NULL
+
+    }else{
+
+        raw <- raw# %>%
+          #select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
+
+        #colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
+    }
+
+    return(raw)
 }
