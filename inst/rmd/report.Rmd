@@ -32,7 +32,7 @@ d2 <- params$cap
 
 
 ret <- d2 %>%
-        dplyr::filter(Qdc.mAh > Qdc.mAh[1]*0.8) 
+        filter(Qdc.mAh > Qdc.mAh[1]*0.8) 
 if(nrow(ret) == 0) ret = head(d2,2)
 
 keypara <- data.frame('max cycle number' = max(d2$CycNr)+1,
@@ -98,12 +98,12 @@ kableExtra::kable(init.stats,
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
 ```{r fig3, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-if(length(params$plotVPloop)==2) plot(params$plotVPloop)
+if(length(params$plotVPloop)==9) params$plotVPloop
 ```
 
 ### Linear
 ```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", warning=FALSE}
-if(length(params$plotVPlin)==2) params$plotVPlin
+if(length(params$plotVPlin)==9) plot(params$plotVPlin)
 ```
 
 ### Split
