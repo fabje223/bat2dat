@@ -58,6 +58,4 @@ report0r <- function(cccv = FALSE, cycles = c(0,1,4,seq(9,199, 10)), htmlReport 
 
 
                   }
-
-                  return(processedData)
         }

@@ -23,7 +23,7 @@ SaveStatsToOrigin <- function(exp){
 }
 
 #' @describeIn SaveStatsToOrigin save results from CCCV step analysis
-SaveToOrigin.CCCV <- function(exp){
+SaveCCCVToOrigin <- function(exp){
 
           CCCV <- exp$CCCV
           meta <- exp$metadata
