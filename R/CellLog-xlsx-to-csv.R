@@ -44,7 +44,7 @@ convertLabNotes <- function(example=FALSE) {
                     meta.t <- meta.t[!is.na(meta.t[,2]),]
 
                     #write .csv file
-                    write.table(meta.t, paste0(dirName, '/exampleMeta.csv'), dec=",", sep="\t", row.names=FALSE)
+                    write.table(meta.t, paste0(dirName, '/meta.csv'), dec=",", sep="\t", row.names=FALSE)
 
                     if(example == TRUE){
                           #create example metadata file in /data

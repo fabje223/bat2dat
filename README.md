@@ -87,6 +87,11 @@ run and press **ctrl + enter** (*Windows*) or **cmd + enter**
 devtools::install_github(fabje223/bat2dat)
 ```
 
+> the command might cause an error, if you are connected to a company
+> network.  
+> outside restricted networks, the installation should proceed without
+> problems.  
+
 To update to the latest version of *bat2dat* repeat step 3) once in a
 while.
 
