@@ -191,7 +191,7 @@ During execution you will be asked for the directory of your experimental data. 
 > - perform a CC-CV step analysis to separate constant current and constant potential contributions? yes(=TRUE)/no(=FALSE)\
 > - which cycles would you like to extract to plot voltage profiles?\
 >   options:  - use default (c(seq(0, 100, 10)), i.e. 0, 10, 20, 30,..., 100) Note that Biologic starts counting from 0. \
->             - make your own selection, type: c(*cycle#x*, *cycle#y*, ..., *cycle#xy*)\
+>             - make your own selection, type: c(*cycle#x*, *cycle#y*, ..., *cycle#xy*) or for a number range, e.g. c(1:100)\
 > - generate a html-report? yes(=TRUE)/no(=FALSE)\
 > - export analysed data as .txt file? yes(=TRUE)/no(=FALSE)\
 >

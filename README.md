@@ -248,7 +248,7 @@ same folder**. Additional files do not interfere.
 > options: - use default (c(seq(0, 100, 10)), i.e. 0, 10, 20, 30,…, 100)
 > Note that Biologic starts counting from 0.  
 > - make your own selection, type: c(*cycle#x*, *cycle#y*, …,
-> *cycle#xy*)  
+> *cycle#xy*) or for a number range, e.g. c(1:100)  
 > - generate a html-report? yes(=TRUE)/no(=FALSE)  
 > - export analysed data as .txt file? yes(=TRUE)/no(=FALSE)  
 >
