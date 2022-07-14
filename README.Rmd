@@ -87,7 +87,7 @@ install.packages('kableExtra')
 3) You can install the development version of bat2dat via GitHub like so:\
 
 ``` r
-devtools::install_github(fabje223/bat2dat)
+devtools::install_github('fabje223/bat2dat')
 ```
   > the command might cause an error, if you are connected to a company network.\
   > outside restricted networks, the installation should proceed without problems.\

@@ -1,9 +1,6 @@
 "Identifier"	"sample name"	"instrument"	"cell config"	"AM loading"
-"FJ-KI-055_cell5"	"FJ-KI-055_220118_Act15-4-95CB1CMC2PAA2_1xWhatmanGFB_150uL_750mM-KPF6-alfa-ECDEC11_K-98-Aldrich-chunks_coincell-5_CB7.txt_stitch"	"Biologic BCS"	"halfcell-anode"	"7.7995"
-"FJ-KI-055_cell4"	"FJ-KI-055_220118_SLP50-95CB1CMC2PAA2_1xWhatmanGFB_150uL_750mM-KPF6-alfa-ECDEC11_K-98-Aldrich-chunks_coincell-4_CB6.txt_stitch"	"Biologic BCS"	"halfcell-anode"	"7.5525"
-"FJ-KI-055_cell7"	"FJ-KI-055_220201_Act10-4-95CB1CMC2PAA2_1xWhatmanGFB_200uL_750mM-KPF6-acros-ECDEC11_K-98-Aldrich-chunks_coincell-7_CF1.txt_stitch"	"Biologic BCS"	"halfcell-anode"	"7.1915"
-"FJ-KI-055_cell8"	"FJ-KI-055_220201_Act15-4-95CB1CMC2PAA2_1xWhatmanGFB_200uL_750mM-KPF6-acros-ECDEC11_K-98-Aldrich-chunks_coincell-8_CF2.txt_stitch"	"Biologic BCS"	"halfcell-anode"	"6.7735"
-"FJ-KI-055_cell9"	"FJ-KI-055_220201_SLP50-95CB1CMC2PAA2_1xWhatmanGFB_200uL_750mM-KPF6-acros-ECDEC11_K-98-Aldrich-chunks_coincell-9_CF3.txt_stitch"	"Biologic BCS"	"halfcell-anode"	"7.4955"
-"FJ-KI-055_cell1"	"FJ-KI-055_220118_SLP50-95CB1CMC2PAA2_1xWhatmanGFB_150uL_750mM-KPF6-ECDEC11_K-98-aldrich_coincell-1_C09"	"Biologic VMP"	"halfcell-anode"	"7.467"
-"FJ-KI-055_cell2"	"FJ-KI-055_220118_Act15-4-95CB1CMC2PAA2_1xWhatmanGFB_150uL_750mM-KPF6-ECDEC11_K-98-aldrich_coincell-2_C10.txt_stitch"	"Biologic VMP"	"halfcell-anode"	"6.4695"
-"FJ-KI-055_cell3"	"FJ-KI-055_220118_Act10-4-95CB1CMC2PAA2_1xWhatmanGFB_150uL_750mM-KPF6-ECDEC11_K-98-aldrich_coincell-3_restarted_C11"	"Biologic VMP"	"halfcell-anode"	"7.562"
+"cell1"	"SampleExample_Biologic-1"	"Biologic BCS"	"halfcell-anode"	7,7995
+"cell2"	"SampleExample_Biologic-2"	"Biologic VMP"	"halfcell-anode"	7,5525
+"cell3"	"SampleExample_Arbin-2"	"Arbin"	"halfcell-cathode"	1
+"cell4"	"AKK_sample1_dot"	"Biologic BCS"	"halfcell-cathode"	1,409
+"cell5"	"AKK_sample2_comma"	"Biologic BCS"	"halfcell-cathode"	1,409

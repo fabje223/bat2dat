@@ -84,7 +84,7 @@ run and press **ctrl + enter** (*Windows*) or **cmd + enter**
     so:  
 
 ``` r
-devtools::install_github(fabje223/bat2dat)
+devtools::install_github('fabje223/bat2dat')
 ```
 
 > the command might cause an error, if you are connected to a company
