@@ -5,7 +5,7 @@
 \alias{exampleMeta}
 \title{Example meta data file of a battery cell.}
 \format{
-A data frame with 53940 rows and 10 variables:
+A data frame with 4 rows and 5 variables:
 \describe{
   \item{Identifier}{identifier of experiment}
   \item{sample name}{name of the file *without* file extension}
@@ -18,7 +18,7 @@ A data frame with 53940 rows and 10 variables:
 }
 }
 \source{
-galvanostatic cycling experiment of a graphite-potassium half cell measured on a Biologic BCS instrument
+fabje223
 }
 \usage{
 exampleMeta
