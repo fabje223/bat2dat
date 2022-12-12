@@ -6,13 +6,19 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-Different Potentiostats produce different experimental output files.
-Some of them are easy readable, as they are saves as .txt or .xlsx
-files, while others need to be exported into a readable format prior to
-further processing. This tools aims to convert various potentiostat
-outputs into a uniform structure while extracting key parameters and
-datasets for further graphical processing (e.g. in Origin). For this
-tool to work metadata has to be provided.
+This package was developed to facilitate the data processing and
+analysis of experimental battery data from potentiostats. Each
+potentiostat manufacturer uses his own file formats that are only
+readable in customized software. Usually an export into .txt, .csv or
+.xlsx files is possible. The structure of each of these files, including
+the way the data is reported, can differ considerably between different
+manufacturer. This tools aims to convert various potentiostat outputs
+into a uniform structure while extracting key parameters and datasets
+for further graphical processing (e.g. in Origin). In addition, a html
+report can be created that offers an option to quickly access certain
+information. The package deliberately designed in a modular manner, so
+that other potentiostats can be easly integrated into the existing
+structure. For this tool to work metadata has to be provided.
 
 ## Installation
 
@@ -72,7 +78,7 @@ install.packages('knitr')
 install.packages('kableExtra')
 ```
 
-A more user-friedly environment is provided by RStudio, which can be
+A more user-friendly environment is provided by RStudio, which can be
 downloaded as free desktop version from here: \>
 <https://www.rstudio.com/products/rstudio/download/#download>  
 
