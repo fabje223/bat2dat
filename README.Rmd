@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 This package was developed to facilitate the data processing and analysis of experimental battery data from potentiostats.
 Each potentiostat manufacturer uses his own file formats that are only readable in customized software. 
 Usually an export into .txt, .csv or .xlsx files is possible. The structure of each of these files, including the way the data is reported, can differ considerably between different manufacturer.
-This tools aims to convert various potentiostat outputs into a uniform structure while extracting key parameters and datasets for further graphical processing (e.g. in Origin). In addition, a html report can be created that offers an option to quickly access certain information. The package deliberately designed in a modular manner, so that other potentiostats can be easly integrated into the existing structure.
+This tools aims to convert various potentiostat outputs into a uniform structure while extracting key parameters and datasets for further graphical processing (e.g. in Origin). In addition, a html report can be created that offers an option to quickly access certain information. The package is deliberately designed in a modular manner, so that other potentiostats can be easly integrated into the existing structure.
 For this tool to work metadata has to be provided. 
 
 ## Installation
@@ -316,7 +316,7 @@ library(bat2dat)
 raw <- VMPraw(dir, filename)
 ```
 
-If a metadata file imported through metaDir() is available, use:\
+If a metadata file was imported through metaDir(), use:\
 ```
 raw <- VMPraw(dir=meta$dir[1], 
               filename= meta$sample.name[1])

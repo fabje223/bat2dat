@@ -16,8 +16,8 @@ manufacturer. This tools aims to convert various potentiostat outputs
 into a uniform structure while extracting key parameters and datasets
 for further graphical processing (e.g. in Origin). In addition, a html
 report can be created that offers an option to quickly access certain
-information. The package deliberately designed in a modular manner, so
-that other potentiostats can be easly integrated into the existing
+information. The package is deliberately designed in a modular manner,
+so that other potentiostats can be easly integrated into the existing
 structure. For this tool to work metadata has to be provided.
 
 ## Installation
@@ -390,7 +390,7 @@ a metadata file (–\> metaDir())
     # starts data analysis
     raw <- VMPraw(dir, filename)
 
-If a metadata file imported through metaDir() is available, use:  
+If a metadata file was imported through metaDir(), use:  
 
     raw <- VMPraw(dir=meta$dir[1], 
                   filename= meta$sample.name[1])

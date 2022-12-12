@@ -46,17 +46,17 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
               }
 
 #' @describeIn BiologicEvaluat0r Evaluat0r for Arbin Instruments
-ArbinEvaluat0r <- function(raw, AMmass, cycles){
+ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
 
               cycDat <- list('capacity' = NULL,
                              'VoltageProfiles' = NULL,
                              'CCCV' = NULL)
 
               #calculate capacities for each cycle
-              cycDat$capacity <- Arbin.CAP(raw, AMmass)
+              cycDat$capacity <- Arbin.CAP(raw, AMmass, cellType)
 
               #extract voltage profiles for selected cycles
-              cycDat$VPprofiles <- Arbin.VP(raw, cycles)
+              cycDat$VoltageProfiles <- Arbin.VP(raw, AMmass, cellType, cycles)
 
               return(cycDat)
 

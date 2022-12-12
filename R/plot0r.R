@@ -81,6 +81,7 @@ plotIRdrop <- function(capacity, cell){
           # workaround: no resting step between charge and discharge
           # prevents error "from must be a finite number" in scale_y_continuous
           minmax[is.na(minmax)] <- 0
+          minmax[is.infinite(minmax)] <- 0
 
           #print('plotting cathode/full cell data')
   }else if (cell %in% c('halfcell-anode', 'LiS')){
@@ -93,11 +94,19 @@ plotIRdrop <- function(capacity, cell){
           # workaround: no resting step between charge and discharge
           # prevents error "from must be a finite number" in scale_y_continuous
           minmax[is.na(minmax)] <- 0
+          minmax[is.infinite(minmax)] <- 0
 
           #print('plotting anode data')
   }else {
     print('unknown celltype')
     stop()
+  }
+
+  #No plot if all minmax == 0
+  if(sum(minmax) == 0){
+
+    pIRdrop <- NA
+    return(pIRdrop)
   }
 
   p.IRdrop.ch <- ggplot(capacity) +

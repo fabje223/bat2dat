@@ -78,7 +78,7 @@ VMPraw <- function(dir, filename){
   }
 
 #' @describeIn BCSraw read .txt files from raw data directory
-ARBINrawXLSX <- function(dir, filename){
+ARBINrawXLSX <- function(dir, f.path){
 
     if (!requireNamespace("readxl", quietly = TRUE)) {
       stop(
@@ -87,17 +87,17 @@ ARBINrawXLSX <- function(dir, filename){
       )
     }
 
-    f.dir <- paste0(dir, "/", filename, ".xlsx")
+    #f.dir <- paste0(dir, "/", filename, ".xlsx")
 
     # @param filename must end in .xls or xlsx
-    l <- lapply(grep("Channel*", excel_sheets(f.dir), value=TRUE),
-                read_excel, path = f.dir)
+    l <- lapply(grep("Channel*", excel_sheets(f.path), value=TRUE),
+                read_excel, path = f.path)
     l <- do.call(rbind,l)
 
     raw <- l %>%
       select('Cycle_Index', 'Test_Time(s)', 'Step_Index', 'Voltage(V)', 'Current(A)', 'Charge_Capacity(Ah)', 'Discharge_Capacity(Ah)')
     #mutate(Test_Time(s) = Test_Time(s) - min(Test_Time(s)))
-    colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qdc.Ah', 'Qch.Ah')
+    colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
 
     return(raw)
   }

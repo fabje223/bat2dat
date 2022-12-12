@@ -86,6 +86,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
                   }
 
                   #IR drop 2
+                  #seq(0,50,2) -> 50 is a random high number
                   dc.IR <- raw %>%
                           filter(cyc.nr == i & Ns %in% c(seq(0,50,2)) & I.mA == 0)
                   dc.IR <- head(dc.IR, 1)

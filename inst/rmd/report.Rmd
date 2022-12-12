@@ -57,7 +57,7 @@ kableExtra::kable(t(keypara), align = "cccc", digits = 2,
 
 ```
 
-
+\newpage
 ## Galvanostatic Cycling {.tabset .tabset-fade .tabset-pills}
 
 ### Capacity & CE Plots
@@ -94,7 +94,7 @@ kableExtra::kable(init.stats,
 
 ```
 
-
+\newpage
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
 ```{r fig3, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}

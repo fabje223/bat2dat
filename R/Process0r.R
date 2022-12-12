@@ -70,10 +70,11 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
 
                             }else{
 
-                                  raw <- ARBINrawXLSX(dir, meta$sample.name[i])
+                                  f.path <- paste0(meta$dir[i], "/", meta$sample.name[i], ".xlsx")
+                                  raw <- ARBINrawXLSX(dir, f.path)
                             }
 
-                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], cycles)
+                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
 
                           }else{
 
