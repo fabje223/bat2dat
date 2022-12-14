@@ -1,6 +1,0 @@
-"Identifier"	"sample name"	"instrument"	"cell config"	"AM loading"
-"cell1"	"SampleExample_Biologic-1"	"Biologic BCS"	"halfcell-anode"	7,7995
-"cell2"	"SampleExample_Biologic-2"	"Biologic VMP"	"halfcell-anode"	7,5525
-"cell3"	"SampleExample_Arbin-2"	"Arbin"	"halfcell-cathode"	1
-"cell4"	"AKK_sample1_dot"	"Biologic BCS"	"halfcell-cathode"	1,409
-"cell5"	"AKK_sample2_comma"	"Biologic BCS"	"halfcell-cathode"	1,409

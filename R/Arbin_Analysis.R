@@ -20,10 +20,15 @@
 #' @importFrom dplyr arrange
 #'
 #' @examples
+#' \dontrun{
+#' capa <- Arbin.CAP()
+#'
+#' VP <- Arbin.VP()
+#' }
 Arbin.VP <- function(raw, AMmass, cellType, cycles=c(1,5,10)){
 
   #binding variables locally to function Arbin.VP
-  cyc.nr <- time.s <- Qch.Ah <- Qdc.Ah <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- NULL
+  cyc.nr <- time.s <- Qch.Ah <- Qdc.Ah <- Ewe.V <- Ewe.V.rnd <- I.A <- diff.Q <- diff.E <- NULL
 
   VP.list <- list()
   k = 1
@@ -140,6 +145,8 @@ Arbin.VP <- function(raw, AMmass, cellType, cycles=c(1,5,10)){
 
 #' @describeIn Arbin.VP data from galvanostatic cycling experiments
 Arbin.CAP <- function(raw, AMmass, cellType){
+
+    cyc.nr <- I.A <- NULL
 
     cap <- data.frame('cyc.nr'= numeric(), 'time.s'= numeric(), 'Ns'= numeric(), 'Ewe.V'= numeric(),
                       'I.A'= numeric(), 'Qdc.Ah'= numeric(), 'Qch.Ah'= numeric())

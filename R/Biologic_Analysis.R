@@ -20,6 +20,11 @@
 #' @importFrom utils tail
 #'
 #' @examples
+#' \dontrun{
+#' capa <- Biologic.CAP()
+#'
+#' VP <- Biologic.VP()
+#' }
 Biologic.CAP <- function(raw, AM.mass, type){
 
         #create empty result data.frame
@@ -37,67 +42,78 @@ Biologic.CAP <- function(raw, AM.mass, type){
 
                 seq1.df <- data.frame()
                 seq2.df <- data.frame()
+
                 for(i in 0:(max(raw$cyc.nr)-1)){
 
-                  # first cycling sequence
-                  ch <- raw %>%
-                        filter(cyc.nr == i & Ns %in% c(seq(1,50,2)) & I.mA != 0)
-                  #take last line of data.frame to obtain total capacity of that sequence
-                  ch.ln <- head(tail(ch, 2),1)
-
-                  if(nrow(ch) == 0){
-                          next
-                  }else{
-                          ch.df <- data.frame(ch.ln)
-                  }
-
-                  #IR drop 1
-                  ch.IR <- raw %>%
-                           filter(cyc.nr == i & Ns %in% c(seq(1,50,2)) & I.mA != 0)
-                  ch.IR <- head(ch.IR, 1)
-
-                  if(nrow(ch.IR) == 0){
-                          Edrop.ch <- NA
-                  }else{
-                          Edrop.ch <- ch.IR$Ewe.V - ch.df$Ewe.V
-                  }
-
-                  ch.df <- data.frame(ch.df, Edrop.ch)
-                  seq1.df <- rbind(seq1.df, ch.df)
-
-
-                  #second cycling sequence
+                  # a bit misleading: first sequence in LiS is not a charge,
+                  # but for the calculation of the IRdrop it works like a anode halfcell
                   if(type == 'halfcell-anode' || type == 'LiS'){
+
+                        #first cycling sequence
+                        ch <- raw %>%
+                                  filter(cyc.nr == i & Ns %in% c(seq(1,50,2)) & I.mA != 0)
+                        ch.IR <- raw %>%
+                                  filter(cyc.nr == i & Ns %in% c(seq(1,50,2)) & I.mA == 0)
+
+                        #second cycling sequence
                         dc <-   raw %>%
                                 filter(cyc.nr == i+1 & Ns %in% c(seq(0,50,2)) & I.mA !=0)
+                        dc.IR <- raw %>%
+                                filter(cyc.nr == i+1 & Ns %in% c(seq(0,50,2)) & I.mA == 0)
+
                         #take last line of data.frame to obtain total capacity of that sequence
+                        ch.ln <- head(tail(ch, 2),1)
+                        ch.IR <- head(ch.IR, 1)
+
                         dc.ln <- head(tail(dc, 2),1)
-                  }else if(type ==  "halfcell-cathode" || type == "fullcell"){
+                        dc.IR <- head(dc.IR, 1)
+
+                      }else if(type ==  "halfcell-cathode" || type == "fullcell"){
+
+                        #first cycling sequence
+                        ch <- raw %>%
+                                filter(cyc.nr == i & Ns %in% c(seq(1,50,2)) & I.mA != 0)
+                        ch.IR <- raw %>%
+                                filter(cyc.nr == i & Ns %in% c(seq(1,50,2)) & I.mA == 0)
+
+                        #second cycling sequence
                         dc <-   raw %>%
-                                filter(cyc.nr == i & Ns %in% c(seq(0,50,2)) & I.mA !=0)
+                                filter(cyc.nr == i & Ns %in% c(seq(2,50,2)) & I.mA !=0)
+                        dc.IR <- raw %>%
+                                filter(cyc.nr == i & Ns %in% c(seq(2,50,2)) & I.mA == 0)
+
                         #take last line of data.frame to obtain total capacity of that sequence
+                        ch.ln <- head(tail(ch, 2),1)
+                        ch.IR <- head(ch.IR, 1)
+
                         dc.ln <- head(tail(dc, 2),1)
-                  }
+                        dc.IR <- head(dc.IR, 1)
+                    }
 
-                  if(nrow(dc) == 0){
+                  if(nrow(dc) == 0 || nrow(dc.IR) == 0 || nrow(ch) == 0 || nrow(ch.IR) == 0){
+
                           next
-                  }else{
-                          dc.df <- data.frame(dc.ln)
-                  }
 
-                  #IR drop 2
-                  #seq(0,50,2) -> 50 is a random high number
-                  dc.IR <- raw %>%
-                          filter(cyc.nr == i & Ns %in% c(seq(0,50,2)) & I.mA == 0)
-                  dc.IR <- head(dc.IR, 1)
+                    }else if(type == 'halfcell-anode' || type == 'LiS'){
 
-                  if(nrow(dc.IR) == 0){
-                        Edrop.dc <- NA
-                  } else {
-                        Edrop.dc <- dc.df$Ewe.V - dc.IR$Ewe.V
-                        }
-                  dc.df <- data.frame(dc.df, Edrop.dc)
-                  seq2.df <- rbind(seq2.df, dc.df)
+                            Edrop.ch <- ch.IR$Ewe.V - ch.ln$Ewe.V
+                            ch.df <- data.frame(ch.ln, Edrop.ch)
+                            seq1.df <- rbind(seq1.df, ch.df)
+
+                            Edrop.dc <- dc.ln$Ewe.V - dc.IR$Ewe.V
+                            dc.df <- data.frame(dc.ln, Edrop.dc)
+                            seq2.df <- rbind(seq2.df, dc.df)
+
+                    }else if(type ==  "halfcell-cathode" || type == "fullcell"){
+
+                            Edrop.ch <- ch.ln$Ewe.V - ch.IR$Ewe.V
+                            ch.df <- data.frame(ch.ln, Edrop.ch)
+                            seq1.df <- rbind(seq1.df, ch.df)
+
+                            Edrop.dc <- dc.IR$Ewe.V - dc.ln$Ewe.V
+                            dc.df <- data.frame(dc.ln, Edrop.dc)
+                            seq2.df <- rbind(seq2.df, dc.df)
+                    }
                 }
 
                 #remove trash
@@ -158,18 +174,22 @@ Biologic.CAP <- function(raw, AM.mass, type){
 
                 } else if(type == "LiS"){
                         # workaround: cap <- data.frame(...) kept throwing false error (no matching row number)
-                        cap <- seq2.df
-                        cap$Ns <- seq1.df$time.s
-                        cap$Qdc.mAh <- seq1.df$Qdc.mAh
-                        cap$Edrop.ch <- seq1.df$Edrop.ch
-                        cap$Qdc.mAh.g <- cap$Qdc.mAh/AM.mass
-                        cap$Qch.mAh.g <- cap$Qch.mAh/AM.mass
-                        cap$CE <- cap$Qdc.mAh/cap$Qch.mAh
-                        cap$Ewe.endCH <- seq1.df$Ewe.V
-
-                        cap <- cap %>%
-                                select(cyc.nr, Ns, time.s, Qch.mAh, Qdc.mAh, Qch.mAh.g, Qdc.mAh.g, CE, Ewe.endCH, Ewe.V, Edrop.ch, Edrop.dc)
-                        colnames(cap) <- c("CycNr", "time.s.ch", "time.s.dc", "Qch.mAh", "Qdc.mAh", "Qch.mAh.g", "Qdc.mAh.g", "CE", "Ewe.endCH", "Ewe.endDC", "Edrop.ch", "Edrop.dc")
+                        cap <- data.frame("CycNr" = seq2.df$cyc.nr,
+                                          "time.s.ch" = seq2.df$time.s,
+                                          "time.s.dc" = seq1.df$time.s,
+                                          "Qch.mAh" = seq1.df$Qdc.mAh,
+                                          "Qdc.mAh" = seq2.df$Qch.mAh,
+                                          "Qch.mAh.g" = seq1.df$Qdc.mAh/AM.mass,
+                                          "Qdc.mAh.g" = seq2.df$Qch.mAh/AM.mass,
+                                          "CE" = seq1.df$Qdc.mAh/seq2.df$Qch.mAh,
+                                          "Ewe.endCH" = seq2.df$Ewe.V,
+                                          "Ewe.endDC" = seq1.df$Ewe.V,
+                                          "Edrop.ch" = seq2.df$Edrop.dc,
+                                          "Edrop.dc" = seq1.df$Edrop.ch
+                                          )
+                        #cap <- cap %>%
+                         #       select(cyc.nr, Ns, time.s, Qch.mAh, Qdc.mAh, Qch.mAh.g, Qdc.mAh.g, CE, Ewe.endCH, Ewe.V, Edrop.ch, Edrop.dc)
+                        #colnames(cap) <- c("CycNr", "time.s.ch", "time.s.dc", "Qch.mAh", "Qdc.mAh", "Qch.mAh.g", "Qdc.mAh.g", "CE", "Ewe.endCH", "Ewe.endDC", "Edrop.ch", "Edrop.dc")
 
                         }
                 return(cap)
@@ -387,7 +407,8 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
         cyc.nr <- Ns <- I.mA <- Qch.mAh <- Qdc.mAh <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- NULL
 
         #create empty result data.frame and empty VP.list (temporary storage)
-        VPprofiles <- data.frame("CycNr" = numeric(), "time.s" = numeric(), "Qch.mAh" = numeric(), "Qdc.mAh" = numeric(), "Qloop" = numeric(),
+        VPprofiles <- data.frame("CycNr" = numeric(), "time.s" = numeric(), "I.mA" = numeric(),
+                                 "Qch.mAh" = numeric(), "Qdc.mAh" = numeric(), "Qloop" = numeric(),
                                  "Ewe.V" = numeric(), "diffcap" = numeric())
         VP.list <- list()
         k = 1
@@ -447,7 +468,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
 
                         # create new data.frame
                         VPprofile <- data.frame(
-                                "CycNr" = VP.df$cyc.nr, "time.s" = VP.df$time.s, "Ewe.V" = VP.df$Ewe.V,
+                                "CycNr" = VP.df$cyc.nr, "time.s" = VP.df$time.s, "I.mA" = VP.df$I.mA, "Ewe.V" = VP.df$Ewe.V,
                                 "Qch.mAh" = VP.df$Qdc.mAh, "Qch.mAh.g" = VP.df$Qdc.mAh/AM.mass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
                                 "Qdc.mAh" = VP.df$Qch.mAh, "Qdc.mAh.g" = VP.df$Qch.mAh/AM.mass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
                                 "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AM.mass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
@@ -493,7 +514,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                         VP.df$Qch.mAh[VP.df$Qch.mAh == 0] <- max(VP.df$Qch.mAh)
                         VP.df$Qloop <- VP.df$Qch.mAh - VP.df$Qdc.mAh
 
-                        # modify Q.ch and Q.dc columns for plotting, e.g. in Origin
+                        # modify Q.ch and Q.dc columns <- l[[for plotting, e.g. in Origin
                         VP.df$Ewe.V.ch <- VP.df$Ewe.V
                         VP.df$Qch.mAh[VP.df$Qdc.mAh != 0] <- NA
                         VP.df$Ewe.V.ch[is.na(VP.df$Qch.mAh)] <- NA
@@ -504,7 +525,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
 
                         # create new data.frame
                         VPprofile <- data.frame(
-                                "CycNr" = VP.df$cyc.nr+1, "time.s" = VP.df$time.s, "Ewe.V" = VP.df$Ewe.V,
+                                "CycNr" = VP.df$cyc.nr+1, "time.s" = VP.df$time.s, "I.mA" = VP.df$I.mA, "Ewe.V" = VP.df$Ewe.V,
                                 "Qch.mAh" = VP.df$Qch.mAh, "Qch.mAh.g" = VP.df$Qch.mAh/AM.mass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
                                 "Qdc.mAh" = VP.df$Qdc.mAh, "Qdc.mAh.g" = VP.df$Qdc.mAh/AM.mass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
                                 "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AM.mass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,

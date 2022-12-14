@@ -59,3 +59,21 @@ and capacity (vs. cycle number) data
 
 Analysis of Biologic potentiostat data
 }
+\examples{
+\dontrun{
+raw <- BCSraw()
+}
+\dontrun{
+BiologicEvaluat0r()
+}
+\dontrun{
+capa <- Arbin.CAP()
+
+VP <- Arbin.VP()
+}
+\dontrun{
+capa <- Biologic.CAP()
+
+VP <- Biologic.VP()
+}
+}

@@ -10,6 +10,11 @@
 #' @importFrom utils write.table
 #'
 #' @examples
+#' \dontrun{
+#' l <- process0r()
+#' exp <- l[[1]]
+#' SaveStatsToOrigin(exp)
+#' }
 SaveStatsToOrigin <- function(exp){
 
           capacity <- exp$capacity

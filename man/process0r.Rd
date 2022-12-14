@@ -18,3 +18,8 @@ sampleSUMMARY is a list of one or more samples stated in meta.csv file (=cell lo
 \description{
 Initiates import and analysis of a curated dataset
 }
+\examples{
+\dontrun{
+l <- process0r()
+}
+}

@@ -20,6 +20,18 @@ information. The package is deliberately designed in a modular manner,
 so that other potentiostats can be easly integrated into the existing
 structure. For this tool to work metadata has to be provided.
 
+> **Note** The script was derived from standard in-house cycling
+> protocols of full cell and half cell configurations. Standard tests
+> include repeating rest-charge-rest-discharge cycles. The cycling rate
+> can be different in different cycles. Cycling protocols are frequently
+> very individual experiments to a specific cell configuration and
+> setup.  
+> Although the functions to this package have been written in a general
+> manner and with this challenge in mind,  
+> the results of any processed data should be carefully checked, for
+> example against the data viewer options in the proprietary software of
+> the respective potentiostat manufacturers.
+
 ## Installation
 
 bat2dat is based on R programming language. To install R and the
@@ -221,10 +233,15 @@ Arbin data comes in 2 formats: it is saved by the instrument as a *.res*
 file and can be converted via the Excel plug-in to a *.xlsx* result file
 with several tabs for metadata. raw cycling data, (processed) Stats-Tab
 for end-of-cycling-sequence information (e.g. cycle number
-vs. capacity). Both types can be imported into R. Import of *.res* files
-require the RODBC package (included in the package recommendations
-above) and changing the file extension from .res to *.accdb* (Access
-database file).
+vs. capacity).  
+The script uses *.xlsx* files for data processing (note that a “stat”
+tab, containing the end-of-cycle charge and discharge capacities, can be
+obtained using the Arbin excel macro).  
+The package contains functions for the Import of *.res* files, using the
+RODBC package (included in the package recommendations above). In this
+case the file extension is changed in the process from .res to *.accdb*
+(Access database file). However, this part has caused problems
+repeatedly.
 
 ## How to use
 
@@ -326,7 +343,7 @@ extracted), i.e. put the function to FALSE you do not want included:
               htmlReport = FALSE)
 
 > **HINT** There are different ways to choose your cycles:  
-> - manually: cylces = c(1,6,9,3,12,99) –\> no specific order needed,
+> - manually: cycles = c(1,6,9,3,12,99) –\> no specific order needed,
 > just type the numbers you’d like to extract  
 > - intervall: cycles = c(seq(0, 99, 10)) –\> the first two numbers
 > define the boundary (from 0 to 99); the third number defines the
@@ -341,24 +358,65 @@ extracted), i.e. put the function to FALSE you do not want included:
 If you’d like to skip the export and report function all together call
 process0r() directly (before report0r() did this job for us):  
 
-    #if library is not loaded already
+    # if library is not loaded already
     library(bat2dat)
 
     # starts data analysis
     # default: cccv=FALSE & cycles(seq(0,100,10))
-    process0r()
+    expList <- process0r()
+
+To further work the results of the analysis, the results need to be
+saved in a R-list (‘a generic vector containing other objects’;
+<http://www.r-tutor.com/r-introduction/list>). A specific experiment
+(cell i) can be extracted as follows:
+
+    # export separate experiments into individual R-lists (here cell1)
+    cell1 <- expList[[i]]
+
+    # Access processed data
+    capacity <- cell1$capacity                # or expList[[i]]$capacity
+    voltageprofiles <- cell1$VoltageProfiles  # voltageprofiles is a R-list with containing data.frame() of all cycles defined in *cycles*
+
+    # export a single voltage profile
+    VP1 <- voltageprofiles[[1]]
+    VP1 <- cell1$VoltageProfiles[[1]]
+    VP1 <- expList[[1]]$VoltageProfiles[[1]]
 
 If you would like to make changes to the analysis, i.e. include a CC-CV
 step analysis (cccv=TRUE) or change the cycle numbers in the voltage
 profile extraction proceed like this:  
 
-    #if library is not loaded already
+    # if library is not loaded already
     library(bat2dat)
 
     # starts data analysis
     # default: cccv=FALSE & cycles(seq(0,100,10))
-    process0r(cccv=TRUE,
-              cycles(1,2,5,10,25))
+    expList <- process0r( cccv=TRUE,
+                          cycles(1,2,5,10,25))
+
+### reportGenerat0r()
+
+> generates RMarkdown (html) sample report of a **single** experiment
+
+*process0r()* stores all processed data provided *meta.csv* in a list. A
+single element of that list, i.e. a single experiment, can be exported
+into a separate object and then passed to *reportGenerat0r()* for
+processing. This allows you to check your data before generating a html
+report. Of course, it is also possible to add different analysis steps
+between the basic data imports and generating standard outfiles used in
+battery research.
+
+A call or reportGenerat0r() could look like this:  
+
+    # import and analyse your data with process0r()
+    l <- process0r()
+
+    # select a single experiment
+    # you can check the elements in l in RStudios by clicking on it in the Environment tab or check the number of elements in l with length(l)
+    exp <- l[[i]]
+
+    # initiate the generation of your report
+    reportGenerat0r(exp)
 
 ### metaDir()
 

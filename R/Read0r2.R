@@ -20,6 +20,9 @@
 #' @import readxl RODBC
 #'
 #' @examples
+#' \dontrun{
+#' raw <- BCSraw()
+#' }
 BCSraw <- function(dir, filename){
 
   #binding variables locally to function BCSraw()
@@ -113,7 +116,7 @@ ARBINrawACCDB <- function(filename){
     }
 
     raw <- data.frame()
-
+    print('importing accdb')
     #system.file() required???
     RODBC <- tryCatch(
                           expr = {
@@ -137,11 +140,12 @@ ARBINrawACCDB <- function(filename){
         raw <- NULL
 
     }else{
+        print('selecting columns')
+        print(raw)
+        raw <- raw%>%
+          select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
 
-        raw <- raw# %>%
-          #select('Cycle_Index', 'Test_Time', 'Step_Index', 'Voltage', 'Current', 'Charge_Capacity', 'Discharge_Capacity')
-
-        #colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
+        colnames(raw) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.A', 'Qch.Ah', 'Qdc.Ah')
     }
 
     return(raw)

@@ -28,3 +28,10 @@ exports analysed data from list 'processedData', i.e. exp = processedData[[sampl
 \item \code{SaveVPToOrigin}: save results from extracted voltage profiles
 }}
 
+\examples{
+\dontrun{
+l <- process0r()
+exp <- l[[1]]
+SaveStatsToOrigin(exp)
+}
+}

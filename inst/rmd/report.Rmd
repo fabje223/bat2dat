@@ -1,17 +1,13 @@
 ---
 title: "Summary: Cycling Data"
-author: "Fabian"
+
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 
 params:
   metavar: meta
   cap: capacity
-  plotCap: pCap
-  plotIR: pIRdrop
-  plotVPloop: pVPloop
-  plotVPlin: pVPlin
-  plotVPsplit: pVPsplit
+  pList: plotList
 ---
 
 ```{r setup, include = FALSE}
@@ -19,19 +15,41 @@ params:
 
 library(kableExtra)
 library(dplyr)
+library(ggplot2)
 
-#knitr::opts_chunk$set(results = FALSE)
+knitr::opts_chunk$set(echo = params$pList)
+
+ # fig.width = 6,
+ # fig.asp = 0.8,
+ # out.width = "80%"
+
 #RMarkdown Cookbook: https://bookdown.org/yihui/rmarkdown-cookbook/kable.html#customize-html-tables
+#RMArkdown References https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
+#RMarkdown "The definite Guide" https://bookdown.org/yihui/rmarkdown/
+
 ```
 
-
-## Metadata & Cell Stats in brief
+## Metadata & Cell Stats in brief {.tabset .tabset-fade .tabset-pills}
+### Metadata
 ```{r metadata, echo = FALSE}
 d1 <- params$metavar
-d2 <- params$cap
 
+
+kableExtra::kable(t(d1), align = "cccc",
+              #col.names = c("sample name",
+               #              "active material loading [mg]",
+                #              "cell type",
+                 #            "battery cycler"),
+      caption="Sample Infos") %>% 
+      kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE,  position="float_left")
 # Error message: UseMethod("filter") no applicable method for 'filter'
 # ignore. disappears in actual execution, when cap is defined
+```
+
+### Cell Stats @ 80%
+```{r KPI, echo = FALSE}
+d2 <- params$cap
+
 ret <- dplyr::filter(d2, Qdc.mAh > Qdc.mAh[1]*0.8) 
 if(nrow(ret) == 0) ret = head(d2,2)
 
@@ -41,35 +59,11 @@ keypara <- data.frame('max cycle number' = max(d2$CycNr)+1,
                       'mean_Qdc' = mean(ret$Qdc.mAh.g),
                       'median_Qdc' = median(ret$Qdc.mAh.g)
                       )
-
-kableExtra::kable(t(d1), align = "cccc",
-              #col.names = c("sample name",
-               #              "active material loading [mg]",
-                #              "cell type",
-                 #            "battery cycler"),
-      caption="Sample Infos") %>% 
-      kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE,  position="float_left")
-
 kableExtra::kable(t(keypara), align = "cccc", digits = 2,
       caption="Cell Stats @ 80% capacity loss") %>% 
       kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE, position = "left")
 
 
-```
-
-\newpage
-## Galvanostatic Cycling {.tabset .tabset-fade .tabset-pills}
-
-### Capacity & CE Plots
-```{r fig1, echo = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-
-if(length(params$plotCap)==2) plot(params$plotCap)
-```
-
-### IR drop
-```{r fig2, echo = FALSE, meessage = FALSE, fig.height=6, fig.width=8, fig.align="center"}
-
-if(length(params$plotIR)==2) plot(params$plotIR)
 ```
 
 ### Data Table
@@ -95,20 +89,47 @@ kableExtra::kable(init.stats,
 ```
 
 \newpage
+## Galvanostatic Cycling {.tabset .tabset-fade .tabset-pills}
+
+### Capacity & CE Plots
+```{r fig1, echo = FALSE, fig.height=5, fig.asp='.75', fig.align="center", fig.show="hold", results='asis', message=FALSE}
+print(params$pList[[1]])
+print(params$pList[[2]])
+```
+
+### IR drop
+```{r fig2, echo = FALSE, meessage = FALSE, fig.height=5, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
+
+print(params$pList[[3]])
+print(params$pList[[4]])
+```
+
+### CCCV
+```{r fig3, echo = FALSE, meessage = FALSE, fig.height=5, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
+
+print('coming soon')
+```
+
+
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
-```{r fig3, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center"}
-if(length(params$plotVPloop)==9) params$plotVPloop
+```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", results='asis'}
+print(params$pList[[5]])
 ```
 
 ### Linear
-```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", warning=FALSE}
-if(length(params$plotVPlin)==9) plot(params$plotVPlin)
+```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", results= 'asis', warning=FALSE}
+#if(length(params$plotVPlin)==9) plot(params$plotVPlin)
+
+print(params$pList[[6]])
 ```
 
 ### Split
-```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", warning=FALSE}
-if(length(params$plotVPsplit)==2) plot(params$plotVPsplit)
+```{r fig6, echo = FALSE, message = FALSE, fig.height=5, fig.asp='2.0', fig.align="center", fig.show="hold", out.height='75%', results = 'asis', warning=FALSE}
+#if(length(params$plotVPsplitCH)==9) plot(params$plotVPsplitCH)
+
+print(params$pList[[7]])
+print(params$pList[[8]])
 ```
 
 ## {-}

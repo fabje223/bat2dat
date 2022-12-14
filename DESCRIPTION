@@ -4,15 +4,11 @@ Title: Analysis of Potentiostat Output for Battery Research
 Version: 1.0.1
 Author: fabje223
 Maintainer: Fabian Jeschull <fabian.jeschull@kit.edu>
-Description: More about what it does (maybe more than one line) Use four
-    Battery Cycling Data Different Potentiostats produce different
-    experimental output files.  Some of them are easy readable, as they
-    are saves as .txt or .xlsx files, while others need to be exported
-    into a readable format prior to further processing.  This tools aims
-    to convert various potentiostat outputs into a uniform structure while
-    extracting key parameters and datasets for further graphical
-    processing (e.g. in Origin).  For this tool to work metadata has to be
-    provided.
+Description: This package was developed to facilitate the data processing and analysis of experimental battery data from potentiostats.
+    Each potentiostat manufacturer uses his own file formats that are only readable in customized software. 
+    Usually an export into .txt, .csv or .xlsx files is possible. The structure of each of these files, including the way the data is reported, can differ considerably between different manufacturer.
+    This tools aims to convert various potentiostat outputs into a uniform structure while extracting key parameters and datasets for further graphical processing (e.g. in Origin). In addition, a html report can be created that offers an option to quickly access certain information. The package is deliberately designed in a modular manner, so that other potentiostats can be easly integrated into the existing structure.
+    For this tool to work metadata has to be provided.
 License: CC0
 Depends: 
     R (>= 2.10),
@@ -31,8 +27,11 @@ Suggests:
     kableExtra,
     knitr,
     devtools
-Author@R: person("Fabian", "Jeschull", email = "fabian.jeschull@kit.edu",
-    role = c("aut", "cre"))
+Author@R: person("Jeschull", "Fabian, 
+                email="fabian.jeschull@kit.edu", 
+                role = c("aut", "cre"),
+                comment = c(ORCID = "0000-0002-5927-1978"))
+URL: https://github.com/fabje223/bat2dat
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2

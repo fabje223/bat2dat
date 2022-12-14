@@ -12,7 +12,9 @@
 #' @include Report0r.R Direct0r.R Read0r2.R
 #'
 #' @examples
-
+#' \dontrun{
+#' l <- process0r()
+#' }
 process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
 
               #Select (optional)
@@ -30,6 +32,10 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
                               "section" = character(),
                               "message" = character()
               )
+
+              #initializing data.frames() for raw and processed raw data
+              raw <- data.frame()
+              rawEval <- data.frame()
 
               #read-in raw data from folder
               sampleSUMMARY <- lapply(1:nrow(meta), function(i) {
@@ -53,35 +59,42 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
                           }else if(meta$instrument[i] == "Arbin") {
 
                             print("Reading Arbin raw data file")
-
                             #path/to/file/filename.res --> check is .res file in directory
                             res <- paste0(meta$dir[i], "/", meta$sample.name[i], ".res")
                             accdb <- paste0(meta$dir[i], "/", meta$sample.name[i], ".accdb")
-                            #check if file has .res ending; if so, rename them to .accdb
-                            if(file.exists(res)){
+                            xlsx <- paste0(meta$dir[i], "/", meta$sample.name[i], ".xlsx")
 
-                                  newfile <- gsub(".res$", ".accdb", res)
-                                  file.rename(res, newfile)
-                                  raw <- ARBINrawACCDB(newfile)
-
-                            }else if(file.exists(accdb)){
-
-                                  raw <- ARBINrawACCDB(accdb)
-
-                            }else{
+                            if(file.exists(xlsx)){
 
                                   f.path <- paste0(meta$dir[i], "/", meta$sample.name[i], ".xlsx")
                                   raw <- ARBINrawXLSX(dir, f.path)
+                                  rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
+
+                            #check if file has .res ending; if so, rename them to .accdb
+                            }else if(file.exists(res)){
+
+                                  print('.res interpreter currently not functional')
+                                  raw <- NULL
+
+                                  #newfile <- gsub(".res$", ".accdb", res)
+                                  #file.rename(res, newfile)
+                                  #raw <- ARBINrawACCDB(newfile)
+
+                            }else if(file.exists(accdb)){
+
+                                  raw <- NULL
+                                  rawEval <- NULL
+                                  #raw <- ARBINrawACCDB(accdb)
+                                  #rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
                             }
 
-                            rawEval <- ArbinEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
 
                           }else{
 
                             print("cycler not found - check directory")
 
-                            raw <- data.frame()
                             raw <- NULL
+                            rawEval <- NULL
                           }
 
                 l.sample <- list("metadata" = meta[i,],

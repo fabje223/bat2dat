@@ -44,9 +44,17 @@ report0r <- function(cccv = FALSE, cycles = c(0,1,4,seq(9,199, 10)), htmlReport 
                       )
                     }
 
+
+
                     #Generate html report using RMarkdown
                     if(htmlReport == TRUE){
+
+                      #no data no report
+                      if(is.null(exp$rawdata)) {
+                        print(paste0('no report generated for cell ', exp$metadata[2], ', as raw data could not be obtained'))
+                      }else{
                         reportGenerat0r(exp)
+                      }
                     }
 
                     #Export data as .txt (Origin compatible)
@@ -58,4 +66,6 @@ report0r <- function(cccv = FALSE, cycles = c(0,1,4,seq(9,199, 10)), htmlReport 
 
 
                   }
+
+                  print('all jobs done!')
         }

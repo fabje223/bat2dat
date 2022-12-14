@@ -22,6 +22,9 @@
 #' @name %>%
 #'
 #' @examples
+#' \dontrun{
+#' BiologicEvaluat0r()
+#' }
 BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               cycDat <- list('capacity' = NULL,
@@ -38,14 +41,15 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               #CC-CV step analysis is included if TRUE
               if(cccv == TRUE){
-                cycDat$CCCV <- Biologic.CCCV(raw, AMmass, cellType, warningsLOG)
+                cycDat$CCCV <- Biologic.CCCV(cycDat$VoltageProfiles, AMmass, cellType, warningsLOG)
               }
 
               return(cycDat)
 
               }
 
-#' @describeIn BiologicEvaluat0r Evaluat0r for Arbin Instruments
+#' @rdname Evaluat0r
+#' @details Evaluat0r for Arbin Instruments
 ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
 
               cycDat <- list('capacity' = NULL,
