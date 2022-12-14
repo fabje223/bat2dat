@@ -98,7 +98,7 @@ print(params$pList[[2]])
 ```
 
 ### IR drop
-```{r fig2, echo = FALSE, meessage = FALSE, fig.height=5, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
+```{r fig2, echo = FALSE, meessage = FALSE, fig.height=4, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
 
 print(params$pList[[3]])
 print(params$pList[[4]])

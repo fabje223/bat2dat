@@ -23,11 +23,11 @@ exports analysed data from list 'processedData', i.e. exp = processedData[[sampl
 }
 \section{Functions}{
 \itemize{
-\item \code{SaveCCCVToOrigin}: save results from CCCV step analysis
+\item \code{SaveCCCVToOrigin()}: save results from CCCV step analysis
 
-\item \code{SaveVPToOrigin}: save results from extracted voltage profiles
+\item \code{SaveVPToOrigin()}: save results from extracted voltage profiles
+
 }}
-
 \examples{
 \dontrun{
 l <- process0r()
