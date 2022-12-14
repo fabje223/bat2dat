@@ -20,12 +20,13 @@ information. The package is deliberately designed in a modular manner,
 so that other potentiostats can be easly integrated into the existing
 structure. For this tool to work metadata has to be provided.
 
-> **Note** The script was derived from standard in-house cycling
-> protocols of full cell and half cell configurations. Standard tests
-> include repeating rest-charge-rest-discharge cycles. The cycling rate
-> can be different in different cycles. Cycling protocols are frequently
-> very individual experiments to a specific cell configuration and
-> setup.  
+> **NOTE**  
+> The script was derived from standard in-house cycling protocols of
+> full cell and half cell configurations.  
+> Standard tests include repeating rest-charge-rest-discharge cycles.
+> The cycling rate can be different in different cycles. Cycling
+> protocols are frequently very individual experiments to a specific
+> cell configuration and setup.  
 > Although the functions to this package have been written in a general
 > manner and with this challenge in mind,  
 > the results of any processed data should be carefully checked, for
@@ -464,3 +465,18 @@ and *dir* manually. Or using the following code snippet:
 
     #defines dir
     dir <- dirname(fileDir)
+
+## (De)Bugs
+
+During installation of the package the following error message occured
+repeatedly:
+
+    Loading required package: ggplot2
+    Error: package or namespace load failed for ‘ggplot2’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+    namespace ‘rlang’ 1.0.2 is already loaded, but >= 1.0.6 is required
+    Error: package ‘ggplot2’ could not be loaded
+
+Update to a newer version of ‘rlang’ package
+
+    # update rlang
+    install.packages('rlang')  
