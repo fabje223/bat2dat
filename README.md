@@ -3,6 +3,8 @@
 
 # bat2dat
 
+[![DOI](https://zenodo.org/badge/486499338.svg)](https://zenodo.org/badge/latestdoi/486499338)
+
 <!-- badges: start -->
 <!-- badges: end -->
 
