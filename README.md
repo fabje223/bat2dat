@@ -3,7 +3,7 @@
 
 # bat2dat
 
-[![DOI](https://zenodo.org/badge/486499338.svg)](https://zenodo.org/badge/latestdoi/486499338)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7439377.svg)](https://doi.org/10.5281/zenodo.7439377)
 
 <!-- badges: start -->
 <!-- badges: end -->
