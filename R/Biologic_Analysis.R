@@ -28,8 +28,9 @@
 Biologic.CAP <- function(raw, AM.mass, type){
 
         #create empty result data.frame
-        cap <- data.frame("CycNr" = numeric(), "time.s.ch" = numeric(), "time.s.dc" = numeric(), "Qch.mAh" = numeric(),
-                          "Qdc.mAh" = numeric(), "CE" = numeric(), "Ewe.endCH" = numeric(), "Ewe.endDC" = numeric())
+        cap <- data.frame("CycNr" = numeric(), "time.s.ch" = numeric(), "time.s.dc" = numeric(), "I.mA.ch" = numeric(), "I.mA.dc" = numeric(),
+                          "Qch.mAh" = numeric(), "Qdc.mAh" = numeric(), "CE" = numeric(), "Ewe.endCH" = numeric(), "Ewe.endDC" = numeric(),
+                          "Edrop.ch" = numeric(), "Edrop.dc" = numeric(), "IntR.ch" = numeric(), "IntR.dc" = numeric())
 
         ##Analyse Biologic files:
         # most common setting: half cells are started from Ns0 in first half cycle
@@ -97,21 +98,25 @@ Biologic.CAP <- function(raw, AM.mass, type){
                     }else if(type == 'halfcell-anode' || type == 'LiS'){
 
                             Edrop.ch <- ch.IR$Ewe.V - ch.ln$Ewe.V
-                            ch.df <- data.frame(ch.ln, Edrop.ch)
+                            IntR.ch <- Edrop.ch / (ch.ln$I.mA*(-0.001))
+                            ch.df <- data.frame(ch.ln, Edrop.ch, IntR.ch)
                             seq1.df <- rbind(seq1.df, ch.df)
 
                             Edrop.dc <- dc.ln$Ewe.V - dc.IR$Ewe.V
-                            dc.df <- data.frame(dc.ln, Edrop.dc)
+                            IntR.dc <- Edrop.dc / (dc.ln$I.mA*(0.001))
+                            dc.df <- data.frame(dc.ln, Edrop.dc, IntR.dc)
                             seq2.df <- rbind(seq2.df, dc.df)
 
                     }else if(type ==  "halfcell-cathode" || type == "fullcell"){
 
                             Edrop.ch <- ch.ln$Ewe.V - ch.IR$Ewe.V
-                            ch.df <- data.frame(ch.ln, Edrop.ch)
+                            IntR.ch <- Edrop.ch / (ch.ln$I.mA*(0.001))
+                            ch.df <- data.frame(ch.ln, Edrop.ch, IntR.ch)
                             seq1.df <- rbind(seq1.df, ch.df)
 
                             Edrop.dc <- dc.IR$Ewe.V - dc.ln$Ewe.V
-                            dc.df <- data.frame(dc.ln, Edrop.dc)
+                            IntR.dc <- Edrop.dc / (dc.ln$I.mA*(-0.001))
+                            dc.df <- data.frame(dc.ln, Edrop.dc, IntR.dc)
                             seq2.df <- rbind(seq2.df, dc.df)
                     }
                 }
@@ -145,6 +150,8 @@ Biologic.CAP <- function(raw, AM.mass, type){
                         cap <- data.frame("CycNr" = seq2.df$cyc.nr,
                                           "time.s.ch" = seq1.df$time.s,
                                           "time.s.dc" = seq2.df$time.s,
+                                          #"I.mA.ch" = seq1.df$I.mA,
+                                          #"I.mA.dc" = seq2.df$I.mA,
                                           "Qch.mAh" = seq1.df$Qdc.mAh,
                                           "Qdc.mAh" = seq2.df$Qch.mAh,
                                           "Qch.mAh.g" = seq1.df$Qdc.mAh/AM.mass,
@@ -153,7 +160,9 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           "Ewe.endCH" = seq1.df$Ewe.V,
                                           "Ewe.endDC" = seq2.df$Ewe.V,
                                           "Edrop.ch" = seq1.df$Edrop.ch,
-                                          "Edrop.dc" = seq2.df$Edrop.dc
+                                          "Edrop.dc" = seq2.df$Edrop.dc,
+                                          "IntR.ch" = seq1.df$IntR.ch,
+                                          "IntR.dc" = seq2.df$IntR.dc
                                           )
 
                 } else if(type == "halfcell-cathode" || type ==  "fullcell"){
@@ -161,6 +170,8 @@ Biologic.CAP <- function(raw, AM.mass, type){
                         cap <- data.frame("CycNr" = seq2.df$cyc.nr,
                                           "time.s.ch" = seq1.df$time.s,
                                           "time.s.dc" = seq2.df$time.s,
+                                          #"I.mA.ch" = seq1.df$I.mA,
+                                          #"I.mA.dc" = seq2.df$I.mA,
                                           "Qch.mAh" = seq1.df$Qch.mAh,
                                           "Qdc.mAh" = seq2.df$Qdc.mAh,
                                           "Qch.mAh.g" = seq1.df$Qch.mAh/AM.mass,
@@ -169,7 +180,9 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           "Ewe.endCH" = seq1.df$Ewe.V,
                                           "Ewe.endDC" = seq2.df$Ewe.V,
                                           "Edrop.ch" = seq1.df$Edrop.ch,
-                                          "Edrop.dc" = seq2.df$Edrop.dc
+                                          "Edrop.dc" = seq2.df$Edrop.dc,
+                                          "IntR.ch" = seq1.df$IntR.ch,
+                                          "IntR.dc" = seq2.df$IntR.dc
                                           )
 
                 } else if(type == "LiS"){
@@ -177,6 +190,8 @@ Biologic.CAP <- function(raw, AM.mass, type){
                         cap <- data.frame("CycNr" = seq2.df$cyc.nr,
                                           "time.s.ch" = seq2.df$time.s,
                                           "time.s.dc" = seq1.df$time.s,
+                                          #"I.mA.ch" = seq1.df$I.mA,
+                                          #"I.mA.dc" = seq2.df$I.mA,
                                           "Qch.mAh" = seq1.df$Qdc.mAh,
                                           "Qdc.mAh" = seq2.df$Qch.mAh,
                                           "Qch.mAh.g" = seq1.df$Qdc.mAh/AM.mass,
@@ -185,7 +200,9 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           "Ewe.endCH" = seq2.df$Ewe.V,
                                           "Ewe.endDC" = seq1.df$Ewe.V,
                                           "Edrop.ch" = seq2.df$Edrop.dc,
-                                          "Edrop.dc" = seq1.df$Edrop.ch
+                                          "Edrop.dc" = seq1.df$Edrop.ch,
+                                          "IntR.ch" = seq1.df$IntR.ch,
+                                          "IntR.dc" = seq2.df$IntR.dc
                                           )
                         #cap <- cap %>%
                          #       select(cyc.nr, Ns, time.s, Qch.mAh, Qdc.mAh, Qch.mAh.g, Qdc.mAh.g, CE, Ewe.endCH, Ewe.V, Edrop.ch, Edrop.dc)
@@ -409,7 +426,8 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
         #create empty result data.frame and empty VP.list (temporary storage)
         VPprofiles <- data.frame("CycNr" = numeric(), "time.s" = numeric(), "I.mA" = numeric(),
                                  "Qch.mAh" = numeric(), "Qdc.mAh" = numeric(), "Qloop" = numeric(),
-                                 "Ewe.V" = numeric(), "diffcap" = numeric())
+                                 "Ewe.V" = numeric(), "diffcap" = numeric(), "dQdV.mav3" = numeric(),
+                                 "type" = c())
         VP.list <- list()
         k = 1
 
@@ -431,7 +449,9 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.Q' = c(0, diff(Qdc.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
-                                       'type' = 'ch')
+                                       'type' = 'ch') %>%
+                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+
 
                         VP.dc <- raw %>%
                                 filter(cyc.nr == i+1 & Ns %in% c(seq(0,50,2))) %>%
@@ -440,9 +460,13 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.Q' = c(0, diff(Qch.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
-                                       'type' = 'dc')
+                                       'type' = 'dc') %>%
+                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
+
+                        #remove infinite (+/- Inf) values for dQdV
+                        cell_a1$dQdV.mav[!is.finite(cell_a1$dQdV.mav)] <- NA
 
                         #correct cycle number (is shifted by half a sequence in half cells)
                         VP.df$cyc.nr <- i
@@ -472,7 +496,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                 "Qch.mAh" = VP.df$Qdc.mAh, "Qch.mAh.g" = VP.df$Qdc.mAh/AM.mass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
                                 "Qdc.mAh" = VP.df$Qch.mAh, "Qdc.mAh.g" = VP.df$Qch.mAh/AM.mass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
                                 "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AM.mass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
-                                "diffcap" = VP.df$diff.cap, "type" = VP.df$type)
+                                "diffcap" = VP.df$diff.cap, "dQdV.mav3" = VP.df$dQdV.mav, "type" = VP.df$type)
 
                         VP.list[[k]] <- VPprofile
                         k = k+1
@@ -490,7 +514,8 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.Q' = c(0, diff(Qdc.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
-                                       'type' = 'ch')
+                                       'type' = 'ch') %>%
+                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
                         VP.ch <- tail(VP.ch, -1)
 
                         VP.dc <- raw %>%
@@ -500,7 +525,13 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.Q' = c(0, diff(Qch.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
-                                       'type' = 'dc')
+                                       'type' = 'dc') %>%
+                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+
+                        VP.df <- rbind(VP.ch, VP.dc)
+
+                        #remove infinite (+/- Inf) values for dQdV
+                        cell_a1$dQdV.mav[!is.finite(cell_a1$dQdV.mav)] <- NA
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
@@ -529,7 +560,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                 "Qch.mAh" = VP.df$Qch.mAh, "Qch.mAh.g" = VP.df$Qch.mAh/AM.mass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
                                 "Qdc.mAh" = VP.df$Qdc.mAh, "Qdc.mAh.g" = VP.df$Qdc.mAh/AM.mass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
                                 "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AM.mass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
-                                 "diffcap" = VP.df$diff.cap, "type" = VP.df$type)
+                                 "diffcap" = VP.df$diff.cap, "dQdV.mav3" = VP.df$dQdV.mav, "type" = VP.df$type)
 
                 VP.list[[k]] <- VPprofile
                 k = k+1
