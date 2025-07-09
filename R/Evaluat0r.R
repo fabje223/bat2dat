@@ -46,7 +46,7 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               return(cycDat)
 
-              }
+            }
 
 #' @rdname Evaluat0r
 #' @details Evaluat0r for Arbin Instruments

@@ -15,7 +15,7 @@
 #' \dontrun{
 #' l <- process0r()
 #' }
-process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
+process0r <- function(cccv = FALSE, cycles) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -33,12 +33,19 @@ process0r <- function(cccv = FALSE, cycles = c(seq(0, 99, 10)) ) {
                               "message" = character()
               )
 
-              #initializing data.frames() for raw and processed raw data
-              raw <- data.frame()
-              rawEval <- data.frame()
-
               #read-in raw data from folder
               sampleSUMMARY <- lapply(1:nrow(meta), function(i) {
+
+                          #initialize/empty l.sample list()
+                          l.samples <- list("metadata"=NULL,
+                                            "rawdata"=NULL,
+                                            "capacity"=NULL,
+                                            "VoltageProfiles"=NULL,
+                                            "CCCV"=NULL)
+
+                          #initializing data.frames() for raw and processed raw data
+                          raw <- data.frame()
+                          rawEval <- data.frame()
 
                           if(meta$instrument[i] == "Biologic BCS"){
 

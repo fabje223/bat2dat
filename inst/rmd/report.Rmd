@@ -88,7 +88,7 @@ kableExtra::kable(init.stats,
 
 ```
 
-\newpage
+
 ## Galvanostatic Cycling {.tabset .tabset-fade .tabset-pills}
 
 ### Capacity & CE Plots
@@ -104,8 +104,15 @@ print(params$pList[[3]])
 print(params$pList[[4]])
 ```
 
+### Internal Resistance
+```{r fig3, echo = FALSE, meessage = FALSE, fig.height=4, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
+
+print(params$pList[[5]])
+print(params$pList[[6]])
+```
+
 ### CCCV
-```{r fig3, echo = FALSE, meessage = FALSE, fig.height=5, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
+```{r fig4, echo = FALSE, meessage = FALSE, fig.height=5, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
 
 print('coming soon')
 ```
@@ -113,23 +120,23 @@ print('coming soon')
 
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
-```{r fig4, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", results='asis'}
-print(params$pList[[5]])
+```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", results='asis'}
+print(params$pList[[7]])
 ```
 
 ### Linear
-```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", results= 'asis', warning=FALSE}
+```{r fig6, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", results= 'asis', warning=FALSE}
 #if(length(params$plotVPlin)==9) plot(params$plotVPlin)
 
-print(params$pList[[6]])
+print(params$pList[[8]])
 ```
 
 ### Split
-```{r fig6, echo = FALSE, message = FALSE, fig.height=5, fig.asp='2.0', fig.align="center", fig.show="hold", out.height='75%', results = 'asis', warning=FALSE}
+```{r fig7, echo = FALSE, message = FALSE, fig.height=5, fig.asp='2.0', fig.align="center", fig.show="hold", out.height='75%', results = 'asis', warning=FALSE}
 #if(length(params$plotVPsplitCH)==9) plot(params$plotVPsplitCH)
 
-print(params$pList[[7]])
-print(params$pList[[8]])
+print(params$pList[[9]])
+print(params$pList[[10]])
 ```
 
 ## {-}

@@ -116,6 +116,56 @@ plotIRdropCH <- function(capacity, minmax){
   return(p.IRdrop.dc)
 }
 
+#' @describeIn plotCapReport plots internal resistance versus cycle number
+  plotIntRCH <- function(capacity, minmax){
+
+    #binding variables locally to function plotCapReport
+    CycNr <- IntR.ch <- NULL
+
+    p.IntR.ch <- ggplot(capacity) +
+      geom_point(aes(x=CycNr, y=IntR.ch), color='red', size=4) +
+      labs(x = bquote('cycle number'),
+           y = bquote('Internal Resistance / Ohm'),
+           title = "Internal Resistance (end of charge) vs. cycle number",
+           color = "Legend") +
+      #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
+      #                  breaks = seq(0,200, 10)) +
+      scale_y_continuous(limits=c(minmax[1]*0.9, minmax[2]*1.1),
+                         #breaks = round(seq(minmax[1]*1200, minmax[2]*800, length.out=50), 0)) +
+                         breaks = waiver(), n.breaks = 10) +
+      #     breaks = seq(0,4000, 0.2)) +
+      #my.axis +
+      customTheme() +
+      theme(legend.position = 'right')
+
+    return(p.IntR.ch)
+  }
+
+#' @describeIn plotCapReport plots internal resistance versus cycle number
+plotIntRDC <- function(capacity, minmax){
+
+    #binding variables locally to function plotCapReport
+    CycNr <- IntR.dc <- NULL
+
+    p.IntR.dc <- ggplot(capacity) +
+      geom_point(aes(x=CycNr, y=IntR.dc), color='blue', size=4) +
+      labs(x = bquote('cycle number'),
+           y = bquote('Internal Resistance / Ohm'),
+           title = "Internal Resistance (end of discharge) vs. cycle number",
+           color = "Legend") +
+      #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
+      #                  breaks = seq(0,200, 10)) +
+      scale_y_continuous(limits=c(minmax[3]*0.9, minmax[4]*1.1),
+                         #breaks = round(seq(minmax[3]*1200, minmax[4]*800, length.out=10), 0)) +
+                         breaks = waiver(), n.breaks = 10) +
+      #my.axis +
+      customTheme() +
+      theme(legend.position = 'right')
+
+    return(p.IntR.dc)
+  }
+
+
 #' @describeIn plotCapReport plots voltage profile vs Qloop
 plotVPloop <- function(vp.dat){
 
