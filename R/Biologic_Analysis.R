@@ -18,6 +18,7 @@
 #' @importFrom dplyr select
 #' @importFrom utils head
 #' @importFrom utils tail
+#' @importFrom zoo rollapply
 #'
 #' @examples
 #' \dontrun{
@@ -450,7 +451,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
                                        'type' = 'ch') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
 
 
                         VP.dc <- raw %>%
@@ -461,12 +462,12 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
                                        'type' = 'dc') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
                         #remove infinite (+/- Inf) values for dQdV
-                        cell_a1$dQdV.mav[!is.finite(cell_a1$dQdV.mav)] <- NA
+                        VP.df$dQdV.mav[!is.finite(VP.df$dQdV.mav)] <- NA
 
                         #correct cycle number (is shifted by half a sequence in half cells)
                         VP.df$cyc.nr <- i
@@ -515,7 +516,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
                                        'type' = 'ch') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
                         VP.ch <- tail(VP.ch, -1)
 
                         VP.dc <- raw %>%
@@ -526,12 +527,12 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
                                        'type' = 'dc') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
                         #remove infinite (+/- Inf) values for dQdV
-                        cell_a1$dQdV.mav[!is.finite(cell_a1$dQdV.mav)] <- NA
+                        VP.df$dQdV.mav[!is.finite(VP.df$dQdV.mav)] <- NA
 
                         VP.df <- rbind(VP.ch, VP.dc)
 

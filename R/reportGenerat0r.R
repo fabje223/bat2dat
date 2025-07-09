@@ -63,22 +63,45 @@ reportGenerat0r <- function(exp){
       stop()
     }
 
+      #No plot if all minmax == 0
+      if(sum(minmax) == 0){
+
+          pIRdropDC <- NA
+          pIRdropCH <- NA
+
+        }else{
+
+        pIRdropDC <- plotIRdropDC(capacity, minmax)
+        pIRdropCH <- plotIRdropCH(capacity, minmax)
+        }
+  }
+
+  #Plot Internal Resistance (IntR)
+  capacity <- exp$capacity
+  if(max(capacity$CycNr) >= 2){
+
+    minmax.IntR <- c("min.y.ch" <- min(capacity$IntR.ch),
+                    "max.y.ch" <- max(capacity$IntR.ch),
+                    "min.y.dc" <- min(capacity$IntR.dc),
+                    "max.y.dc" <- max(capacity$IntR.dc))
+
+    # workaround: no resting step between charge and discharge
+    # prevents error "from must be a finite number" in scale_y_continuous
+    minmax.IntR[is.na(minmax.IntR)] <- 0
+    minmax.IntR[is.infinite(minmax.IntR)] <- 0
+
     #No plot if all minmax == 0
-    if(sum(minmax) == 0){
+    if(sum(minmax.IntR) == 0){
 
-      pIRdrop <- NA
-      return(pIRdrop)
-    }
+        pIntRCH <- NA
+        pIntRDC <- NA
 
-    pIRdropDC <- plotIRdropDC(capacity, minmax)
-    pIRdropCH <- plotIRdropCH(capacity, minmax)
+        }else{
 
-  }else{
-
-    pCap <- NA
-    pIRdrop <- NA
-
-    }
+        pIntRDC <- plotIntRDC(capacity, minmax.IntR)
+        pIntRCH <- plotIntRCH(capacity, minmax.IntR)
+        }
+  }
 
   #draw voltage profiles
   l.VP <- exp$VoltageProfiles
@@ -134,14 +157,16 @@ reportGenerat0r <- function(exp){
   }
 
   #save all plots in plotList
-  plotList <- list('capa' = pCap,
-                   'CE' = pCE,
-                   'IR.ch' = pIRdropCH,
-                   'IR.dc' = pIRdropDC,
-                   'VPloop' = pVPloop,
-                   'VPlin' = pVPlin,
-                   'VPsplitCH' = pVPsplitCH,
-                   'VPsplitDC' = pVPsplitDC
+  plotList <- list('capa' = pCap, #               [1]
+                   'CE' = pCE, #                  [2]
+                   'IR.ch' = pIRdropCH, #         [3]
+                   'IR.dc' = pIRdropDC, #         [4]
+                   'IntR.ch' = pIntRCH, #         [5]
+                   'IntR.dc' = pIntRDC, #         [6]
+                   'VPloop' = pVPloop, #          [7]
+                   'VPlin' = pVPlin, #            [8]
+                   'VPsplitCH' = pVPsplitCH, #    [9]
+                   'VPsplitDC' = pVPsplitDC #     [10]
                     )
 
   #locate report.rmd file
