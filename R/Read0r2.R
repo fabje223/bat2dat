@@ -5,14 +5,13 @@
 #'
 #' @param dir directory to raw data folder
 #' @param filename sample name
+#' @param f.path full file path with ending
 #'
 #' @return returns data.frame with raw data
-#' @export
 #'
 #' @include Process0r.R Report0r.R
 #' @importFrom utils read.table
 #' @importFrom magrittr %>%
-#' @name %>%
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
@@ -23,6 +22,10 @@
 #' \dontrun{
 #' raw <- BCSraw()
 #' }
+
+#' @export
+#' @rdname Read0r
+#' @details read .txt files from raw data directory (for Biologic BCS)
 BCSraw <- function(dir, filename){
 
   #binding variables locally to function BCSraw()
@@ -52,7 +55,9 @@ BCSraw <- function(dir, filename){
 
 }
 
-#' @describeIn BCSraw read .txt files from raw data directory
+#' @export
+#' @rdname Read0r
+#' @details read .txt files from raw data directory (for Biologic VMP)
 VMPraw <- function(dir, filename){
 
   #binding variables locally to function VMPraw()
@@ -80,7 +85,9 @@ VMPraw <- function(dir, filename){
 
   }
 
-#' @describeIn BCSraw read .txt files from raw data directory
+#' @export
+#' @rdname Read0r
+#' @details read .xlsx files from raw data directory
 ARBINrawXLSX <- function(dir, f.path){
 
     if (!requireNamespace("readxl", quietly = TRUE)) {
@@ -105,7 +112,9 @@ ARBINrawXLSX <- function(dir, f.path){
     return(raw)
   }
 
-#' @describeIn BCSraw read .txt files from raw data directory
+#' @export
+#' @rdname Read0r
+#' @details read .accdb (MS Access) files from raw data directory
 ARBINrawACCDB <- function(filename){
 
     if (!requireNamespace("RODBC", quietly = TRUE)) {

@@ -3,9 +3,16 @@
 #' @description Plotting Script for RMarkdown Report
 #'
 #' @param capacity data.frame with galvanostatic cycling information
+#' @param minmax axis range
+#' @param vp.dat voltage profile information
+#' @param dc data.frame with discharge data for selected cycles
+#' @param ch data.frame with charge data for selected cycles
+#' @param min.dc.y y-axis limit - min
+#' @param max.dc.y y-axis limit - max
+#' @param min.ch.y y-axis limit - min
+#' @param max.ch.y y-axis limit - max
 #'
 #' @return returns graphs generated from expeirmental data for report.Rmd
-#' @export
 #'
 #' @include customThemes.R reportGenerat0r.R
 #' @import ggplot2 viridis
@@ -16,6 +23,9 @@
 #' capa <- Arbin.CAP()
 #' pCap <- plotCapa(capa)
 #' }
+
+#' @rdname plot0r
+#' @details plotCapa plots coulombic efficiency versus cycle number
 plotCapa <- function(capacity){
 
       #binding variables locally to function plotCapReport
@@ -41,7 +51,8 @@ plotCapa <- function(capacity){
       return(p.cap)
 }
 
-#' @describeIn plotCEReport plots IR drop versus cycle number
+#' @rdname plot0r
+#' @details plotCE plots coulombic efficiency versus cycle number
 plotCE <- function(capacity){
 
       CycNr <- CE <- NULL
@@ -67,7 +78,8 @@ plotCE <- function(capacity){
 
 }
 
-#' @describeIn plotCapReport plots IR drop versus cycle number
+#' @rdname plot0r
+#' @details plotIRdropCH plots IR drop versus cycle number (charge)
 plotIRdropCH <- function(capacity, minmax){
 
   #binding variables locally to function plotCapReport
@@ -92,7 +104,8 @@ plotIRdropCH <- function(capacity, minmax){
   return(p.IRdrop.ch)
 }
 
-  #' @describeIn plotCapReport plots IR drop versus cycle number
+#' @rdname plot0r
+#' @details plotIRdropDC plots IR drop versus cycle number (discharge)
   plotIRdropDC <- function(capacity, minmax){
 
     #binding variables locally to function plotCapReport
@@ -116,7 +129,8 @@ plotIRdropCH <- function(capacity, minmax){
   return(p.IRdrop.dc)
 }
 
-#' @describeIn plotCapReport plots internal resistance versus cycle number
+#' @rdname plot0r
+#' @details plotIntRCH plots internal resistance versus cycle number (charge)
   plotIntRCH <- function(capacity, minmax){
 
     #binding variables locally to function plotCapReport
@@ -141,7 +155,8 @@ plotIRdropCH <- function(capacity, minmax){
     return(p.IntR.ch)
   }
 
-#' @describeIn plotCapReport plots internal resistance versus cycle number
+#' @rdname plot0r
+#' @details plotIntRDC plots internal resistance versus cycle number (discharge)
 plotIntRDC <- function(capacity, minmax){
 
     #binding variables locally to function plotCapReport
@@ -166,7 +181,8 @@ plotIntRDC <- function(capacity, minmax){
   }
 
 
-#' @describeIn plotCapReport plots voltage profile vs Qloop
+#' @rdname plot0r
+#' @details plotVPloop plots voltage profile vs Qloop
 plotVPloop <- function(vp.dat){
 
   #binding variables locally to function plotVPloop
@@ -192,7 +208,8 @@ plotVPloop <- function(vp.dat){
 
 }
 
-#' @describeIn plotCapReport plots voltage profile vs Q
+#' @rdname plot0r
+#' @details plotVPlin plots voltage profile vs Q
 plotVPlin <- function(vp.dat){
 
     #binding variables locally to function plotVPloop
@@ -226,7 +243,8 @@ plotVPlin <- function(vp.dat){
 
 }
 
-#' @describeIn plotCapReport plots voltage profile vs Q
+#' @rdname plot0r
+#' @details plotVPsplitDC plots voltage profile vs Q (discharge)
 plotVPsplitDC <- function(dc, min.dc.y, max.dc.y){
 
   Qdc.mAh.g <- Ewe.V.dc <- CycNr <- NULL
@@ -252,8 +270,8 @@ plotVPsplitDC <- function(dc, min.dc.y, max.dc.y){
   return(p.vp1)
 }
 
-
-#' @describeIn plotCapReport plots voltage profile vs Q
+#' @rdname plot0r
+#' @details plotVPsplitCH plots voltage profile vs Q (charge)
 plotVPsplitCH <- function(ch, min.ch.y, max.ch.y){
 
   Qch.mAh.g <- Ewe.V.ch <- CycNr <- NULL

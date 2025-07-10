@@ -1,19 +1,19 @@
-#' @title Arbin.analysis
+#' @title Arbin_analysis
 #'
 #' @description Analysis Arbin data to produce data.frames for voltage profiles of selected cycles
 #' and capacity (vs. cycle number) data
 #'
 #' @param raw raw data file
 #' @param cycles selected cycles to extract for voltage profiles
+#' @param AMmass - object of Biologic.CAPA
+#' @param cellType - object of Biologic.CAPA
 #'
 #' @return returns data.frames (for Arbin.VP as list)
-#' @export
 #'
 #' @include Evaluat0r.R Process0r.R Read0r2.R Report0r.R
 #' @importFrom utils head
 #' @importFrom utils tail
 #' @importFrom magrittr %>%
-#' @name %>%
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
@@ -21,10 +21,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' capa <- Arbin.CAP()
+#' capa <- Arbin.CAPA()
 #'
 #' VP <- Arbin.VP()
 #' }
+
+#' @export
+#' @rdname Arbin_analysis
+#' @details Extract voltage profiles for selected cycles
 Arbin.VP <- function(raw, AMmass, cellType, cycles=c(1,5,10)){
 
   #binding variables locally to function Arbin.VP
@@ -143,8 +147,10 @@ Arbin.VP <- function(raw, AMmass, cellType, cycles=c(1,5,10)){
   return(VP.list)
 }
 
-#' @describeIn Arbin.VP data from galvanostatic cycling experiments
-Arbin.CAP <- function(raw, AMmass, cellType){
+#' @export
+#' @rdname Arbin_analysis
+#' @details Arbin.CAPA extracts cycling data from galvanostatic cycling experiments
+Arbin.CAPA <- function(raw, AMmass, cellType){
 
     cyc.nr <- I.A <- NULL
 

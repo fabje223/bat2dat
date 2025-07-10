@@ -18,6 +18,10 @@
 #'             "CCCV" <- data.frame)
 #' report <- reportGenerat0r(exp)
 #' }
+#'
+
+#' @rdname reportGenerat0r
+#' @details Produce plots for HTML report
 reportGenerat0r <- function(exp){
 
   type <- NULL
