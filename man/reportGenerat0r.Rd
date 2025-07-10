@@ -16,6 +16,9 @@ initiates data report function report.Rmd and generates plots for report using p
 Interface to plot data and pass it to report.Rdm to
 generate data report
 }
+\details{
+Produce plots for HTML report
+}
 \examples{
 \dontrun{
 exp <- list("metadata" <- base.info,
@@ -24,4 +27,5 @@ exp <- list("metadata" <- base.info,
             "CCCV" <- data.frame)
 report <- reportGenerat0r(exp)
 }
+
 }

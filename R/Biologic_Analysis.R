@@ -2,22 +2,23 @@
 #'
 #' @description Analysis of Biologic potentiostat data
 #'
-#' @param raw - object of Biologic.CAP
-#' @param AM.mass - object of Biologic.CAP
-#' @param type - object of Biologic.CAP
+#' @param raw - object of Biologic.CAPA
+#' @param AMmass - object of Biologic.CAPA
+#' @param cycles - selected cycles to extract for voltage profiles
+#' @param cellType - object of Biologic.CAPA
+#' @param warningsLOG - test LOG to fetch errors
 #'
 #' @return capacity table
-#' @export
 #'
 #' @include Read0r2.R Evaluat0r.R Process0r.R Report0r.R
 #'
 #' @importFrom magrittr %>%
-#' @name %>%
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom utils head
 #' @importFrom utils tail
+#' @importFrom zoo rollapply
 #'
 #' @examples
 #' \dontrun{
@@ -25,7 +26,11 @@
 #'
 #' VP <- Biologic.VP()
 #' }
-Biologic.CAP <- function(raw, AM.mass, type){
+
+#' @export
+#' @rdname Biologic_Analysis
+#' @details Extract Cycling Data for Biologic Instruments
+Biologic.CAPA <- function(raw, AMmass, cellType){
 
         #create empty result data.frame
         cap <- data.frame("CycNr" = numeric(), "time.s.ch" = numeric(), "time.s.dc" = numeric(), "I.mA.ch" = numeric(), "I.mA.dc" = numeric(),
@@ -48,7 +53,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
 
                   # a bit misleading: first sequence in LiS is not a charge,
                   # but for the calculation of the IRdrop it works like a anode halfcell
-                  if(type == 'halfcell-anode' || type == 'LiS'){
+                  if(cellType == 'halfcell-anode' || cellType == 'LiS'){
 
                         #first cycling sequence
                         ch <- raw %>%
@@ -69,7 +74,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
                         dc.ln <- head(tail(dc, 2),1)
                         dc.IR <- head(dc.IR, 1)
 
-                      }else if(type ==  "halfcell-cathode" || type == "fullcell"){
+                      }else if(cellType ==  "halfcell-cathode" || cellType == "fullcell"){
 
                         #first cycling sequence
                         ch <- raw %>%
@@ -95,7 +100,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
 
                           next
 
-                    }else if(type == 'halfcell-anode' || type == 'LiS'){
+                    }else if(cellType == 'halfcell-anode' || cellType == 'LiS'){
 
                             Edrop.ch <- ch.IR$Ewe.V - ch.ln$Ewe.V
                             IntR.ch <- Edrop.ch / (ch.ln$I.mA*(-0.001))
@@ -107,7 +112,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
                             dc.df <- data.frame(dc.ln, Edrop.dc, IntR.dc)
                             seq2.df <- rbind(seq2.df, dc.df)
 
-                    }else if(type ==  "halfcell-cathode" || type == "fullcell"){
+                    }else if(cellType ==  "halfcell-cathode" || cellType == "fullcell"){
 
                             Edrop.ch <- ch.ln$Ewe.V - ch.IR$Ewe.V
                             IntR.ch <- Edrop.ch / (ch.ln$I.mA*(0.001))
@@ -145,7 +150,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
                 #write results in new data.frame "cap"
                 if(nrow(seq2.df) == 0) {
                         return(cap)
-                } else if(type == "halfcell-anode"){
+                } else if(cellType == "halfcell-anode"){
                         # fill result data.frame
                         cap <- data.frame("CycNr" = seq2.df$cyc.nr,
                                           "time.s.ch" = seq1.df$time.s,
@@ -154,8 +159,8 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           #"I.mA.dc" = seq2.df$I.mA,
                                           "Qch.mAh" = seq1.df$Qdc.mAh,
                                           "Qdc.mAh" = seq2.df$Qch.mAh,
-                                          "Qch.mAh.g" = seq1.df$Qdc.mAh/AM.mass,
-                                          "Qdc.mAh.g" = seq2.df$Qch.mAh/AM.mass,
+                                          "Qch.mAh.g" = seq1.df$Qdc.mAh/AMmass,
+                                          "Qdc.mAh.g" = seq2.df$Qch.mAh/AMmass,
                                           "CE" = seq2.df$Qch.mAh/seq1.df$Qdc.mAh,
                                           "Ewe.endCH" = seq1.df$Ewe.V,
                                           "Ewe.endDC" = seq2.df$Ewe.V,
@@ -165,7 +170,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           "IntR.dc" = seq2.df$IntR.dc
                                           )
 
-                } else if(type == "halfcell-cathode" || type ==  "fullcell"){
+                } else if(cellType == "halfcell-cathode" || cellType ==  "fullcell"){
                         # fill result data.frame
                         cap <- data.frame("CycNr" = seq2.df$cyc.nr,
                                           "time.s.ch" = seq1.df$time.s,
@@ -174,8 +179,8 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           #"I.mA.dc" = seq2.df$I.mA,
                                           "Qch.mAh" = seq1.df$Qch.mAh,
                                           "Qdc.mAh" = seq2.df$Qdc.mAh,
-                                          "Qch.mAh.g" = seq1.df$Qch.mAh/AM.mass,
-                                          "Qdc.mAh.g" = seq2.df$Qdc.mAh/AM.mass,
+                                          "Qch.mAh.g" = seq1.df$Qch.mAh/AMmass,
+                                          "Qdc.mAh.g" = seq2.df$Qdc.mAh/AMmass,
                                           "CE" = seq2.df$Qdc.mAh/seq1.df$Qch.mAh,
                                           "Ewe.endCH" = seq1.df$Ewe.V,
                                           "Ewe.endDC" = seq2.df$Ewe.V,
@@ -185,7 +190,7 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           "IntR.dc" = seq2.df$IntR.dc
                                           )
 
-                } else if(type == "LiS"){
+                } else if(cellType == "LiS"){
                         # workaround: cap <- data.frame(...) kept throwing false error (no matching row number)
                         cap <- data.frame("CycNr" = seq2.df$cyc.nr,
                                           "time.s.ch" = seq2.df$time.s,
@@ -194,8 +199,8 @@ Biologic.CAP <- function(raw, AM.mass, type){
                                           #"I.mA.dc" = seq2.df$I.mA,
                                           "Qch.mAh" = seq1.df$Qdc.mAh,
                                           "Qdc.mAh" = seq2.df$Qch.mAh,
-                                          "Qch.mAh.g" = seq1.df$Qdc.mAh/AM.mass,
-                                          "Qdc.mAh.g" = seq2.df$Qch.mAh/AM.mass,
+                                          "Qch.mAh.g" = seq1.df$Qdc.mAh/AMmass,
+                                          "Qdc.mAh.g" = seq2.df$Qch.mAh/AMmass,
                                           "CE" = seq1.df$Qdc.mAh/seq2.df$Qch.mAh,
                                           "Ewe.endCH" = seq2.df$Ewe.V,
                                           "Ewe.endDC" = seq1.df$Ewe.V,
@@ -212,8 +217,10 @@ Biologic.CAP <- function(raw, AM.mass, type){
                 return(cap)
 }
 
-#' @describeIn Biologic.CAP Evaluates CCCV-steps in galvanostatic cycling data
-Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
+#' @export
+#' @rdname Biologic_Analysis
+#' @details Evaluates CCCV-steps in galvanostatic cycling data
+Biologic.CCCV <- function(raw, AMmass, cellType, warningsLOG){
 
         #binding variables to function Biologic.CAP
         cyc.nr <- Ns <- I.mA <- Ewe.V <- dE <-NULL
@@ -225,7 +232,7 @@ Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
                         dE = c(0, diff(Ewe.V))
                         )
 
-        if(type %in% c("halfcell-anode", 'LiS')){
+        if(cellType %in% c("halfcell-anode", 'LiS')){
 
                 CCCV <- data.frame()
 
@@ -316,28 +323,28 @@ Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
                                 "I.charge.mA" = round(charge.df$I.mA[5],6),
                                 "ch.time.tot" = t.tot.ch,
                                 "Qch.tot.mAh" = Qch.tot,
-                                "Qch.tot.mAh.g" = Qch.tot/AM.mass,
+                                "Qch.tot.mAh.g" = Qch.tot/AMmass,
                                 "CCstep.t.ch" = t.tot.ch - (cccv.ch.ll$time.s - cccv.ch.fl$time.s),
                                 "CCstep.Qch.mAh" = Qch.tot - (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh),
-                                "CCstep.Qch.mAh.g" = (Qch.tot - (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh))/AM.mass,
+                                "CCstep.Qch.mAh.g" = (Qch.tot - (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh))/AMmass,
                                 "CVstep.t.ch" = cccv.ch.ll$time.s - cccv.ch.fl$time.s,
                                 "CVstep.Qch.mAh" = cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh,
-                                "CVstep.Qch.mAh.g" = (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh)/AM.mass,
+                                "CVstep.Qch.mAh.g" = (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh)/AMmass,
                                 "UpperCutoff" = min(cccv.dc$Ewe.V),
                                 "I.discharge.mA" = round(discharge.df$I.mA[5],6),
                                 "dc.time.tot" = t.tot.dc,
                                 "Qdc.tot.mAh" = Qdc.tot,
-                                "Qdc.tot.mAh.g" = Qdc.tot/AM.mass,
+                                "Qdc.tot.mAh.g" = Qdc.tot/AMmass,
                                 "CCstep.t.dc" = t.tot.dc - (cccv.dc.ll$time.s - cccv.dc.fl$time.s),
                                 "CCstep.Qdc.mAh" = Qdc.tot - (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh),
-                                "CCstep.Qdc.mAh.g" = (Qdc.tot - (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh))/AM.mass,
+                                "CCstep.Qdc.mAh.g" = (Qdc.tot - (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh))/AMmass,
                                 "CVstep.t.dc" = cccv.dc.ll$time.s - cccv.dc.fl$time.s,
                                 "CVstep.Qdc.mAh" = cccv.dc.ll$Qdc.mAh - cccv.dc.fl$Qdc.mAh,
-                                "CVstep.Qdc.mAh.g" = (cccv.dc.ll$Qdc.mAh - cccv.dc.fl$Qdc.mAh)/AM.mass
+                                "CVstep.Qdc.mAh.g" = (cccv.dc.ll$Qdc.mAh - cccv.dc.fl$Qdc.mAh)/AMmass
                         )
                         CCCV <- rbind(CCCV, cccv.df)
                 }
-        }else if(type %in% c("halfcell-cathode", "fullcell")){
+        }else if(cellType %in% c("halfcell-cathode", "fullcell")){
 
                 CCCV <- data.frame()
 
@@ -385,24 +392,24 @@ Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
                                         "I.charge.mA" = round(charge.df$I.mA[5],6),
                                         "ch.time.tot" = t.tot.ch,
                                         "Qch.tot.mAh" = Qch.tot,
-                                        "Qch.tot.mAh.g" = Qch.tot/AM.mass,
+                                        "Qch.tot.mAh.g" = Qch.tot/AMmass,
                                         "CCstep.t.ch" = t.tot.ch - (cccv.ch.ll$time.s - cccv.ch.fl$time.s),
                                         "CCstep.Qch.mAh" = Qch.tot - (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh),
-                                        "CCstep.Qch.mAh.g" = (Qch.tot - (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh))/AM.mass,
+                                        "CCstep.Qch.mAh.g" = (Qch.tot - (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh))/AMmass,
                                         "CVstep.t.ch" = cccv.ch.ll$time.s - cccv.ch.fl$time.s,
                                         "CVstep.Qch.mAh" = cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh,
-                                        "CVstep.Qch.mAh.g" = (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh)/AM.mass,
+                                        "CVstep.Qch.mAh.g" = (cccv.ch.ll$Qch.mAh - cccv.ch.fl$Qch.mAh)/AMmass,
                                         "LowerCutoff" = min(cccv.dc$Ewe.V),
                                         "I.discharge.mA" = round(discharge.df$I.mA[5],6),
                                         "dc.time.tot" = t.tot.dc,
                                         "Qdc.tot.mAh" = Qdc.tot,
-                                        "Qdc.tot.mAh.g" = Qdc.tot/AM.mass,
+                                        "Qdc.tot.mAh.g" = Qdc.tot/AMmass,
                                         "CCstep.t.dc" = t.tot.dc - (cccv.dc.ll$time.s - cccv.dc.fl$time.s),
                                         "CCstep.Qdc.mAh" = Qdc.tot - (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh),
-                                        "CCstep.Qdc.mAh.g" = (Qdc.tot - (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh))/AM.mass,
+                                        "CCstep.Qdc.mAh.g" = (Qdc.tot - (cccv.ch.ll$Qdc.mAh - cccv.ch.fl$Qdc.mAh))/AMmass,
                                         "CVstep.t.dc" = cccv.dc.ll$time.s - cccv.dc.fl$time.s,
                                         "CVstep.Qdc.mAh" = cccv.dc.ll$Qdc.mAh - cccv.dc.fl$Qdc.mAh,
-                                        "CVstep.Qdc.mAh.g" = (cccv.dc.ll$Qdc.mAh - cccv.dc.fl$Qdc.mAh)/AM.mass
+                                        "CVstep.Qdc.mAh.g" = (cccv.dc.ll$Qdc.mAh - cccv.dc.fl$Qdc.mAh)/AMmass
                         )
                         CCCV <- rbind(CCCV, cccv.df)
                 }
@@ -411,8 +418,10 @@ Biologic.CCCV <- function(raw, AM.mass, type, warningsLOG){
         return(CCCV)
 }
 
-#' @describeIn Biologic.CAP Evaluates CCCV-steps in galvanostatic cycling data
-Biologic.VP <- function(raw, AM.mass, cycles, type){
+#' @export
+#' @rdname Biologic_Analysis
+#' @details Biologic.VP extracts voltage profiles for selected cycles from cycling data
+Biologic.VP <- function(raw, AMmass, cycles, cellType){
 
         #extract columns needed from result file of instrument, using piping operators
         #df.VP <- tmp %>%
@@ -421,7 +430,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
         #colnames(df.VP) = c('cyc.nr', 'time.s', 'Ns', 'Ewe.V', 'I.mA', 'Qdc.mAh', 'Qch.mAh')
 
         #binding variables to function Biologic.CAP
-        cyc.nr <- Ns <- I.mA <- Qch.mAh <- Qdc.mAh <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- NULL
+        cyc.nr <- Ns <- I.mA <- Qch.mAh <- Qdc.mAh <- Ewe.V <- Ewe.V.rnd <- diff.Q <- diff.E <- diff.cap <- NULL
 
         #create empty result data.frame and empty VP.list (temporary storage)
         VPprofiles <- data.frame("CycNr" = numeric(), "time.s" = numeric(), "I.mA" = numeric(),
@@ -437,7 +446,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
         # select cycle
         #for(i in idx){
 
-        if(type %in% c("halfcell-anode", 'LiS')){
+        if(cellType %in% c("halfcell-anode", 'LiS')){
 
                 # loop through selected cycles
                 for(i in idx){
@@ -450,7 +459,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
                                        'type' = 'ch') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
 
 
                         VP.dc <- raw %>%
@@ -461,12 +470,12 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
                                        'type' = 'dc') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
                         #remove infinite (+/- Inf) values for dQdV
-                        cell_a1$dQdV.mav[!is.finite(cell_a1$dQdV.mav)] <- NA
+                        VP.df$dQdV.mav[!is.finite(VP.df$dQdV.mav)] <- NA
 
                         #correct cycle number (is shifted by half a sequence in half cells)
                         VP.df$cyc.nr <- i
@@ -493,16 +502,16 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                         # create new data.frame
                         VPprofile <- data.frame(
                                 "CycNr" = VP.df$cyc.nr, "time.s" = VP.df$time.s, "I.mA" = VP.df$I.mA, "Ewe.V" = VP.df$Ewe.V,
-                                "Qch.mAh" = VP.df$Qdc.mAh, "Qch.mAh.g" = VP.df$Qdc.mAh/AM.mass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
-                                "Qdc.mAh" = VP.df$Qch.mAh, "Qdc.mAh.g" = VP.df$Qch.mAh/AM.mass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
-                                "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AM.mass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
+                                "Qch.mAh" = VP.df$Qdc.mAh, "Qch.mAh.g" = VP.df$Qdc.mAh/AMmass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
+                                "Qdc.mAh" = VP.df$Qch.mAh, "Qdc.mAh.g" = VP.df$Qch.mAh/AMmass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
+                                "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AMmass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
                                 "diffcap" = VP.df$diff.cap, "dQdV.mav3" = VP.df$dQdV.mav, "type" = VP.df$type)
 
                         VP.list[[k]] <- VPprofile
                         k = k+1
                         }
 
-        } else if(type %in% c("halfcell-cathode", "fullcell")){
+        } else if(cellType %in% c("halfcell-cathode", "fullcell")){
 
                 # loop through selected cycles
                 for(i in idx){
@@ -515,7 +524,7 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
                                        'type' = 'ch') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
                         VP.ch <- tail(VP.ch, -1)
 
                         VP.dc <- raw %>%
@@ -526,12 +535,12 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
                                        'type' = 'dc') %>%
-                                mutate("dQdV.mav" = rollapplyr(diffcap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
                         #remove infinite (+/- Inf) values for dQdV
-                        cell_a1$dQdV.mav[!is.finite(cell_a1$dQdV.mav)] <- NA
+                        VP.df$dQdV.mav[!is.finite(VP.df$dQdV.mav)] <- NA
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
@@ -557,9 +566,9 @@ Biologic.VP <- function(raw, AM.mass, cycles, type){
                         # create new data.frame
                         VPprofile <- data.frame(
                                 "CycNr" = VP.df$cyc.nr+1, "time.s" = VP.df$time.s, "I.mA" = VP.df$I.mA, "Ewe.V" = VP.df$Ewe.V,
-                                "Qch.mAh" = VP.df$Qch.mAh, "Qch.mAh.g" = VP.df$Qch.mAh/AM.mass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
-                                "Qdc.mAh" = VP.df$Qdc.mAh, "Qdc.mAh.g" = VP.df$Qdc.mAh/AM.mass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
-                                "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AM.mass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
+                                "Qch.mAh" = VP.df$Qch.mAh, "Qch.mAh.g" = VP.df$Qch.mAh/AMmass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
+                                "Qdc.mAh" = VP.df$Qdc.mAh, "Qdc.mAh.g" = VP.df$Qdc.mAh/AMmass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
+                                "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AMmass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
                                  "diffcap" = VP.df$diff.cap, "dQdV.mav3" = VP.df$dQdV.mav, "type" = VP.df$type)
 
                 VP.list[[k]] <- VPprofile

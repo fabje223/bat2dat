@@ -11,3 +11,5 @@ data('filename')
 
 devtools::load_all()
 
+#Update NAMESPACE
+devtools::document()

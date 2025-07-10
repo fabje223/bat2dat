@@ -4,7 +4,7 @@
 \alias{process0r}
 \title{Process0r}
 \usage{
-process0r(cccv = FALSE, cycles = c(seq(0, 99, 10)))
+process0r(cccv = FALSE, cycles)
 }
 \arguments{
 \item{cccv}{was cccv cycling conducted? TRUE/FALSE}

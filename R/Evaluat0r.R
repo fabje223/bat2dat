@@ -11,20 +11,22 @@
 #' @param warningsLOG a log book for warning messages
 #'
 #' @return returns a list cycDat with analysed data
-#' @export
 #'
-#' @include Read0r2.R Process0r.R Report0r.R
+#' @include Read0r2.R Process0r.R Report0r.R Biologic_Analysis.R Arbin_Analysis.R
 #'
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
-#' @name %>%
 #'
 #' @examples
 #' \dontrun{
 #' BiologicEvaluat0r()
 #' }
+
+#' @export
+#' @rdname Evaluat0r
+#' @details Evaluat0r for Biologic Instruments
 BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               cycDat <- list('capacity' = NULL,
@@ -32,7 +34,7 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
                              'CCCV' = NULL)
 
               #calculate capacities for each cycle
-              cycDat$capacity <- Biologic.CAP(raw, AMmass, cellType)
+              cycDat$capacity <- Biologic.CAPA(raw, AMmass, cellType)
 
               #extract voltage profiles for selected cycles
               if(length(cycles) != 0){
@@ -46,8 +48,9 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, cccv, warningsLOG){
 
               return(cycDat)
 
-              }
+            }
 
+#' @export
 #' @rdname Evaluat0r
 #' @details Evaluat0r for Arbin Instruments
 ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
@@ -57,7 +60,7 @@ ArbinEvaluat0r <- function(raw, AMmass, cellType, cycles){
                              'CCCV' = NULL)
 
               #calculate capacities for each cycle
-              cycDat$capacity <- Arbin.CAP(raw, AMmass, cellType)
+              cycDat$capacity <- Arbin.CAPA(raw, AMmass, cellType)
 
               #extract voltage profiles for selected cycles
               cycDat$VoltageProfiles <- Arbin.VP(raw, AMmass, cellType, cycles)
