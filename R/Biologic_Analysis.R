@@ -458,8 +458,10 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                                        'diff.Q' = c(0, diff(Qdc.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
+                                       'diff.pot' = sqrt((diff.E/diff.Q)^2)*-1,
                                        'type' = 'ch') %>%
-                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA),
+                                       "dVdQ.mav" = rollapply(diff.pot, 3, mean, fill=NA))
 
 
                         VP.dc <- raw %>%
@@ -468,14 +470,17 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
                                        'diff.Q' = c(0, diff(Qch.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
-                                       'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
+                                       'diff.cap' = sqrt((diff.Q/diff.E)^2),
+                                       'diff.pot' = sqrt((diff.E/diff.Q)^2),
                                        'type' = 'dc') %>%
-                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA),
+                                       "dVdQ.mav" = rollapply(diff.pot, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
                         #remove infinite (+/- Inf) values for dQdV
-                        VP.df$dQdV.mav[!is.finite(VP.df$dQdV.mav)] <- NA
+                        VP.df$dQdV.mav[is.infinite(VP.df$dQdV.mav)] <- NA
+                        VP.df$dVdQ.mav[is.infinite(VP.df$dVdQ.mav)] <- NA
 
                         #correct cycle number (is shifted by half a sequence in half cells)
                         VP.df$cyc.nr <- i
@@ -487,25 +492,37 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                         VP.df$time.s <- VP.df$time.s - min(VP.df$time.s)
 
                         # New column --> Qloop: create a column where capacity is counted up until the sequence changes and then counted back down.
-                        VP.df$Qdc.mAh[VP.df$Qdc.mAh == 0] <- max(VP.df$Qdc.mAh)
-                        VP.df$Qloop <- VP.df$Qdc.mAh - VP.df$Qch.mAh
+                        VP.df$Qch.mAh[VP.df$Qch.mAh == 0] <- max(VP.df$Qch.mAh)
+                        VP.df$Qloop <- VP.df$Qch.mAh - VP.df$Qdc.mAh
 
-                        # modify Q.ch and Q.dc columns for plotting, e.g. in Origin
+                        # sets Qcharge to NA during discharge (and vice versa); for easier plotting e.g. in Origin
                         VP.df$Ewe.V.ch <- VP.df$Ewe.V
-                        VP.df$Qdc.mAh[VP.df$Qch.mAh != 0] <- NA
-                        VP.df$Ewe.V.ch[is.na(VP.df$Qdc.mAh)] <- NA
+                        VP.df$Qdc.mAh[VP.df$type == 'ch'] <- NA
+                        VP.df$Ewe.V.ch[VP.df$type == 'dc'] <- NA
 
                         VP.df$Ewe.V.dc <- VP.df$Ewe.V
-                        VP.df$Qch.mAh[VP.df$Qdc.mAh != 0] <- NA
-                        VP.df$Ewe.V.dc[is.na(VP.df$Qch.mAh)] <- NA
+                        VP.df$Qch.mAh[VP.df$type == 'dc'] <- NA
+                        VP.df$Ewe.V.dc[VP.df$type == 'ch'] <- NA
 
                         # create new data.frame
                         VPprofile <- data.frame(
-                                "CycNr" = VP.df$cyc.nr, "time.s" = VP.df$time.s, "I.mA" = VP.df$I.mA, "Ewe.V" = VP.df$Ewe.V,
-                                "Qch.mAh" = VP.df$Qdc.mAh, "Qch.mAh.g" = VP.df$Qdc.mAh/AMmass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
-                                "Qdc.mAh" = VP.df$Qch.mAh, "Qdc.mAh.g" = VP.df$Qch.mAh/AMmass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
-                                "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AMmass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
-                                "diffcap" = VP.df$diff.cap, "dQdV.mav3" = VP.df$dQdV.mav, "type" = VP.df$type)
+                                        "CycNr" = VP.df$cyc.nr,
+                                        "time.s" = VP.df$time.s,
+                                        "I.mA" = VP.df$I.mA,
+                                        "Ewe.V" = VP.df$Ewe.V,
+                                        "Qch.mAh" = VP.df$Qch.mAh,
+                                        "Qch.mAh.g" = VP.df$Qch.mAh/AMmass,
+                                        "Ewe.V.ch" = VP.df$Ewe.V.ch,
+                                        "Qdc.mAh" = VP.df$Qdc.mAh,
+                                        "Qdc.mAh.g" = VP.df$Qdc.mAh/AMmass,
+                                        "Ewe.V.dc" = VP.df$Ewe.V.dc,
+                                        "Qloop" = VP.df$Qloop,
+                                        "Qloop.mAh.g" = VP.df$Qloop/AMmass,
+                                        "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
+                                        "diffcap" = VP.df$diff.cap,
+                                        "dQdV.mav3" = VP.df$dQdV.mav,
+                                        "dVdQ.mav3" = VP.df$dVdQ.mav,
+                                        "type" = VP.df$type)
 
                         VP.list[[k]] <- VPprofile
                         k = k+1
@@ -520,29 +537,32 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                                 filter(cyc.nr == i & Ns %in% c(seq(1,50, 2)) & I.mA > 0) %>%
                                 #arrange(desc(Ewe.V)) %>%
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
-                                       'diff.Q' = c(0, diff(Qdc.mAh)),
+                                       'diff.Q' = c(0, diff(Qch.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
                                        'diff.cap' = sqrt((diff.Q/diff.E)^2)*-1,
+                                       'diff.pot' = sqrt((diff.E/diff.Q)^2)*-1,
                                        'type' = 'ch') %>%
-                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA),
+                                       "dVdQ.mav" = rollapply(diff.pot, 3, mean, fill=NA))
                         VP.ch <- tail(VP.ch, -1)
 
                         VP.dc <- raw %>%
                                 filter(cyc.nr == i & Ns %in% c(seq(2,50,2)) & I.mA < 0) %>%
                                 #arrange(Ewe.V) %>%
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
-                                       'diff.Q' = c(0, diff(Qch.mAh)),
+                                       'diff.Q' = c(0, diff(Qdc.mAh)),
                                        'diff.E' = c(0, diff(Ewe.V.rnd)),
-                                       'diff.cap' = sqrt((diff.Q/diff.E)^2),#diff.Q/diff.E, #
+                                       'diff.cap' = sqrt((diff.Q/diff.E)^2),
+                                       'diff.pot' = sqrt((diff.E/diff.Q)^2),
                                        'type' = 'dc') %>%
-                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA))
+                                mutate("dQdV.mav" = rollapply(diff.cap, 3, mean, fill=NA),
+                                       "dVdQ.mav" = rollapply(diff.pot, 3, mean, fill=NA))
 
                         VP.df <- rbind(VP.ch, VP.dc)
 
                         #remove infinite (+/- Inf) values for dQdV
-                        VP.df$dQdV.mav[!is.finite(VP.df$dQdV.mav)] <- NA
-
-                        VP.df <- rbind(VP.ch, VP.dc)
+                        VP.df$dQdV.mav[is.infinite(VP.df$dQdV.mav)] <- NA
+                        VP.df$dVdQ.mav[is.infinite(VP.df$dVdQ.mav)] <- NA
 
                         #remove inf values in diff.cap
                         #VP.df <- VP.df[!(VP.df$diff.Q == 0 | VP.df$diff.E == 0),] #is.infinite(dat$diff.cap) |
@@ -556,20 +576,32 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
 
                         # modify Q.ch and Q.dc columns <- l[[for plotting, e.g. in Origin
                         VP.df$Ewe.V.ch <- VP.df$Ewe.V
-                        VP.df$Qch.mAh[VP.df$Qdc.mAh != 0] <- NA
-                        VP.df$Ewe.V.ch[is.na(VP.df$Qch.mAh)] <- NA
+                        VP.df$Qdc.mAh[VP.df$type == 'ch'] <- NA
+                        VP.df$Ewe.V.ch[VP.df$type == 'dc'] <- NA
 
                         VP.df$Ewe.V.dc <- VP.df$Ewe.V
-                        VP.df$Qdc.mAh[VP.df$Qch.mAh != 0] <- NA
-                        VP.df$Ewe.V.dc[is.na(VP.df$Qdc.mAh)] <- NA
+                        VP.df$Qch.mAh[VP.df$type == 'dc'] <- NA
+                        VP.df$Ewe.V.dc[VP.df$type == 'ch'] <- NA
 
                         # create new data.frame
                         VPprofile <- data.frame(
-                                "CycNr" = VP.df$cyc.nr+1, "time.s" = VP.df$time.s, "I.mA" = VP.df$I.mA, "Ewe.V" = VP.df$Ewe.V,
-                                "Qch.mAh" = VP.df$Qch.mAh, "Qch.mAh.g" = VP.df$Qch.mAh/AMmass, "Ewe.V.ch" = VP.df$Ewe.V.ch,
-                                "Qdc.mAh" = VP.df$Qdc.mAh, "Qdc.mAh.g" = VP.df$Qdc.mAh/AMmass, "Ewe.V.dc" = VP.df$Ewe.V.dc,
-                                "Qloop" = VP.df$Qloop, "Qloop.mAh.g" = VP.df$Qloop/AMmass, "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
-                                 "diffcap" = VP.df$diff.cap, "dQdV.mav3" = VP.df$dQdV.mav, "type" = VP.df$type)
+                                "CycNr" = VP.df$cyc.nr+1,
+                                "time.s" = VP.df$time.s,
+                                "I.mA" = VP.df$I.mA,
+                                "Ewe.V" = VP.df$Ewe.V,
+                                "Qch.mAh" = VP.df$Qch.mAh,
+                                "Qch.mAh.g" = VP.df$Qch.mAh/AMmass,
+                                "Ewe.V.ch" = VP.df$Ewe.V.ch,
+                                "Qdc.mAh" = VP.df$Qdc.mAh,
+                                "Qdc.mAh.g" = VP.df$Qdc.mAh/AMmass,
+                                "Ewe.V.dc" = VP.df$Ewe.V.dc,
+                                "Qloop" = VP.df$Qloop,
+                                "Qloop.mAh.g" = VP.df$Qloop/AMmass,
+                                "Ewe.V.rnd" = VP.df$Ewe.V.rnd,
+                                "diffcap" = VP.df$diff.cap,
+                                "dQdV.mav3" = VP.df$dQdV.mav,
+                                "dVdQ.mav3" = VP.df$dVdQ.mav,
+                                "type" = VP.df$type)
 
                 VP.list[[k]] <- VPprofile
                 k = k+1

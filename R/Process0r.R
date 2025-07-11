@@ -15,7 +15,7 @@
 #' \dontrun{
 #' l <- process0r()
 #' }
-process0r <- function(cccv = FALSE, cycles) {
+process0r <- function(cccv = FALSE, cycles=c(seq(0,100, 5))) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
