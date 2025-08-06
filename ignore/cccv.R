@@ -22,7 +22,7 @@
 #' @importFrom utils tail
 #'
 #' @examples
-Biologic.CCCV <- function(raw, AMmass, cellType, warningsLOG){
+Biologic.CCCV <- function(VP.list, AMmass, cellType, warningsLOG){
 
   #binding variables to function Biologic.CAP
   cyc.nr <- Ns <- I.mA <- Ewe.V <- dE <-NULL
@@ -30,6 +30,8 @@ Biologic.CCCV <- function(raw, AMmass, cellType, warningsLOG){
 
   cellType = cellType
   warningsLOG= warningsLOG
+
+  raw <- do.call(rbind, VP.list)
 
   #CV step
   tmp3 <- raw %>%

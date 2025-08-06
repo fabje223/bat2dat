@@ -15,7 +15,7 @@
 #' \dontrun{
 #' l <- process0r()
 #' }
-process0r <- function(cccv = FALSE, cycles=c(seq(0,100, 5))) {
+process0r <- function(cycles=c(seq(0,100, 5))) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -40,8 +40,8 @@ process0r <- function(cccv = FALSE, cycles=c(seq(0,100, 5))) {
                           l.samples <- list("metadata"=NULL,
                                             "rawdata"=NULL,
                                             "capacity"=NULL,
-                                            "VoltageProfiles"=NULL,
-                                            "CCCV"=NULL)
+                                            "VoltageProfiles"=NULL
+                                            )
 
                           #initializing data.frames() for raw and processed raw data
                           raw <- data.frame()
@@ -54,14 +54,14 @@ process0r <- function(cccv = FALSE, cycles=c(seq(0,100, 5))) {
                             raw <- BCSraw(meta$dir[i], meta$sample.name[i])
 
                             rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
-                                                         cycles, cccv, warningsLOG)
+                                                         cycles, warningsLOG)
 
                           }else if(meta$instrument[i] == "Biologic VMP"){
 
                             print("Reading VMP raw data file")
                             raw <- VMPraw(meta$dir[i], meta$sample.name[i])
 
-                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles, cccv)
+                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
 
                           }else if(meta$instrument[i] == "Arbin") {
 

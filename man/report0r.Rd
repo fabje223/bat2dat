@@ -5,20 +5,19 @@
 \title{Report0r}
 \usage{
 report0r(
-  cccv = FALSE,
   cycles = c(0, 1, 4, seq(9, 199, 10)),
   htmlReport = TRUE,
   exportCap = TRUE
 )
 }
 \arguments{
-\item{cccv}{perform a CC-CV step analysis? yes(=TRUE)/no(=FALSE)}
-
 \item{cycles}{cycle numbers to be extracted to plot voltage profiles}
 
 \item{htmlReport}{create a html report? TRUE/FALSE}
 
 \item{exportCap}{export data.frames to .txt for further processing? TRUE/FALSE}
+
+\item{cccv}{perform a CC-CV step analysis? yes(=TRUE)/no(=FALSE)}
 }
 \value{
 no return; saves a html report, .txt files of analysed data or both

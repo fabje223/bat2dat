@@ -17,6 +17,7 @@
 #' @include customThemes.R reportGenerat0r.R
 #' @import ggplot2 viridis
 #' @importFrom gridExtra grid.arrange
+#' @importFrom stats na.omit
 #'
 #' @examples
 #' \dontrun{
@@ -300,6 +301,8 @@ plotVPsplitCH <- function(ch, min.ch.y, max.ch.y){
 #' @details plotVPloop plots voltage profile vs Qloop
 plotdQdV <- function(vp.dat){
 
+  CycNr <- dqdv <- Ewe <- NULL
+
   dqdv.df <- data.frame('CycNr'=vp.dat$CycNr, 'Ewe'=vp.dat$Ewe.V.rnd, 'dqdv'=vp.dat$dQdV.mav3)
   dqdv.df <- na.omit(dqdv.df)
 
@@ -329,6 +332,8 @@ plotdQdV <- function(vp.dat){
 #' @rdname plot0r
 #' @details plotVPloop plots voltage profile vs Qloop
 plotdVdQ <- function(vp.dat){
+
+  CycNr <- dvdq <- typeof() <- NULL
 
   dvdq.df <- data.frame('CycNr'=vp.dat$CycNr, 'q'=vp.dat$Qloop, 'dvdq'=vp.dat$dVdQ.mav3, 'type'=vp.dat$type)
   dvdq.df <- na.omit(dvdq.df)

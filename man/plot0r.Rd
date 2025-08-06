@@ -11,6 +11,8 @@
 \alias{plotVPlin}
 \alias{plotVPsplitDC}
 \alias{plotVPsplitCH}
+\alias{plotdQdV}
+\alias{plotdVdQ}
 \title{plot0r}
 \usage{
 plotCapa(capacity)
@@ -21,9 +23,9 @@ plotIRdropCH(capacity, minmax)
 
 plotIRdropDC(capacity, minmax)
 
-plotIntRCH(capacity, minmax)
+plotIntRCH(capacity, minmax = c(0, 1000, 0, 1000))
 
-plotIntRDC(capacity, minmax)
+plotIntRDC(capacity, minmax = c(0, 1000, 0, 1000))
 
 plotVPloop(vp.dat)
 
@@ -32,6 +34,10 @@ plotVPlin(vp.dat)
 plotVPsplitDC(dc, min.dc.y, max.dc.y)
 
 plotVPsplitCH(ch, min.ch.y, max.ch.y)
+
+plotdQdV(vp.dat)
+
+plotdVdQ(vp.dat)
 }
 \arguments{
 \item{capacity}{data.frame with galvanostatic cycling information}
@@ -78,6 +84,10 @@ plotVPlin plots voltage profile vs Q
 plotVPsplitDC plots voltage profile vs Q (discharge)
 
 plotVPsplitCH plots voltage profile vs Q (charge)
+
+plotVPloop plots voltage profile vs Qloop
+
+plotVPloop plots voltage profile vs Qloop
 }
 \examples{
 \dontrun{

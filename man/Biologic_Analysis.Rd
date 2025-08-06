@@ -2,13 +2,10 @@
 % Please edit documentation in R/Biologic_Analysis.R
 \name{Biologic.CAPA}
 \alias{Biologic.CAPA}
-\alias{Biologic.CCCV}
 \alias{Biologic.VP}
 \title{Biologic_Analysis}
 \usage{
 Biologic.CAPA(raw, AMmass, cellType)
-
-Biologic.CCCV(raw, AMmass, cellType, warningsLOG)
 
 Biologic.VP(raw, AMmass, cycles, cellType)
 }
@@ -19,9 +16,9 @@ Biologic.VP(raw, AMmass, cycles, cellType)
 
 \item{cellType}{- object of Biologic.CAPA}
 
-\item{warningsLOG}{- test LOG to fetch errors}
-
 \item{cycles}{- selected cycles to extract for voltage profiles}
+
+\item{warningsLOG}{- test LOG to fetch errors}
 }
 \value{
 capacity table
@@ -31,8 +28,6 @@ Analysis of Biologic potentiostat data
 }
 \details{
 Extract Cycling Data for Biologic Instruments
-
-Evaluates CCCV-steps in galvanostatic cycling data
 
 Biologic.VP extracts voltage profiles for selected cycles from cycling data
 }

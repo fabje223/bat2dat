@@ -4,12 +4,12 @@
 \alias{process0r}
 \title{Process0r}
 \usage{
-process0r(cccv = FALSE, cycles)
+process0r(cycles = c(seq(0, 100, 5)))
 }
 \arguments{
-\item{cccv}{was cccv cycling conducted? TRUE/FALSE}
-
 \item{cycles}{cycles to be extracted for voltage profiles}
+
+\item{cccv}{was cccv cycling conducted? TRUE/FALSE}
 }
 \value{
 returns a summary of all sample data, including metadata and raw file.

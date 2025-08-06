@@ -18,7 +18,7 @@
 #'  analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
 #'  }
 
-report0r <- function(cccv = FALSE, cycles = c(0,1,4,seq(9,199, 10)), htmlReport = TRUE, exportCap = TRUE) {
+report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = TRUE, exportCap = TRUE) {
 
             print('Hello there! Let us analyse some data, shall we? Show the way to your experimental data...')
 
@@ -29,7 +29,7 @@ report0r <- function(cccv = FALSE, cycles = c(0,1,4,seq(9,199, 10)), htmlReport 
                     )
                   }
 
-                  processedData <- process0r(cccv, cycles)
+                  processedData <- process0r(cycles)
 
                   #export data as data report and/or txt files
                   for(i in 1:length(processedData)){
