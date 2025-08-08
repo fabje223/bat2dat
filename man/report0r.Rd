@@ -6,7 +6,7 @@
 \usage{
 report0r(
   cycles = c(0, 1, 4, seq(9, 199, 10)),
-  htmlReport = TRUE,
+  htmlReport = FALSE,
   exportCap = TRUE
 )
 }
@@ -16,18 +16,16 @@ report0r(
 \item{htmlReport}{create a html report? TRUE/FALSE}
 
 \item{exportCap}{export data.frames to .txt for further processing? TRUE/FALSE}
-
-\item{cccv}{perform a CC-CV step analysis? yes(=TRUE)/no(=FALSE)}
 }
 \value{
 no return; saves a html report, .txt files of analysed data or both
 }
 \description{
 initiate data processing with:
-analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+report0r(htmlReport = TRUE, exportCap = TRUE)
 }
 \examples{
 \dontrun{
- analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+ dat <- report0r(htmlReport = TRUE, exportCap = TRUE)
  }
 }

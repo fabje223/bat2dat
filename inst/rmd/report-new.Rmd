@@ -5,20 +5,19 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 
 params:
-  metavar: meta
-  cap: capacity
-  pList: plotList
+    sample: sample
 ---
 
 ```{r setup, include = FALSE}
 #library(knitr)
-
 library(kableExtra)
+library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(bat2dat)
 
-knitr::opts_chunk$set(echo = params$pList)
-
+#knitr::opts_chunk$set(cache=TRUE,
+                   #   echo = TRUE)
  # fig.width = 6,
  # fig.asp = 0.8,
  # out.width = "80%"
@@ -29,31 +28,43 @@ knitr::opts_chunk$set(echo = params$pList)
 
 ```
 
+```{r, include = FALSE}
+cell <- params$sample
+
+meta <- cell$metadata
+capa <- cell$capacity
+
+CYC <- plotGC(cell)
+IR <- plotIRdrop(cell)
+IntR <- plotIntR(cell)
+VP <- plotVP(cell)
+dQdV <- plotdQdV(cell)
+dVdQ <- plotdVdQ(cell)
+
+```
+
 ## Metadata & Cell Stats in brief {.tabset .tabset-fade .tabset-pills}
 ### Metadata
 ```{r metadata, echo = FALSE}
-d1 <- params$metavar
 
-
-kableExtra::kable(t(d1), align = "cccc",
+kableExtra::kable(t(meta), align = "cccc",
               #col.names = c("sample name",
                #              "active material loading [mg]",
                 #              "cell type",
                  #            "battery cycler"),
       caption="Sample Infos") %>% 
-      kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE,  position="float_left")
+      kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE,  position="center")
 # Error message: UseMethod("filter") no applicable method for 'filter'
 # ignore. disappears in actual execution, when cap is defined
 ```
 
 ### Cell Stats @ 80%
 ```{r KPI, echo = FALSE}
-d2 <- params$cap
 
-ret <- dplyr::filter(d2, Qdc.mAh > Qdc.mAh[1]*0.8) 
-if(nrow(ret) == 0) ret = head(d2,2)
+ret <- dplyr::filter(capa, Qdc.mAh > Qdc.mAh[1]*0.8) 
+if(nrow(ret) == 0) ret = head(capa,2)
 
-keypara <- data.frame('max cycle number' = max(d2$CycNr)+1,
+keypara <- data.frame('max cycle number' = max(capa$CycNr)+1,
                       #'capacity retention' = tail((ret$CycNr),1),
                       'mean_Qch' = mean(ret$Qch.mAh.g),
                       'mean_Qdc' = mean(ret$Qdc.mAh.g),
@@ -61,7 +72,7 @@ keypara <- data.frame('max cycle number' = max(d2$CycNr)+1,
                       )
 kableExtra::kable(t(keypara), align = "cccc", digits = 2,
       caption="Cell Stats @ 80% capacity loss") %>% 
-      kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE, position = "left")
+      kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE, position = "center")
 
 
 ```
@@ -69,11 +80,12 @@ kableExtra::kable(t(keypara), align = "cccc", digits = 2,
 ### Data Table
 ```{r initial.stats, echo = FALSE, message = FALSE}
 
-tmp <- params$cap
+max.cyc <- max(capa$CycNr)
+cycles <- c(1:9, seq(10, max.cyc, max.cyc/10))
 
-init.stats <- tmp %>%
+init.stats <- capa %>%
               dplyr::select(CycNr, Qch.mAh.g, Qdc.mAh.g, CE) %>%
-              dplyr::filter(CycNr %in% c(1:10,15,20,25,30,40,50,75,100,125,150,175,200)) %>% 
+              dplyr::filter(CycNr %in% cycles) %>% 
               dplyr::mutate(retetion = Qdc.mAh.g/Qdc.mAh.g[1]) 
 
 kableExtra::kable(init.stats,
@@ -93,22 +105,25 @@ kableExtra::kable(init.stats,
 
 ### Capacity & CE Plots
 ```{r fig1, echo = FALSE, fig.height=5, fig.asp='.75', fig.align="center", fig.show="hold", results='asis', message=FALSE}
-print(params$pList[[1]])
-print(params$pList[[2]])
+
+print(CYC$capa)
+print(CYC$CE)
+
 ```
 
 ### IR drop
 ```{r fig2, echo = FALSE, message = FALSE, fig.height=4, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
+#dev.off()
 
-print(params$pList[[3]])
-print(params$pList[[4]])
+plot(IR$ch.drop)
+plot(IR$dc.drop)
 ```
 
 ### Internal Resistance
 ```{r fig3, echo = FALSE, message = FALSE, fig.height=4, fig.asp='0.75', fig.align="center", fig.show="hold", results='asis'}
 
-print(params$pList[[5]])
-print(params$pList[[6]])
+print(IntR$IntR.ch)
+print(IntR$IntR.dc)
 ```
 
 ### CCCV
@@ -121,22 +136,24 @@ print('coming soon')
 ## Voltage Profiles {.tabset .tabset-fade .tabset-pills}
 ### Looped
 ```{r fig5, echo = FALSE, message = FALSE, fig.height=6, fig.width=10, fig.align="center", results='asis'}
-print(params$pList[[7]])
+
+print(VP$VPloop)
+
 ```
 
 ### Linear
 ```{r fig6, echo = FALSE, message = FALSE, fig.height=6, fig.width=12, fig.align="center", results= 'asis', warning=FALSE}
-#if(length(params$plotVPlin)==9) plot(params$plotVPlin)
 
-print(params$pList[[8]])
+print(VP$VPlin)
+
 ```
 
 ### Split
 ```{r fig7, echo = FALSE, message = FALSE, fig.height=5, fig.asp='2.0', fig.align="center", fig.show="hold", out.height='75%', results = 'asis', warning=FALSE}
-#if(length(params$plotVPsplitCH)==9) plot(params$plotVPsplitCH)
 
-print(params$pList[[9]])
-print(params$pList[[10]])
+print(VP$VPsplit.ch)
+print(VP$VPsplit.dc)
+
 ```
 
 ## {-}

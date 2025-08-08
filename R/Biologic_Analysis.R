@@ -6,7 +6,6 @@
 #' @param AMmass - object of Biologic.CAPA
 #' @param cycles - selected cycles to extract for voltage profiles
 #' @param cellType - object of Biologic.CAPA
-#' @param warningsLOG - test LOG to fetch errors
 #'
 #' @return capacity table
 #'
@@ -172,7 +171,7 @@ Biologic.CAPA <- function(raw, AMmass, cellType){
 
                 } else if(cellType == "halfcell-cathode" || cellType ==  "fullcell"){
                         # fill result data.frame
-                        cap <- data.frame("CycNr" = seq2.df$cyc.nr,
+                        cap <- data.frame("CycNr" = (seq2.df$cyc.nr)+1,
                                           "time.s.ch" = seq1.df$time.s,
                                           "time.s.dc" = seq2.df$time.s,
                                           #"I.mA.ch" = seq1.df$I.mA,

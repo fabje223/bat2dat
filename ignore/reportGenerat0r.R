@@ -14,8 +14,8 @@
 #' \dontrun{
 #' exp <- list("metadata" <- base.info,
 #'             "capacity" <- data.frame,
-#'             "VoltageProfiles" <- list(df1, df2, ...),
-#'             "CCCV" <- data.frame)
+#'             "VoltageProfiles" <- list(df1, df2, ...)
+#'             )
 #' report <- reportGenerat0r(exp)
 #' }
 #'
@@ -173,22 +173,5 @@ reportGenerat0r <- function(exp){
                    'VPsplitDC' = pVPsplitDC #     [10]
                     )
 
-  #locate report.rmd file
-  file <- system.file("rmd", "report.Rmd", package = "bat2dat")
-
-  #background details
-  reportName <- c(paste0("DataReport_", meta$sample.name, ".html"))
-  outdir <- meta$outdir
-
-  #Generate Report in Rmarkdown
-  rmarkdown::render(
-              file,
-              params = list(metavar = meta,
-                            cap = capacity,
-                            pList = plotList
-                            ),
-              output_file = reportName,
-              output_dir = outdir
-              )
-
-  }
+  return(plotList)
+}

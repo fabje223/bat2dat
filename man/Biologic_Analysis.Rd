@@ -17,8 +17,6 @@ Biologic.VP(raw, AMmass, cycles, cellType)
 \item{cellType}{- object of Biologic.CAPA}
 
 \item{cycles}{- selected cycles to extract for voltage profiles}
-
-\item{warningsLOG}{- test LOG to fetch errors}
 }
 \value{
 capacity table

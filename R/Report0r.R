@@ -1,9 +1,8 @@
 #' @title Report0r
 #'
 #' @description initiate data processing with:
-#' analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#' report0r(htmlReport = TRUE, exportCap = TRUE)
 #'
-#' @param cccv perform a CC-CV step analysis? yes(=TRUE)/no(=FALSE)
 #' @param cycles cycle numbers to be extracted to plot voltage profiles
 #' @param htmlReport create a html report? TRUE/FALSE
 #' @param exportCap export data.frames to .txt for further processing? TRUE/FALSE
@@ -11,14 +10,14 @@
 #' @return no return; saves a html report, .txt files of analysed data or both
 #' @export
 #'
-#' @include reportGenerat0r.R Process0r.R
+#' @include renderReport.R Process0r.R plot0r.R
 #'
 #' @examples
 #' \dontrun{
-#'  analyz0r <- report0r(htmlReport = TRUE, exportCap = TRUE)
+#'  dat <- report0r(htmlReport = TRUE, exportCap = TRUE)
 #'  }
 
-report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = TRUE, exportCap = TRUE) {
+report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = FALSE, exportCap = TRUE) {
 
             print('Hello there! Let us analyse some data, shall we? Show the way to your experimental data...')
 
@@ -53,7 +52,7 @@ report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = TRUE, export
                       if(is.null(exp$rawdata)) {
                         print(paste0('no report generated for cell ', exp$metadata[2], ', as raw data could not be obtained'))
                       }else{
-                        reportGenerat0r(exp)
+                        renderReport(sample = exp)
                       }
                     }
 

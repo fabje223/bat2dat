@@ -85,6 +85,9 @@ install.packages('knitr')
 
 #kableExtra: additional package to knitr & Rmarkdown
 install.packages('kableExtra')
+
+#Devtools: to install the package from GitHUB (rtools is not required)
+install.packages('devtools')
   ```
 
   A more user-friendly environment is provided by RStudio, which can be downloaded as free desktop version from here:
@@ -314,7 +317,7 @@ expList <- process0r( cccv=TRUE,
 ```
 
 ### reportGenerat0r()
-
+#### Release December, 2022
 > generates RMarkdown (html) sample report of a **single** experiment
 
 *process0r()* stores all processed data provided *meta.csv* in a list. A single element of that list, i.e. a single experiment, can be exported into a separate object and then passed to *reportGenerat0r()* for processing.
@@ -331,9 +334,88 @@ l <- process0r()
 exp <- l[[i]]
 
 # initiate the generation of your report
+#default RmdFile = 'report-new.Rmd'
 reportGenerat0r(exp)
 ```
 
+#### Release August, 2025
+*reportGenerat0r()* was removed in the updated version and replaced by *renderReport()*.
+
+### renderReport()
+#### NEW Function since August, 2025
+*renderReport()* will initiate the RMarkdown script in the inst > rmd folder to generate an HTML Report of the data. The function can only read one sample at the time (unless the RMarkdown script is modified).
+
+
+```
+# import and analyse your data with process0r()
+l <- process0r()
+
+# select a single experiment
+# you can check the elements in l in RStudios by clicking on it in the Environment tab or check the number of elements in l with length(l)
+exp <- l[[i]]
+
+# initiate the generation of your report
+#default RmdFile = 'report-new.Rmd'
+renderReport(sample = exp, RmdFile = 'report-new.Rmd')
+```
+
+For custom RMarkdown files, put the script into the inst > rmd directory of the package and give *renderReport()* the new filename.
+```
+# initiate the generation of your customized report
+renderReport(sample = exp, RmdFile = 'report-new.Rmd')
+```
+
+### plot0r()
+### NEW functions since August, 2025
+
+> import a meta data file from a folder
+
+*plot0r* contains a numbe rof ggplot functions to generate plots from galvanostatic cycling data based on the processed sample data.
+Below you find a brief overview:
+- *plotGC()* plots of galvanostatic cycling (GC) experiments (Q vs. CycNr & CE vs. CycNr)
+    return(list('ch.drop'= p.IRdrop.ch, 'dc.drop' = p.IRdrop.dc))
+    
+- *plotIRdrop()* plots IR drop versus cycle number
+    return(list('IntR.ch'= p.IntR.ch, 'IntR.dc' = p.IntR.dc))
+
+- *plotIntR()* plots internal resistance versus cycle number
+    return(list('VPloop'= p.VPloop, 'VPlin' = p.VPlin, 'VPsplit.ch' = p.splitCH, 'VPsplit.dc' = p.splitDC))
+    
+- *plotdQdV()* plots differential capacity plots (dQ/dV) - uses a moving average to smooth the data!
+    return(p.dQdV)
+    
+- *plotdVdQ()* plots differential voltage plots (dV/dQ) - uses a moving average to smooth the data!
+    return(p.dVdQ)
+
+Either of the functions return one or several plots from a single sample list.
+The same plots are used to generate the RMarkdown HTML report.
+
+```
+# import and analyse your data with process0r()
+l <- process0r()
+
+# select a single experiment
+# you can check the elements in l in RStudios by clicking on it in the Environment tab or check the number of elements in l with length(l)
+exp <- l[[i]]
+
+# plot data
+# e.g. voltage prolfiles
+figures <- plotVP(exp)
+
+# calling an object in figures will show the graph in the plot tab in RStudio
+figure$VPloop
+# or
+figures[[1]]
+```
+
+The style of the figures can be customized by theme functions. This package contains two themes: *theme1()* and *theme2()*, with *theme2()* being the default theme for all plots. Changing the theme can be done straightforwardly:
+
+```
+# change theme of figure
+newfigure <- figures[[1]] + theme1()
+```
+
+The figure style can also changed by custome themes in the same way, using local scripts (outside the package). 
 
 ### metaDir()
 
@@ -385,7 +467,7 @@ dir <- dirname(fileDir)
 
 ## (De)Bugs
 
-During installation of the package the following error message occured repeatedly:
+> During installation of the package the following error message occured repeatedly:
 
 ```
 Loading required package: ggplot2
@@ -399,4 +481,51 @@ Update to a newer version of 'rlang' package
 # update rlang
 install.packages('rlang')  
 ```
+
+> In *report0r()* or *process0r()* the data analysis might be stopped due to the error message below. This error is caused by wrong assignment of the potentiostat in the metadata file. Due to different column labelling, *select()* (dplyr package) cannot find the designated potential column.
+
+Solution: edit the metadata file, i.e. update the cycler information or rename the potential column to "Ewe/V" and use "Biologic VMP" in the metadata file.
+
+```
+Error in `select()`:
+! Can't select columns that don't exist.
+✖ Column `Ewe.V` doesn't exist.
+Run `rlang::last_trace()` to see where the error occurred.
+```
+
+
+> In *report0r(htmlReport = TRUE)* or *renderReport()* RMarkdown may through the following error, if the filename contains special characters, especially " % "
+
+Solution: change filename
+
+```
+Error in `png()`:
+! invalid 'filename' argument
+Backtrace:
+     ▆
+  1. └─bat2dat::renderReport(sample[[1]])
+  2.   └─rmarkdown::render(...) at bat2dat/R/renderReport.R:36:3
+  3.     └─knitr::knit(knit_input, knit_output, envir = envir, quiet = quiet)
+  4.       └─knitr:::process_file(text, output)
+  5.         ├─xfun:::handle_error(...)
+  6.         ├─base::withCallingHandlers(...)
+  7.         └─knitr:::process_group(group)
+  8.           └─knitr:::call_block(x)
+  9.             └─knitr:::block_exec(params)
+ 10.               └─knitr:::eng_r(options)
+ 11.                 ├─base::unlist(sew(res, options))
+ 12.                 ├─knitr::sew(res, options)
+ 13.                 └─knitr:::sew.list(res, options)
+ 14.                   └─base::lapply(x, sew, options, ...)
+ 15.                     ├─knitr (local) FUN(X[[i]], ...)
+ 16.                     └─knitr:::sew.recordedplot(X[[i]], ...)
+ 17.                       └─base::mapply(...)
+ 18.                         └─knitr (local) `<fn>`(...)
+ 19.                           ├─knitr:::in_base_dir(...)
+ 20.                           │ └─knitr:::in_dir(d, expr)
+ 21.                           └─knitr:::plot2dev(...)
+ 22.                             ├─base::do.call(...)
+ 23.                             └─knitr (local) `<fn>`(...)
+ 24.                               └─grDevices::png(..., res = dpi, units = "in")
+ ```
 

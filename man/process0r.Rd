@@ -8,8 +8,6 @@ process0r(cycles = c(seq(0, 100, 5)))
 }
 \arguments{
 \item{cycles}{cycles to be extracted for voltage profiles}
-
-\item{cccv}{was cccv cycling conducted? TRUE/FALSE}
 }
 \value{
 returns a summary of all sample data, including metadata and raw file.

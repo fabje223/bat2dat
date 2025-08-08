@@ -2,19 +2,12 @@
 #'
 #' @description Plotting Script for RMarkdown Report
 #'
-#' @param capacity data.frame with galvanostatic cycling information
-#' @param minmax axis range
-#' @param vp.dat voltage profile information
-#' @param dc data.frame with discharge data for selected cycles
-#' @param ch data.frame with charge data for selected cycles
-#' @param min.dc.y y-axis limit - min
-#' @param max.dc.y y-axis limit - max
-#' @param min.ch.y y-axis limit - min
-#' @param max.ch.y y-axis limit - max
+#' @param cell data.frame with galvanostatic cycling information (Voltage Profiles or Cycling Data)
+#' @param minmax y-axis bounds
 #'
 #' @return returns graphs generated from expeirmental data for report.Rmd
 #'
-#' @include customThemes.R reportGenerat0r.R
+#' @include theme1.R theme2.R renderReport.R
 #' @import ggplot2 viridis
 #' @importFrom gridExtra grid.arrange
 #' @importFrom stats na.omit
@@ -24,14 +17,17 @@
 #' capa <- Arbin.CAP()
 #' pCap <- plotCapa(capa)
 #' }
-
+#'
+#' @export
 #' @rdname plot0r
-#' @details plotCapa plots coulombic efficiency versus cycle number
-plotCapa <- function(capacity){
+#' @details plots of galvanostatic cycling (GC) experiments (Q vs. CycNr & CE vs. CycNr)
+plotGC <- function(cell){
 
       #binding variables locally to function plotCapReport
       p.cap <- p.CE <- NULL
-      CycNr <- Qdc.mAh.g <- CE <- NULL
+      CycNr <- capacity <- Qdc.mAh.g <- CE <- NULL
+
+      capacity <- cell$capacity
 
       #Plot capacity
       p.cap <- ggplot(capacity) +
@@ -46,17 +42,8 @@ plotCapa <- function(capacity){
                           breaks = waiver(), n.breaks = 10) +
         #     breaks = seq(0,4000, 0.2)) +
         #my.axis +
-        customTheme()
+        theme2()
         #my.legend #theme(legend.position = 'none')
-
-      return(p.cap)
-}
-
-#' @rdname plot0r
-#' @details plotCE plots coulombic efficiency versus cycle number
-plotCE <- function(capacity){
-
-      CycNr <- CE <- NULL
 
       #Plot Coulombic Efficiency
       p.CE <- ggplot(capacity) +
@@ -69,22 +56,61 @@ plotCE <- function(capacity){
         scale_y_continuous(limits=c(40,103),
                           breaks = seq(0, 200, 5)) +
         #     breaks = seq(0,4000, 0.2)) +
-
-
         #my.axis +
-        customTheme() +
+        theme2() +
         theme(legend.position = 'none')
 
-      return(p.CE)
+      return(list('capa' = p.cap, 'CE' = p.CE))
 
 }
 
+#' @export
 #' @rdname plot0r
-#' @details plotIRdropCH plots IR drop versus cycle number (charge)
-plotIRdropCH <- function(capacity, minmax){
+#' @details plotIRdrop plots IR drop versus cycle number (charge)
+plotIRdrop <- function(cell){
 
   #binding variables locally to function plotCapReport
-  CycNr <- Edrop.ch <- NULL
+  CycNr <- cellType <- capacity <- meta <- Edrop.ch <- Edrop.dc <- NULL
+
+  capacity <- cell$capacity
+  meta <- cell$metadata
+  cellType <- meta$cell.config
+
+  if(max(capacity$CycNr) <=2) {
+    print('this cell performed less than 2 cycles. Plotting aborted')
+    return(list('ch.drop'= NA, 'dc.drop' = NA))
+  }
+  #Plot IR drop
+  if(cellType %in% c('halfcell-cathode', 'fullcell')){
+
+    minmax <- c("min.y.ch" <- min(capacity$Edrop.ch),
+                "max.y.ch" <- max(capacity$Edrop.ch),
+                "min.y.dc" <- min(capacity$Edrop.dc),
+                "max.y.dc" <- max(capacity$Edrop.dc))
+
+    # workaround: no resting step between charge and discharge
+    # prevents error "from must be a finite number" in scale_y_continuous
+    minmax[is.na(minmax)] <- 0
+    minmax[is.infinite(minmax)] <- 0
+
+    #print('plotting cathode/full cell data')
+  }else if(cellType %in% c('halfcell-anode', 'LiS')){
+
+    minmax <- c("min.y.ch" <- min(capacity$Edrop.ch),
+                "max.y.ch" <- max(capacity$Edrop.ch),
+                "min.y.dc" <- min(capacity$Edrop.dc),
+                "max.y.dc" <- max(capacity$Edrop.dc))
+
+    # workaround: no resting step between charge and discharge
+    # prevents error "from must be a finite number" in scale_y_continuous
+    minmax[is.na(minmax)] <- 0
+    minmax[is.infinite(minmax)] <- 0
+
+    #print('plotting anode data')
+  }else {
+    print('unknown celltype')
+    return(list('ch.drop'= NA, 'dc.drop' = NA))
+  }
 
   p.IRdrop.ch <- ggplot(capacity) +
                     geom_point(aes(x=CycNr, y=Edrop.ch*1000), color='red', size=4) +
@@ -99,43 +125,62 @@ plotIRdropCH <- function(capacity, minmax){
                                        breaks = waiver(), n.breaks = 10) +
                     #     breaks = seq(0,4000, 0.2)) +
                     #my.axis +
-                    customTheme() +
+                    theme2() +
                     theme(legend.position = 'right')
 
-  return(p.IRdrop.ch)
-}
-
-#' @rdname plot0r
-#' @details plotIRdropDC plots IR drop versus cycle number (discharge)
-  plotIRdropDC <- function(capacity, minmax){
-
-    #binding variables locally to function plotCapReport
-    CycNr <- Edrop.dc <- NULL
-
   p.IRdrop.dc <- ggplot(capacity) +
-                  geom_point(aes(x=CycNr, y=Edrop.dc*1000), color='blue', size=4) +
-                  labs(x = bquote('cycle number'),
-                       y = bquote('IR drop / mV'),
-                       title = "IR drop (discharge) vs. cycle number",
-                       color = "Legend") +
-                  #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
-                  #                  breaks = seq(0,200, 10)) +
-                  scale_y_continuous(limits=c(minmax[3]*900, minmax[4]*1100),
-                                     #breaks = round(seq(minmax[3]*1200, minmax[4]*800, length.out=10), 0)) +
-                                     breaks = waiver(), n.breaks = 10) +
-                  #my.axis +
-                  customTheme() +
-                  theme(legend.position = 'right')
+                    geom_point(aes(x=CycNr, y=Edrop.dc*1000), color='blue', size=4) +
+                    labs(x = bquote('cycle number'),
+                          y = bquote('IR drop / mV'),
+                          title = "IR drop (discharge) vs. cycle number",
+                          color = "Legend") +
+                    #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
+                    #                  breaks = seq(0,200, 10)) +
+                    scale_y_continuous(limits=c(minmax[3]*900, minmax[4]*1100),
+                                      #breaks = round(seq(minmax[3]*1200, minmax[4]*800, length.out=10), 0)) +
+                                      breaks = waiver(), n.breaks = 10) +
+                    #my.axis +
+                    theme2() +
+                    theme(legend.position = 'right')
 
-  return(p.IRdrop.dc)
+  return(list('ch.drop'= p.IRdrop.ch, 'dc.drop' = p.IRdrop.dc))
 }
 
+
+#' @export
 #' @rdname plot0r
-#' @details plotIntRCH plots internal resistance versus cycle number (charge)
-  plotIntRCH <- function(capacity, minmax=c(0, 1000, 0, 1000)){
+#' @details plotIntR plots internal resistance versus cycle number (charge)
+  plotIntR <- function(cell, minmax=c(0, 1000, 0, 1000)){
 
     #binding variables locally to function plotCapReport
-    CycNr <- IntR.ch <- NULL
+    CycNr <- IntR.ch <- IntR.dc <- NULL
+
+    capacity <- cell$capacity
+    if(max(capacity$CycNr) >= 2){
+
+      minmax.IntR <- c("min.y.ch" <- min(capacity$IntR.ch),
+                       "max.y.ch" <- max(capacity$IntR.ch),
+                       "min.y.dc" <- min(capacity$IntR.dc),
+                       "max.y.dc" <- max(capacity$IntR.dc))
+
+      # workaround: no resting step between charge and discharge
+      # prevents error from "must be a finite number" in scale_y_continuous
+      minmax.IntR[is.na(minmax.IntR)] <- 0
+      minmax.IntR[is.infinite(minmax.IntR)] <- 0
+
+    }else{
+
+      print('this cell performed less than 2 cycles. Plotting aborted')
+      return(list('IntR.ch'= NA, 'IntR.dc' = NA))
+
+    }
+      #No plot if all minmax == 0
+      if(sum(minmax.IntR) == 0){
+
+        print('values returned an internal resistance of 0. Figure skipped')
+        return(list('IntR.ch'= NA, 'IntR.dc' = NA))
+
+      }
 
     p.IntR.ch <- ggplot(capacity) +
       geom_point(aes(x=CycNr, y=IntR.ch), color='red', size=4) +
@@ -150,18 +195,8 @@ plotIRdropCH <- function(capacity, minmax){
                          breaks = waiver(), n.breaks = 10) +
       #     breaks = seq(0,4000, 0.2)) +
       #my.axis +
-      customTheme() +
+      theme2() +
       theme(legend.position = 'right')
-
-    return(p.IntR.ch)
-  }
-
-#' @rdname plot0r
-#' @details plotIntRDC plots internal resistance versus cycle number (discharge)
-plotIntRDC <- function(capacity, minmax=c(0, 1000, 0, 1000)){
-
-    #binding variables locally to function plotCapReport
-    CycNr <- IntR.dc <- NULL
 
     p.IntR.dc <- ggplot(capacity) +
       geom_point(aes(x=CycNr, y=IntR.dc), color='blue', size=4) +
@@ -175,56 +210,86 @@ plotIntRDC <- function(capacity, minmax=c(0, 1000, 0, 1000)){
                          #breaks = round(seq(minmax[3]*1200, minmax[4]*800, length.out=10), 0)) +
                          breaks = waiver(), n.breaks = 10) +
       #my.axis +
-      customTheme() +
+      theme2() +
       theme(legend.position = 'right')
 
-    return(p.IntR.dc)
+    return(list('IntR.ch'= p.IntR.ch, 'IntR.dc' = p.IntR.dc))
   }
 
-
+#' @export
 #' @rdname plot0r
-#' @details plotVPloop plots voltage profile vs Qloop
-plotVPloop <- function(vp.dat){
+#' @details plotVP plots voltage profile in different presentations
+plotVP <- function(cell){
 
   #binding variables locally to function plotVPloop
-  CycNr <- Ewe.V <- Ewe.V.rnd <- Qloop.mAh.g <- NULL
+  CycNr <- cellType <- type <- meta <- VP.df <- ch <- dc <- Qloop.mAh.g <- Ewe.V.rnd <- Qch.mAh.g <- Qdc.mAh.g <- Ewe.V.ch <- Ewe.V.dc <- NULL
 
-  #Plot capacity
-  p.vp.loop <- ggplot(vp.dat) +
+  meta <- cell$metadata
+  cellType <- meta$cell.config
+
+  #draw voltage profiles
+  l.VP <- cell$VoltageProfiles
+  if(!is.null(l.VP)) {
+
+    VP.df <- do.call(rbind, l.VP)
+
+    #binding variables locally to function plotVPloop
+    if(cellType %in% c('halfcell-cathode', 'fullcell')){
+
+      ch <- VP.df %>%
+        filter(type == 'ch')
+      dc <- VP.df %>%
+        filter(type == 'dc')
+
+      min.dc.y <- round(min(dc$Ewe.V),1)-0.1
+      max.dc.y <- round(max(dc$Ewe.V),1)+0.1
+      min.ch.y <- round(min(ch$Ewe.V),1)-0.1
+      max.ch.y <- round(max(ch$Ewe.V),1)+0.1
+      #print('plotting cathode/full cell data')
+
+    }else if (cellType %in% c('halfcell-anode', 'LiS')){
+
+      ch <- VP.df %>%
+        filter(type == 'ch')
+      dc <- VP.df %>%
+        filter(type == 'dc')
+
+      min.dc.y <- round(min(dc$Ewe.V),1)-0.1
+      min.ch.y <- round(min(ch$Ewe.V),1)-0.1
+      max.ch.y <- round(max(dc$Ewe.V),1)+0.1
+      max.dc.y <- max.ch.y
+      #print('plotting anode data')
+
+    }else {
+
+      print('unknown celltype')
+      return(list('VPloop'= NA, 'VPlin' = NA, 'VPsplit.ch' = NA, 'VPsplit.dc' = NA))
+    }
+
+  }else{
+
+    return(list('VPloop'= NA, 'VPlin' = NA, 'VPsplit.ch' = NA, 'VPsplit.dc' = NA))
+
+  }
+
+  #Plot VP (looped)
+  p.VPloop <- ggplot(VP.df) +
     geom_path(aes(x=Qloop.mAh.g, y=Ewe.V.rnd, color=factor(CycNr)), size=1.5) +
     labs(x = bquote('q / mAh'),
          y = bquote('E / V vs. Li^+/Li'),
          title = "Voltage Profiles") +
     #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
     #                  breaks = seq(0,200, 10)) +
-    scale_y_continuous(limits=c(min(vp.dat$Ewe.V),max(vp.dat$Ewe.V)),
+    scale_y_continuous(limits=c(min(VP.df$Ewe.V),max(VP.df$Ewe.V)),
                       breaks = seq(-1, 5, 0.5)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
     #my.axis +
-    customTheme() +
+    theme2() +
     theme(legend.position = "right")
 
-  return(p.vp.loop)
-
-}
-
-#' @rdname plot0r
-#' @details plotVPlin plots voltage profile vs Q
-plotVPlin <- function(vp.dat){
-
-    #binding variables locally to function plotVPloop
-    CycNr <- Ewe.V.ch <- Ewe.V.dc <- Qch.mAh.g <- Qdc.mAh.g <- type <- NULL
-
-    ch <- vp.dat %>%
-          filter(type == 'ch')
-    dc <- vp.dat %>%
-          filter(type == 'dc')
-    min.y <- round(min(dc$Ewe.V),1)-0.1
-    max.y <- round(max(dc$Ewe.V),1)+0.1
-
-  #Plot capacity
-  p.vp.lin <- ggplot() +
+  #Plot VP (linear)
+  p.VPlin <- ggplot() +
     geom_path(data = ch, aes(x=(Qch.mAh.g), y=Ewe.V.ch, color=factor(CycNr)), size=1.5) +
     geom_path(data = dc, aes(x=(Qdc.mAh.g), y=Ewe.V.dc, color=factor(CycNr)), size=1.5) +
     labs(x = bquote('q / mAh'),
@@ -232,26 +297,16 @@ plotVPlin <- function(vp.dat){
          title = "Voltage Profiles") +
     #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
     #                  breaks = seq(0,200, 10)) +
-    scale_y_continuous(limits=c(min.y,max.y),
-                      breaks = seq(-5, 5, 0.25)) +
+    scale_y_continuous(limits=c(min(VP.df$Ewe.V),max(VP.df$Ewe.V)),
+                       breaks = seq(-5, 5, 0.25)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
     #my.axis +
-    customTheme() +
+    theme2() +
     theme(legend.position = "right")
 
-  return(p.vp.lin)
-
-}
-
-#' @rdname plot0r
-#' @details plotVPsplitDC plots voltage profile vs Q (discharge)
-plotVPsplitDC <- function(dc, min.dc.y, max.dc.y){
-
-  Qdc.mAh.g <- Ewe.V.dc <- CycNr <- NULL
-
-  #Plot capacity
-  p.vp1 <- ggplot() +
+  #Plot VP split (dc)
+  p.splitDC <- ggplot() +
     geom_path(data = dc, aes(x=(Qdc.mAh.g), y=Ewe.V.dc, color=factor(CycNr)), size=1.5) +
     labs(x = bquote('q / mAh'),
          y = bquote('E / V vs. Li^+/Li'),
@@ -259,26 +314,17 @@ plotVPsplitDC <- function(dc, min.dc.y, max.dc.y){
     #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
     #                  breaks = seq(0,200, 10)) +
     scale_y_continuous(limits=c(min.dc.y,max.dc.y),
-                      breaks = seq(-5, 5, 0.25)) +
+                       breaks = seq(-5, 5, 0.25)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
     #my.axis +
-    customTheme() +
+    theme2() +
     theme(legend.position = "none")
-    #my.legend + theme(legend.position = c(0,1),
-    #                  legend.justification = c("left", "top"))
+  #my.legend + theme(legend.position = c(0,1),
+  #                  legend.justification = c("left", "top"))
 
-  return(p.vp1)
-}
-
-#' @rdname plot0r
-#' @details plotVPsplitCH plots voltage profile vs Q (charge)
-plotVPsplitCH <- function(ch, min.ch.y, max.ch.y){
-
-  Qch.mAh.g <- Ewe.V.ch <- CycNr <- NULL
-
-  #Plot capacity
-  p.vp2 <- ggplot() +
+  #Plot VP split (ch)
+  p.splitCH <- ggplot() +
     geom_path(data = ch, aes(x=(Qch.mAh.g), y=Ewe.V.ch, color=factor(CycNr)), size=1.5) +
     labs(x = bquote('q / mAh'),
          y = bquote('E / V vs. Li^+/Li'),
@@ -286,24 +332,29 @@ plotVPsplitCH <- function(ch, min.ch.y, max.ch.y){
     #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
     #                  breaks = seq(0,200, 10)) +
     scale_y_continuous(limits=c(min.ch.y, max.ch.y),
-                      breaks = seq(-5, 5, 0.25)) +
+                       breaks = seq(-5, 5, 0.25)) +
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
     #my.axis +
-    customTheme() +
+    theme2() +
     theme(legend.position = "none")
 
-  return(p.vp2)
+  return(list('VPloop'= p.VPloop, 'VPlin' = p.VPlin, 'VPsplit.ch' = p.splitCH, 'VPsplit.dc' = p.splitDC))
 
 }
 
+
+#' @export
 #' @rdname plot0r
-#' @details plotVPloop plots voltage profile vs Qloop
-plotdQdV <- function(vp.dat){
+#' @details plotdQdV plots differential capacity plots (dQ/dV) - uses a moving average to smooth the data!
+plotdQdV <- function(cell){
 
-  CycNr <- dqdv <- Ewe <- NULL
+  CycNr <- l.VP <- VP.df <- dqdv <- Ewe <- NULL
 
-  dqdv.df <- data.frame('CycNr'=vp.dat$CycNr, 'Ewe'=vp.dat$Ewe.V.rnd, 'dqdv'=vp.dat$dQdV.mav3)
+  l.VP <- cell$VoltageProfiles
+  VP.df <- do.call(rbind, l.VP)
+
+  dqdv.df <- data.frame('CycNr'=VP.df$CycNr, 'Ewe'=VP.df$Ewe.V.rnd, 'dqdv'=VP.df$dQdV.mav3)
   dqdv.df <- na.omit(dqdv.df)
 
   min.y <- min(dqdv.df$dqdv, na.rm=TRUE)
@@ -322,20 +373,24 @@ plotdQdV <- function(vp.dat){
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
     #my.axis +
-    customTheme() +
+    theme2() +
     theme(legend.position = "right")
 
   return(p.dQdV)
 
 }
 
+#' @export
 #' @rdname plot0r
-#' @details plotVPloop plots voltage profile vs Qloop
-plotdVdQ <- function(vp.dat){
+#' @details plotdVdQ plots differential voltage plots (dV/dQ) - uses a moving average to smooth the data!
+plotdVdQ <- function(cell){
 
-  CycNr <- dvdq <- typeof() <- NULL
+  CycNr <- l.VP <- VP.df <- dvdq <- type <- NULL
 
-  dvdq.df <- data.frame('CycNr'=vp.dat$CycNr, 'q'=vp.dat$Qloop, 'dvdq'=vp.dat$dVdQ.mav3, 'type'=vp.dat$type)
+  l.VP <- cell$VoltageProfiles
+  VP.df <- do.call(rbind, l.VP)
+
+  dvdq.df <- data.frame('CycNr'=VP.df$CycNr, 'q'=VP.df$Qloop, 'dvdq'=VP.df$dVdQ.mav3, 'type'=VP.df$type)
   dvdq.df <- na.omit(dvdq.df)
 
   dvdq.df <- dvdq.df %>%
@@ -360,7 +415,7 @@ plotdVdQ <- function(vp.dat){
     #     breaks = seq(0,4000, 0.2)) +
     scale_color_viridis("Cycle Number", discrete=TRUE) +
     #my.axis +
-    customTheme() +
+    theme2() +
     theme(legend.position = "right")
 
   return(p.dVdQ)

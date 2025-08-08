@@ -3,7 +3,6 @@
 #' @description Initiates import and analysis of a curated dataset
 #'
 #' @param cycles cycles to be extracted for voltage profiles
-#' @param cccv was cccv cycling conducted? TRUE/FALSE
 #'
 #' @return returns a summary of all sample data, including metadata and raw file.
 #' sampleSUMMARY is a list of one or more samples stated in meta.csv file (=cell log).
