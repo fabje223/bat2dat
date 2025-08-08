@@ -1,7 +1,7 @@
 Type: Package
 Package: bat2dat
 Title: Analysis of Potentiostat Output for Battery Research
-Version: 1.1.0
+Version: 2.0.0
 Author: fabje223
 Maintainer: Fabian Jeschull <fabian.jeschull@kit.edu>
 Description: This package was developed to facilitate the data processing
