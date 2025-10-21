@@ -250,7 +250,7 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                 for(i in idx){
 
                         VP.ch <- raw %>%
-                                filter(cyc.nr == i & Ns %in% c(seq(1,50, 2))) %>%
+                                filter(cyc.nr == i & Ns %in% c(seq(0,50, 2))) %>%
                                 #arrange(desc(Ewe.V)) %>%
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
                                        'diff.Q' = c(0, diff(Qdc.mAh)),
@@ -263,7 +263,7 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
 
 
                         VP.dc <- raw %>%
-                                filter(cyc.nr == i+1 & Ns %in% c(seq(0,50,2))) %>%
+                                filter(cyc.nr == i+1 & Ns %in% c(seq(1,50,2))) %>%
                                 #arrange(Ewe.V) %>%
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
                                        'diff.Q' = c(0, diff(Qch.mAh)),

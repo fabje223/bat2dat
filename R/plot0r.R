@@ -413,7 +413,7 @@ plotdVdQ <- function(cell){
     scale_y_continuous(limits=c(0, 50),
                        breaks = seq(0, 50, 10)) +
     #     breaks = seq(0,4000, 0.2)) +
-    scale_color_viridis("Cycle Number", discrete=TRUE) +
+    scale_color_viridis("Cycle Number", discrete=FALSE) +
     #my.axis +
     theme2() +
     theme(legend.position = "right")
