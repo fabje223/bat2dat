@@ -250,7 +250,7 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                 for(i in idx){
 
                         VP.ch <- raw %>%
-                                filter(cyc.nr == i & Ns %in% c(seq(0,50, 2))) %>%
+                                filter(cyc.nr == i & Ns %in% c(seq(1,50, 2))) %>%
                                 #arrange(desc(Ewe.V)) %>%
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
                                        'diff.Q' = c(0, diff(Qdc.mAh)),
@@ -263,7 +263,7 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
 
 
                         VP.dc <- raw %>%
-                                filter(cyc.nr == i+1 & Ns %in% c(seq(1,50,2))) %>%
+                                filter(cyc.nr == i+1 & Ns %in% c(seq(0,50,2))) %>%
                                 #arrange(Ewe.V) %>%
                                 mutate('Ewe.V.rnd'= round(Ewe.V, 4),
                                        'diff.Q' = c(0, diff(Qch.mAh)),
@@ -295,11 +295,11 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
 
                         # sets Qcharge to NA during discharge (and vice versa); for easier plotting e.g. in Origin
                         VP.df$Ewe.V.ch <- VP.df$Ewe.V
-                        VP.df$Qdc.mAh[VP.df$type == 'ch'] <- NA
+                        VP.df$Qdc.mAh[VP.df$type == 'dc'] <- NA
                         VP.df$Ewe.V.ch[VP.df$type == 'dc'] <- NA
 
                         VP.df$Ewe.V.dc <- VP.df$Ewe.V
-                        VP.df$Qch.mAh[VP.df$type == 'dc'] <- NA
+                        VP.df$Qch.mAh[VP.df$type == 'ch'] <- NA
                         VP.df$Ewe.V.dc[VP.df$type == 'ch'] <- NA
 
                         # create new data.frame
@@ -308,11 +308,11 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
                                         "time.s" = VP.df$time.s,
                                         "I.mA" = VP.df$I.mA,
                                         "Ewe.V" = VP.df$Ewe.V,
-                                        "Qch.mAh" = VP.df$Qch.mAh,
-                                        "Qch.mAh.g" = VP.df$Qch.mAh/AMmass,
+                                        "Qch.mAh" = VP.df$Qdc.mAh,
+                                        "Qch.mAh.g" = VP.df$Qdc.mAh/AMmass,
                                         "Ewe.V.ch" = VP.df$Ewe.V.ch,
-                                        "Qdc.mAh" = VP.df$Qdc.mAh,
-                                        "Qdc.mAh.g" = VP.df$Qdc.mAh/AMmass,
+                                        "Qdc.mAh" = VP.df$Qch.mAh,
+                                        "Qdc.mAh.g" = VP.df$Qch.mAh/AMmass,
                                         "Ewe.V.dc" = VP.df$Ewe.V.dc,
                                         "Qloop" = VP.df$Qloop,
                                         "Qloop.mAh.g" = VP.df$Qloop/AMmass,
