@@ -4,6 +4,7 @@
 #' report0r(htmlReport = TRUE, exportCap = TRUE)
 #'
 #' @param cycles cycle numbers to be extracted to plot voltage profiles
+#' @param CCCV should a CCCV analysis be performed? (TRUE/FALSE)
 #' @param htmlReport create a html report? TRUE/FALSE
 #' @param exportCap export data.frames to .txt for further processing? TRUE/FALSE
 #'
@@ -17,7 +18,7 @@
 #'  dat <- report0r(htmlReport = TRUE, exportCap = TRUE)
 #'  }
 
-report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = FALSE, exportCap = TRUE) {
+report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), CCCV = FALSE, htmlReport = FALSE, exportCap = TRUE) {
 
             print('Hello there! Let us analyse some data, shall we? Show the way to your experimental data...')
 
@@ -28,7 +29,7 @@ report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = FALSE, expor
                     )
                   }
 
-                  processedData <- process0r(cycles)
+                  processedData <- process0r(cycles, CCCV)
 
                   #export data as data report and/or txt files
                   for(i in 1:length(processedData)){
@@ -43,10 +44,8 @@ report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = FALSE, expor
                       )
                     }
 
-
-
-                    #Generate html report using RMarkdown
-                    if(htmlReport == TRUE){
+                  #Generate html report using RMarkdown
+                  if(htmlReport == TRUE){
 
                       #no data no report
                       if(is.null(exp$rawdata)) {
@@ -61,8 +60,10 @@ report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), htmlReport = FALSE, expor
                         SaveStatsToOrigin(exp)
                         SaveVPToOrigin(exp)
                     }
-                      #SaveToOrigin.CCCV(outdir, exp)
 
+                    if(CCCV == TRUE){
+                      SaveCCCVToOrigin(exp)
+                    }
 
                   }
 

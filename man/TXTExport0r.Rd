@@ -21,17 +21,18 @@ no return; writes a .txt file with respective data into outdir folder
 \description{
 exports analysed data from list 'processedData', i.e. exp = processedData[[sampleID]]
 }
-\section{Functions}{
-\itemize{
-\item \code{SaveCCCVToOrigin()}: save results from CCCV step analysis
+\details{
+Save Stats ("cycling data" --> Q, CE,..)
 
-\item \code{SaveVPToOrigin()}: save results from extracted voltage profiles
+Save CCCV analysis data
 
-}}
+Save VPs for selected cycles
+}
 \examples{
 \dontrun{
 l <- process0r()
 exp <- l[[1]]
 SaveStatsToOrigin(exp)
 }
+
 }

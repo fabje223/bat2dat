@@ -3,6 +3,7 @@
 #' @description Initiates import and analysis of a curated dataset
 #'
 #' @param cycles cycles to be extracted for voltage profiles
+#' @param CCCV should a CCCV analysis be performed? (TRUE/FALSE)
 #'
 #' @return returns a summary of all sample data, including metadata and raw file.
 #' sampleSUMMARY is a list of one or more samples stated in meta.csv file (=cell log).
@@ -14,7 +15,7 @@
 #' \dontrun{
 #' l <- process0r()
 #' }
-process0r <- function(cycles=c(seq(0,100, 5))) {
+process0r <- function(cycles=c(seq(0,100, 5)), CCCV=FALSE) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -53,14 +54,15 @@ process0r <- function(cycles=c(seq(0,100, 5))) {
                             raw <- BCSraw(meta$dir[i], meta$sample.name[i])
 
                             rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
-                                                         cycles, warningsLOG)
+                                                         cycles, CCCV, warningsLOG)
 
                           }else if(meta$instrument[i] == "Biologic VMP"){
 
                             print("Reading VMP raw data file")
                             raw <- VMPraw(meta$dir[i], meta$sample.name[i])
 
-                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
+                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
+                                                         cycles, CCCV, warningsLOG)
 
                           }else if(meta$instrument[i] == "Arbin") {
 

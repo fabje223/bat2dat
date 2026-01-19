@@ -6,12 +6,15 @@
 \usage{
 report0r(
   cycles = c(0, 1, 4, seq(9, 199, 10)),
+  CCCV = FALSE,
   htmlReport = FALSE,
   exportCap = TRUE
 )
 }
 \arguments{
 \item{cycles}{cycle numbers to be extracted to plot voltage profiles}
+
+\item{CCCV}{should a CCCV analysis be performed? (TRUE/FALSE)}
 
 \item{htmlReport}{create a html report? TRUE/FALSE}
 
