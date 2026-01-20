@@ -5,7 +5,7 @@
 \title{Report0r}
 \usage{
 report0r(
-  cycles = c(0, 1, 4, seq(9, 199, 10)),
+  cycles = c(0, 1, 4, seq(9, 500, 10)),
   CCCV = FALSE,
   htmlReport = FALSE,
   exportCap = TRUE

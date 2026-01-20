@@ -18,9 +18,9 @@ ArbinEvaluat0r(raw, AMmass, cellType, cycles)
 
 \item{cycles}{cycles to be included in voltage profile analysis}
 
-\item{warningsLOG}{a log book for warning messages}
+\item{CCCV}{should a CCCV analysis be performed? (TRUE/FALSE)}
 
-\item{cccv}{should a CCCV analysis be performed? (TRUE/FALSE)}
+\item{warningsLOG}{a log book for warning messages}
 }
 \value{
 returns a list cycDat with analysed data

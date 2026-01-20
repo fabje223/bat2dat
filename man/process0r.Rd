@@ -4,7 +4,7 @@
 \alias{process0r}
 \title{Process0r}
 \usage{
-process0r(cycles = c(seq(0, 100, 5)), CCCV)
+process0r(cycles = c(0, 1, 4, seq(9, 500, 10)), CCCV = FALSE)
 }
 \arguments{
 \item{cycles}{cycles to be extracted for voltage profiles}
