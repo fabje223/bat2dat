@@ -7,6 +7,7 @@
 #' @param AMmass active material mass in mg
 #' @param cellType cell configuration (halfcell, fullcell, etc.)
 #' @param cycles cycles to be included in voltage profile analysis
+#' @param CCCV should a CCCV analysis be performed? (TRUE/FALSE)
 #' @param warningsLOG a log book for warning messages
 #'
 #' @return returns a list cycDat with analysed data
@@ -26,18 +27,26 @@
 #' @export
 #' @rdname Evaluat0r
 #' @details Evaluat0r for Biologic Instruments
-BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, warningsLOG){
+BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, CCCV, warningsLOG){
 
               cycDat <- list('capacity' = NULL,
-                             'VoltageProfiles' = NULL
+                             'VoltageProfiles' = NULL,
+                             'CCCV' = NULL
                              )
 
               #calculate capacities for each cycle
               cycDat$capacity <- Biologic.CAPA(raw, AMmass, cellType)
 
-              #extract voltage profiles for selected cycles
+              #perform voltage profile & CCCV analysis only of there is data (avoids error messages)
               if(length(cycles) != 0){
+                #extract voltage profiles for selected cycles
                 cycDat$VoltageProfiles <- Biologic.VP(raw, AMmass, cycles, cellType)
+              }
+
+
+              if(CCCV != FALSE){
+              #perform CCCV Analysis
+              cycDat$CCCV <- Biologic.CCCV(raw, AMmass, cellType)
               }
 
               return(cycDat)

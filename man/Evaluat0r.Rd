@@ -5,7 +5,7 @@
 \alias{ArbinEvaluat0r}
 \title{Evaluat0r}
 \usage{
-BiologicEvaluat0r(raw, AMmass, cellType, cycles, warningsLOG)
+BiologicEvaluat0r(raw, AMmass, cellType, cycles, CCCV, warningsLOG)
 
 ArbinEvaluat0r(raw, AMmass, cellType, cycles)
 }
@@ -19,6 +19,8 @@ ArbinEvaluat0r(raw, AMmass, cellType, cycles)
 \item{cycles}{cycles to be included in voltage profile analysis}
 
 \item{warningsLOG}{a log book for warning messages}
+
+\item{cccv}{should a CCCV analysis be performed? (TRUE/FALSE)}
 }
 \value{
 returns a list cycDat with analysed data

@@ -15,6 +15,10 @@
 #' exp <- l[[1]]
 #' SaveStatsToOrigin(exp)
 #' }
+#'
+#' @export
+#' @rdname TXTExport0r
+#' @details Save Stats ("cycling data" --> Q, CE,..)
 SaveStatsToOrigin <- function(exp){
 
           capacity <- exp$capacity
@@ -27,7 +31,9 @@ SaveStatsToOrigin <- function(exp){
           print(paste0('Cycling data of cell ', filename, ' exported to ', outdir))
 }
 
-#' @describeIn SaveStatsToOrigin save results from CCCV step analysis
+#' @export
+#' @rdname TXTExport0r
+#' @details Save CCCV analysis data
 SaveCCCVToOrigin <- function(exp){
 
           CCCV <- exp$CCCV
@@ -40,7 +46,9 @@ SaveCCCVToOrigin <- function(exp){
           print(paste0('Cycling data of cell ', filename, ' exported to ', outdir))
 }
 
-#' @describeIn SaveStatsToOrigin save results from extracted voltage profiles
+#' @export
+#' @rdname TXTExport0r
+#' @details Save VPs for selected cycles
 SaveVPToOrigin <- function(exp){
 
     VPprofiles <- exp$VoltageProfiles

@@ -3,6 +3,7 @@
 #' @description Initiates import and analysis of a curated dataset
 #'
 #' @param cycles cycles to be extracted for voltage profiles
+#' @param CCCV should a CCCV analysis be performed? (TRUE/FALSE)
 #'
 #' @return returns a summary of all sample data, including metadata and raw file.
 #' sampleSUMMARY is a list of one or more samples stated in meta.csv file (=cell log).
@@ -14,7 +15,7 @@
 #' \dontrun{
 #' l <- process0r()
 #' }
-process0r <- function(cycles=c(seq(0,100, 5))) {
+process0r <- function(cycles=c(0,1,4,seq(9,500, 10)), CCCV) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -35,6 +36,8 @@ process0r <- function(cycles=c(seq(0,100, 5))) {
               #read-in raw data from folder
               sampleSUMMARY <- lapply(1:nrow(meta), function(i) {
 
+                          #print(CCCV)
+
                           #initialize/empty l.sample list()
                           l.samples <- list("metadata"=NULL,
                                             "rawdata"=NULL,
@@ -53,16 +56,20 @@ process0r <- function(cycles=c(seq(0,100, 5))) {
                             raw <- BCSraw(meta$dir[i], meta$sample.name[i])
 
                             rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
-                                                         cycles, warningsLOG)
+                                                         cycles, CCCV, warningsLOG)
+                          }
 
-                          }else if(meta$instrument[i] == "Biologic VMP"){
+                          if(meta$instrument[i] == "Biologic VMP"){
 
                             print("Reading VMP raw data file")
                             raw <- VMPraw(meta$dir[i], meta$sample.name[i])
 
-                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i], cycles)
+                            rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
+                                                         cycles, CCCV, warningsLOG)
 
-                          }else if(meta$instrument[i] == "Arbin") {
+                          }
+
+                          if(meta$instrument[i] == "Arbin") {
 
                             print("Reading Arbin raw data file")
                             #path/to/file/filename.res --> check is .res file in directory
@@ -95,13 +102,15 @@ process0r <- function(cycles=c(seq(0,100, 5))) {
                             }
 
 
-                          }else{
-
-                            print("cycler not found - check directory")
-
-                            raw <- NULL
-                            rawEval <- NULL
                           }
+
+                          #else{
+
+                           # print("cycler not found - check directory")
+
+                            #raw <- NULL
+                            #rawEval <- NULL
+                          #}
 
                 l.sample <- list("metadata" = meta[i,],
                                  "rawdata" = raw,

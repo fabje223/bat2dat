@@ -191,7 +191,7 @@ Biologic.CAPA <- function(raw, AMmass, cellType){
 
                 } else if(cellType == "LiS"){
                         # workaround: cap <- data.frame(...) kept throwing false error (no matching row number)
-                        cap <- data.frame("CycNr" = seq2.df$cyc.nr,
+                        cap <- data.frame("CycNr" = seq2.df$cyc.nr+1,
                                           "time.s.ch" = seq2.df$time.s,
                                           "time.s.dc" = seq1.df$time.s,
                                           #"I.mA.ch" = seq1.df$I.mA,
@@ -239,7 +239,7 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
         k = 1
 
         #reduce values in "cycles" vector to those that are actually available in the specific data.frame
-        idx <- cycles[cycles %in% c(1:max(raw$cyc.nr)-1)]
+        idx <- cycles[cycles %in% c(0:max(raw$cyc.nr)-1)]
 
         # select cycle
         #for(i in idx){
@@ -304,7 +304,7 @@ Biologic.VP <- function(raw, AMmass, cycles, cellType){
 
                         # create new data.frame
                         VPprofile <- data.frame(
-                                        "CycNr" = VP.df$cyc.nr,
+                                        "CycNr" = VP.df$cyc.nr+1,
                                         "time.s" = VP.df$time.s,
                                         "I.mA" = VP.df$I.mA,
                                         "Ewe.V" = VP.df$Ewe.V,
