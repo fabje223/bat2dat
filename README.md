@@ -118,7 +118,11 @@ devtools::install_github('fabje223/bat2dat')
 > problems.  
 
 To update to the latest version of *bat2dat* repeat step 3) once in a
-while.
+while. Double check release number in library with GitHub releases using
+``` r
+library(bat2dat)
+print(sessionInfo())
+```
 
 ## Requirements
 
