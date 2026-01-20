@@ -363,9 +363,9 @@ plotdQdV <- function(cell){
   #Plot capacity
   p.dQdV <- ggplot(dqdv.df) +
     geom_path(aes(x=Ewe, y=dqdv, color=factor(CycNr)), size=1.5) +
-    labs(x = bquote('E / V vs. Li^+/Li'),
+    labs(x = bquote('E / V'),
          y = bquote('dQ/dV [mAh/V]'),
-         title = "Voltage Profiles") +
+         title = "Differential Capacity") +
     #scale_x_continuous(limits=c(0,max(tmp$CycNr)),
     #                  breaks = seq(0,200, 10)) +
     scale_y_continuous(limits=c(round(min.y*1.1, 1), round(max.y*1.1, 1)),
@@ -407,7 +407,7 @@ plotdVdQ <- function(cell){
     geom_path(aes(x=q, y=abs(dvdq), color=factor(CycNr)), linewidth=1.5) +
     labs(x = bquote('q / mAh'),
          y = bquote('abs(dV/dQ) [V/mAh]'),
-         title = "Voltage Profiles") +
+         title = "Differential Voltage") +
     scale_x_continuous(limits=c(0, max(dvdq.df$q)),
                       breaks = seq(0, round(max(dvdq.df$q)), round(max(dvdq.df$q))/10)) +
     scale_y_continuous(limits=c(0, 50),

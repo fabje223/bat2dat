@@ -29,7 +29,6 @@
 #' @details Evaluat0r for Biologic Instruments
 BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, CCCV, warningsLOG){
 
-              cccv = CCCV
               cycDat <- list('capacity' = NULL,
                              'VoltageProfiles' = NULL,
                              'CCCV' = NULL
@@ -45,7 +44,7 @@ BiologicEvaluat0r <- function(raw, AMmass, cellType, cycles, CCCV, warningsLOG){
               }
 
 
-              if(cccv == TRUE){
+              if(CCCV != FALSE){
               #perform CCCV Analysis
               cycDat$CCCV <- Biologic.CCCV(raw, AMmass, cellType)
               }

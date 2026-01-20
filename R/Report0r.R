@@ -18,7 +18,7 @@
 #'  dat <- report0r(htmlReport = TRUE, exportCap = TRUE)
 #'  }
 
-report0r <- function(cycles = c(0,1,4,seq(9,199, 10)), CCCV = FALSE, htmlReport = FALSE, exportCap = TRUE) {
+report0r <- function(cycles = c(0,1,4,seq(9,500, 10)), CCCV = FALSE, htmlReport = FALSE, exportCap = TRUE) {
 
             print('Hello there! Let us analyse some data, shall we? Show the way to your experimental data...')
 

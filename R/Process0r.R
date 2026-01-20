@@ -15,7 +15,7 @@
 #' \dontrun{
 #' l <- process0r()
 #' }
-process0r <- function(cycles=c(seq(0,100, 5)), CCCV=FALSE) {
+process0r <- function(cycles=c(0,1,4,seq(9,500, 10)), CCCV) {
 
               #Select (optional)
               #for voltage profiles: which cycles shall be extracted?
@@ -36,6 +36,8 @@ process0r <- function(cycles=c(seq(0,100, 5)), CCCV=FALSE) {
               #read-in raw data from folder
               sampleSUMMARY <- lapply(1:nrow(meta), function(i) {
 
+                          #print(CCCV)
+
                           #initialize/empty l.sample list()
                           l.samples <- list("metadata"=NULL,
                                             "rawdata"=NULL,
@@ -55,8 +57,9 @@ process0r <- function(cycles=c(seq(0,100, 5)), CCCV=FALSE) {
 
                             rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
                                                          cycles, CCCV, warningsLOG)
+                          }
 
-                          }else if(meta$instrument[i] == "Biologic VMP"){
+                          if(meta$instrument[i] == "Biologic VMP"){
 
                             print("Reading VMP raw data file")
                             raw <- VMPraw(meta$dir[i], meta$sample.name[i])
@@ -64,7 +67,9 @@ process0r <- function(cycles=c(seq(0,100, 5)), CCCV=FALSE) {
                             rawEval <- BiologicEvaluat0r(raw, meta$AM.loading[i], meta$cell.config[i],
                                                          cycles, CCCV, warningsLOG)
 
-                          }else if(meta$instrument[i] == "Arbin") {
+                          }
+
+                          if(meta$instrument[i] == "Arbin") {
 
                             print("Reading Arbin raw data file")
                             #path/to/file/filename.res --> check is .res file in directory
@@ -97,13 +102,15 @@ process0r <- function(cycles=c(seq(0,100, 5)), CCCV=FALSE) {
                             }
 
 
-                          }else{
-
-                            print("cycler not found - check directory")
-
-                            raw <- NULL
-                            rawEval <- NULL
                           }
+
+                          #else{
+
+                           # print("cycler not found - check directory")
+
+                            #raw <- NULL
+                            #rawEval <- NULL
+                          #}
 
                 l.sample <- list("metadata" = meta[i,],
                                  "rawdata" = raw,

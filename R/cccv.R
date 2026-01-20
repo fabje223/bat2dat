@@ -86,9 +86,6 @@ Biologic.CCCV <- function(raw, AMmass, cellType){
           filter(Ewe.V <= min(Ewe.V)*0.99 & dI != 0) %>%
           mutate(t.CV = time.s - t0.dc)
 
-        print(i)
-
-
         if(nrow(cccv.ch) != 0 && nrow(cccv.dc) != 0){
 
           cccv.i <- data.frame("CycNr" = i, "Qch.mAh" = Qch.tot, "chk.sum1" = NA, "Qch.mAh.g" = NA, "Qdc.mAh" = Qdc.tot, "chk.sum2" = NA, "Qdc.mAh.g" = NA, "CE" = Qdc.tot/Qch.tot, "LowerCutoff" = min(cccv.dc$Ewe.V), "UpperCutoff" = max(cccv.ch$Ewe.V),
@@ -142,7 +139,7 @@ Biologic.CCCV <- function(raw, AMmass, cellType){
       CCCV$chk.sum1 <- CCCV$CCstep.Qch.mAh + CCCV$CVstep.Qch.mAh
       CCCV$chk.sum2 <- CCCV$CCstep.Qdc.mAh + CCCV$CVstep.Qdc.mAh
 
-      print("CCCV analysis finished")
+      print(paste0("CCCV analysis finished after ", i, " cycles"))
 
     return(CCCV)
   }
